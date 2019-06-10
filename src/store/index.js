@@ -7,9 +7,7 @@ Vue.use(Vuex)
 const myStore = new Vuex.Store({
   modules: {
     user,
-    pagemap,
-    dialog,
-    pages
+
   },
   getters
 })
