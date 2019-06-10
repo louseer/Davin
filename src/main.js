@@ -4,7 +4,9 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import './plugins/element.js'
-
+import '@/assets/styles/base.less'
+import base from '@/mixins/base'
+Vue.mixin(base)
 
 
 Vue.config.productionTip = false
