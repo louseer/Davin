@@ -25,7 +25,9 @@ export default {
   },
 
   methods: {
-   
+   logOut(){
+     this.$router.push('domcanvas')
+   }
   }
 }
 

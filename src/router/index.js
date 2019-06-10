@@ -15,6 +15,7 @@ import Tables from 'pages/project/tables'
 import SQLModels from 'pages/project/sqlmodels'
 import DataMap from 'pages/project/datamap'
 import Setting from 'pages/project/setting'
+import DomCanvas from 'pages/domcanvas/index.vue';
 
 Vue.use(VueRouter)
 const routes = [
@@ -99,6 +100,11 @@ const routes = [
         path:'setting',
         name:'setting',
         component:Setting
+      },
+      {
+        path:'/domcanvas',
+        name:'domcanvas',
+        component:DomCanvas
       }
     ]
   },
