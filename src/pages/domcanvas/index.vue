@@ -5,19 +5,27 @@
     <h1>画布在下方⬇</h1>
 
     <div class="stage" ref="stage">
-      <div class="canvas" ref="canvas"></div>
+      <div class="canvas" ref="canvas">
+        <layer-node></layer-node>
+        <div v-if="rightClick" class="rightmenu" style="width:200px; height:200px; background:red"></div>
+    </div>
     </div>
   </div>
 </template>
 
 <script>
 import domCavase from "././domcanvas";
+import layerNode from '././layer-node.vue';
 export default {
+  components: {
+    layerNode,
+  },
   data() {
     return {
       width: "",
       domCavase: {},
-      opacity: ""
+      opacity: "",
+      rightClick:false
     };
   },
   
@@ -36,9 +44,12 @@ export default {
     console.log(this.domCavase);
 
     this.domCavase.canvasOnclick(e => {
+      this.rightClick=false
       console.log(e.screenX, e.screenY);
     });
-
+    this.domCavase.canvasRightclick(e=>{
+      this.rightClick=true
+    })
     console.log(this.domCavase.canvasWidth);
    
   },
