@@ -30,6 +30,11 @@ const routes = [
     component:Console
   },
   {
+    path:'/domcanvas',
+    name:'domcanvas',
+    component:DomCanvas
+  },
+  {
     path:'/project:proId',
     name:'project',
     component:Project,

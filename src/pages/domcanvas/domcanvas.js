@@ -1,8 +1,9 @@
 export default class DomCavase {
   constructor(el, mode, grid = [5, 5]) {
     this.el = el
-    this.mode = mode || 'select'
+    this.mode =  mode ||  'select'
     this.grid = grid
+    this.mouseOn = false
   }
   set canvasZoom(val) {
     this.el.style.transform = `scale(${val},${val})`
@@ -43,21 +44,134 @@ export default class DomCavase {
   }
   canvasOnclick(callback) {
     this.el.onclick = e => {
+      clearEventBubble(e)
+      if (e.buttons !== 1 || e.which !== 1) return
       const event = e || window.event
       callback && typeof callback === 'function' && callback(event)
-    
     }
   }
-  canvasRightclick(callback) {
-    this.el.oncontextmenu = e => {     
+  canvasOnmousedown(callback) {
     
-        const event = e || window.event
-        callback && typeof callback === 'function' && callback(event)
-        console.log('画布右击')
-      
+    this.el.onmousedown = e => {
+      clearEventBubble(e)
+   
+      if (e.buttons !== 1 || e.which !== 1) return
+      const event = e || window.event
+      callback && typeof callback === 'function' && callback(event)
+    }
+  }
+  canvasOnmousemove(callback) {    
+    this.el.onmousemove = e => {
+      if (!this.mouseOn) return
+      clearEventBubble(e)
+      const event = e || window.event
+      callback && typeof callback === 'function' && callback(event)
+    }
+  }
+  canvasOnmouseup(callback) {  
+    this.el.onmouseup = e => {
+      if (!this.mouseOn) return
+      clearEventBubble(e)
+      const event = e || window.event
+      callback && typeof callback === 'function' && callback(event)
     }
   }
 
+  canvasRightclick(callback) {
+    this.el.oncontextmenu = e => {
+      clearEventBubble(e)
+      const event = e || window.event
+      callback && typeof callback === 'function' && callback(event)
+      console.log('画布右击')
+    }
+  }
+  selectNode(callback) {
+    let mouseStopId
+    // let mouseOn = false
+    let startX = 0
+    let startY = 0
+    let selectContainer = this.el
+    let pos=GetPosition(selectContainer)
+    console.log(pos)
+    console.log(selectContainer)
+    // let selDiv = document.createElement('div')
+    if(this.mode!=="select") return
+    this.canvasOnmousedown(e => {
+      mouseStopId = setTimeout(() => {
+           this.mouseOn = true
+        startX =
+          e.clientX - pos.left + selectContainer.scrollLeft
+       console.log(selectContainer.offsetLeft)
+       console.log(selectContainer.scrollLeft)
+      startY = e.clientY - pos.top + selectContainer.scrollTop
+          console.log(selectContainer.offsetTop)
+          console.log(selectContainer.scrollTop)
+          let selDiv = document.createElement('div')
+        selDiv.style.cssText =
+          'position:absolute;width:0;height:0;margin:0;padding:0;border:1px dashed #eee;background-color:#aaa;z-index:1000;opacity:0.6;display:none'
+        selDiv.id = 'selectDiv'
+        selectContainer.appendChild(selDiv)
+        console.log(this.el)
+        selDiv.style.left = startX + 'px'
+        selDiv.style.top = startY + 'px'
+      
+      }, 300)
+    })
+    this.canvasOnmousemove(e => {
+      let _x =
+        e.clientX - pos.left + selectContainer.scrollLeft
+      let _y = e.clientY - pos.top + selectContainer.scrollTop
+      let _H = selectContainer.clientHeight
+
+      if (_y >= _H && selectContainer.scrollTop <= _H) {
+        selectContainer.scrollTop += _y - _H
+      }
+      // 向上拖拽
+      if (
+        e.clientY <= pos.top &&
+        selectContainer.scrollTop > 0
+      ) {
+        selectContainer.scrollTop = Math.abs(
+          e.clientY - pos.top
+        )
+      }
+
+      let selDiv = document.getElementById('selectDiv')
+      selDiv.style.display = 'block'
+      selDiv.style.left = Math.min(_x, startX) + 'px'
+      selDiv.style.top = Math.min(_y, startY) + 'px'
+      selDiv.style.width = Math.abs(_x - startX) + 'px'
+      selDiv.style.height = Math.abs(_y - startY) + 'px'
+    })
+    this.canvasOnmouseup(e => {
+      let selDiv = document.getElementById('selectDiv')
+      let pos=GetPosition(selDiv)
+      let fileDivs = document.getElementsByClassName('layernode')
+      let selectedEls = []
+      let l = selDiv.offsetLeft
+      let t = selDiv.offsetTop
+      let w = selDiv.offsetWidth
+      let h = selDiv.offsetHeight
+      for (let i = 0; i < fileDivs.length; i++) {
+        let sl = fileDivs[i].offsetWidth + fileDivs[i].offsetLeft
+        let st = fileDivs[i].offsetHeight + fileDivs[i].offsetTop
+
+        if (
+          sl > l &&
+          st > t &&
+          fileDivs[i].offsetLeft < l + w &&
+          fileDivs[i].offsetTop < t + h
+        ) {
+          selectedEls.push(fileDivs[i])
+        }
+      }
+
+      console.log(selectedEls)
+      selDiv.remove()
+      selDiv.style.display = 'none'
+      this.mouseOn = false
+    })
+  }
   createNode(ele) {
     return {
       elementType: ele.elementType || 'node',
@@ -65,25 +179,41 @@ export default class DomCavase {
       y: ele.y,
       type: ele.type || '',
       id: ele.id || getuuid(),
-      iconUrl: ele.iconUrl || '',
-      isSwich: ele.isSwich === undefined ? true : ele.isSwich,
-      nodeBgin: ele.nodeBgin === undefined ? null : ele.nodeBgin.id,
-      nodeEnd: ele.nodeEnd === undefined ? null : ele.nodeEnd.id,
+      iconUrl: ele.iconUrl || '',     
       name: ele.text || '',
       childs: ele.childs || null,
-      isServiceNode: ele.isServiceNode || '-1',
-      isPublish: ele.isPublish || '-1',
-      startNodes: ele.startNodes || null,
-      endNodes: ele.endNodes || null,
-      category: ele.category || ''
+     
     }
   }
   getAllNode() {}
 }
+
+
+//获取相应属性
 function getStyle(obj, styleName) {
   if (obj.currentStyle) {
     return obj.currentStyle[styleName]
   } else {
     return getComputedStyle(obj, null)[styleName]
   }
+}
+//阻止冒泡
+function clearEventBubble(e) {
+  if (e.stopPropagation) e.stopPropagation()
+  else e.cancelBubble = true
+  if (e.preventDefault) e.preventDefault()
+  else e.returnValue = false
+}
+
+function GetPosition(obj)
+{
+let left = 0;
+let top = 0;
+while(obj.offsetParent)//如果obj的有最近的父级定位元素就继续
+{
+left += obj.offsetLeft;//累加
+top += obj.offsetTop;
+obj=obj.offsetParent;//更新obj,继续判断新的obj是否还有父级定位，然后继续累加
+}
+return {left,top}
 }

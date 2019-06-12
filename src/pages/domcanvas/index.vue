@@ -5,58 +5,62 @@
     <h1>画布在下方⬇</h1>
 
     <div class="stage" ref="stage">
-      <div class="canvas" ref="canvas">
-        <layer-node></layer-node>
+      <div class="canvas" ref="canvas" id="canvas">
+        <layer-node v-for class="layernode"></layer-node>
+        <layer-node v-for class="layernode"></layer-node>
+        <layer-node v-for class="layernode"></layer-node>
         <div v-if="rightClick" class="rightmenu" style="width:200px; height:200px; background:red"></div>
-    </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import domCavase from "././domcanvas";
-import layerNode from '././layer-node.vue';
+import domCavase from '././domcanvas'
+import layerNode from '././layer-node.vue'
 export default {
   components: {
-    layerNode,
+    layerNode
   },
   data() {
     return {
-      width: "",
+      width: '',
       domCavase: {},
-      opacity: "",
-      rightClick:false
-    };
+      opacity: '',
+      rightClick: false
+    }
   },
-  
+
   watch: {
     opacity(val) {
-      this.domCavase.canvasOpcity = +val;
+      this.domCavase.canvasOpcity = +val
     },
     width(val) {
-      this.domCavase.canvasWidth = +val;
+      this.domCavase.canvasWidth = +val
     }
   },
   mounted() {
-    const stage = this.$refs.stage;
-    const canvas = this.$refs.canvas;
-    this.domCavase = new domCavase(canvas);
-    console.log(this.domCavase);
+    const stage = this.$refs.stage
+    const canvas = this.$refs.canvas
+    const idcanvas = document.getElementById('canvas')
+    console.log(canvas.offsetTop)
+    this.domCavase = new domCavase(canvas)
+    console.log(this.domCavase)
 
     this.domCavase.canvasOnclick(e => {
-      this.rightClick=false
-      console.log(e.screenX, e.screenY);
-    });
-    this.domCavase.canvasRightclick(e=>{
-      this.rightClick=true
+      this.rightClick = false
+      console.log(e.screenX, e.screenY)
     })
-    console.log(this.domCavase.canvasWidth);
-   
+    this.domCavase.canvasRightclick(e => {
+      this.rightClick = true
+    })
+    this.domCavase.selectNode()
+    console.log(this.domCavase.canvasWidth)
   },
   methods: {
     name() {}
   }
-};
+}
 </script>
 
 <style scoped lang='less'>
@@ -74,10 +78,12 @@ input {
   background: black;
   position: relative;
   .canvas {
+    position: relative;
     width: 90%;
     height: 90%;
     background: gray;
     margin: auto;
+    margin-top: 99px;
   }
 }
 </style>
