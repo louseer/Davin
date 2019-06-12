@@ -1,9 +1,10 @@
 export default class DomCavase {
   constructor(el, mode, grid = [5, 5]) {
     this.el = el
-    this.mode =  mode ||  'select'
+    this.mode = mode || 'select'
     this.grid = grid
     this.mouseOn = false
+    this.pos = GetPosition(this.el)
   }
   set canvasZoom(val) {
     this.el.style.transform = `scale(${val},${val})`
@@ -23,12 +24,14 @@ export default class DomCavase {
   }
   set canvasWidth(val) {
     this.el.style.width = `${val}px`
+    this.pos=GetPosition(this.el)
   }
   get canvasWidth() {
     return this.el.offsetWidth
   }
   set canvasHeight(val) {
     this.el.style.height = `${val}px`
+    this.pos=GetPosition(this.el)
   }
   get canvasHeight() {
     return this.el.offsetHeight
@@ -51,16 +54,15 @@ export default class DomCavase {
     }
   }
   canvasOnmousedown(callback) {
-    
     this.el.onmousedown = e => {
       clearEventBubble(e)
-   
+
       if (e.buttons !== 1 || e.which !== 1) return
       const event = e || window.event
       callback && typeof callback === 'function' && callback(event)
     }
   }
-  canvasOnmousemove(callback) {    
+  canvasOnmousemove(callback) {
     this.el.onmousemove = e => {
       if (!this.mouseOn) return
       clearEventBubble(e)
@@ -68,7 +70,7 @@ export default class DomCavase {
       callback && typeof callback === 'function' && callback(event)
     }
   }
-  canvasOnmouseup(callback) {  
+  canvasOnmouseup(callback) {
     this.el.onmouseup = e => {
       if (!this.mouseOn) return
       clearEventBubble(e)
@@ -91,22 +93,17 @@ export default class DomCavase {
     let startX = 0
     let startY = 0
     let selectContainer = this.el
-    let pos=GetPosition(selectContainer)
-    console.log(pos)
+    //let pos = GetPosition(selectContainer)
+    
     console.log(selectContainer)
-    // let selDiv = document.createElement('div')
-    if(this.mode!=="select") return
+    
+    if (this.mode !== 'select') return
     this.canvasOnmousedown(e => {
       mouseStopId = setTimeout(() => {
-           this.mouseOn = true
-        startX =
-          e.clientX - pos.left + selectContainer.scrollLeft
-       console.log(selectContainer.offsetLeft)
-       console.log(selectContainer.scrollLeft)
-      startY = e.clientY - pos.top + selectContainer.scrollTop
-          console.log(selectContainer.offsetTop)
-          console.log(selectContainer.scrollTop)
-          let selDiv = document.createElement('div')
+        this.mouseOn = true
+        startX = e.clientX - this.pos.left + selectContainer.scrollLeft     
+        startY = e.clientY - this.pos.top + selectContainer.scrollTop      
+        let selDiv = document.createElement('div')
         selDiv.style.cssText =
           'position:absolute;width:0;height:0;margin:0;padding:0;border:1px dashed #eee;background-color:#aaa;z-index:1000;opacity:0.6;display:none'
         selDiv.id = 'selectDiv'
@@ -114,26 +111,19 @@ export default class DomCavase {
         console.log(this.el)
         selDiv.style.left = startX + 'px'
         selDiv.style.top = startY + 'px'
-      
-      }, 300)
+      }, 0)
     })
     this.canvasOnmousemove(e => {
-      let _x =
-        e.clientX - pos.left + selectContainer.scrollLeft
-      let _y = e.clientY - pos.top + selectContainer.scrollTop
+      let _x = e.clientX - this.pos.left + selectContainer.scrollLeft
+      let _y = e.clientY - this.pos.top + selectContainer.scrollTop
       let _H = selectContainer.clientHeight
 
       if (_y >= _H && selectContainer.scrollTop <= _H) {
         selectContainer.scrollTop += _y - _H
       }
       // 向上拖拽
-      if (
-        e.clientY <= pos.top &&
-        selectContainer.scrollTop > 0
-      ) {
-        selectContainer.scrollTop = Math.abs(
-          e.clientY - pos.top
-        )
+      if (e.clientY <= this.pos.top && selectContainer.scrollTop > 0) {
+        selectContainer.scrollTop = Math.abs(e.clientY - this.pos.top)
       }
 
       let selDiv = document.getElementById('selectDiv')
@@ -145,7 +135,7 @@ export default class DomCavase {
     })
     this.canvasOnmouseup(e => {
       let selDiv = document.getElementById('selectDiv')
-      let pos=GetPosition(selDiv)
+      let pos = GetPosition(selDiv)
       let fileDivs = document.getElementsByClassName('layernode')
       let selectedEls = []
       let l = selDiv.offsetLeft
@@ -170,6 +160,7 @@ export default class DomCavase {
       selDiv.remove()
       selDiv.style.display = 'none'
       this.mouseOn = false
+      callback && typeof callback === 'function' && callback(selectedEls)
     })
   }
   createNode(ele) {
@@ -179,15 +170,13 @@ export default class DomCavase {
       y: ele.y,
       type: ele.type || '',
       id: ele.id || getuuid(),
-      iconUrl: ele.iconUrl || '',     
+      iconUrl: ele.iconUrl || '',
       name: ele.text || '',
-      childs: ele.childs || null,
-     
+      childs: ele.childs || null
     }
   }
   getAllNode() {}
 }
-
 
 //获取相应属性
 function getStyle(obj, styleName) {
@@ -204,16 +193,15 @@ function clearEventBubble(e) {
   if (e.preventDefault) e.preventDefault()
   else e.returnValue = false
 }
-
-function GetPosition(obj)
-{
-let left = 0;
-let top = 0;
-while(obj.offsetParent)//如果obj的有最近的父级定位元素就继续
-{
-left += obj.offsetLeft;//累加
-top += obj.offsetTop;
-obj=obj.offsetParent;//更新obj,继续判断新的obj是否还有父级定位，然后继续累加
-}
-return {left,top}
+//遍历父偏移
+function GetPosition(obj) {
+  let left = 0
+  let top = 0
+  while (obj.offsetParent) {
+    //如果obj的有最近的父级定位元素就继续
+    left += obj.offsetLeft
+    top += obj.offsetTop
+    obj = obj.offsetParent 
+  }
+  return { left, top }
 }

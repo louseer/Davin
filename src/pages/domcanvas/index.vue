@@ -3,7 +3,7 @@
     <input v-model="width" type="text" placeholder="请输入宽度">
     <input v-model="opacity" type="text" placeholder="请输入透明度">
     <h1>画布在下方⬇</h1>
-
+    <button @click="toggleMode">切换方式</button>
     <div class="stage" ref="stage">
       <div class="canvas" ref="canvas" id="canvas">
         <layer-node v-for class="layernode"></layer-node>
@@ -27,7 +27,8 @@ export default {
       width: '',
       domCavase: {},
       opacity: '',
-      rightClick: false
+      rightClick: false,
+      select: []
     }
   },
 
@@ -37,6 +38,9 @@ export default {
     },
     width(val) {
       this.domCavase.canvasWidth = +val
+    },
+    select(val) {
+      console.log('选中的子元素', val)
     }
   },
   mounted() {
@@ -46,7 +50,7 @@ export default {
     console.log(canvas.offsetTop)
     this.domCavase = new domCavase(canvas)
     console.log(this.domCavase)
-
+  
     this.domCavase.canvasOnclick(e => {
       this.rightClick = false
       console.log(e.screenX, e.screenY)
@@ -54,11 +58,20 @@ export default {
     this.domCavase.canvasRightclick(e => {
       this.rightClick = true
     })
-    this.domCavase.selectNode()
+    this.domCavase.selectNode(node => {
+      this.select = node
+    })
+    window.onresize = () => {
+      
+      this.domCavase.selectNode()
+    }
     console.log(this.domCavase.canvasWidth)
   },
   methods: {
-    name() {}
+    toggleMode() {
+      this.domCavase.mode = 'select'
+      console.log( this.domCavase.mode)
+    }
   }
 }
 </script>
@@ -79,8 +92,8 @@ input {
   position: relative;
   .canvas {
     position: relative;
-    width: 90%;
-    height: 90%;
+    width:90%;
+    height: 720px;
     background: gray;
     margin: auto;
     margin-top: 99px;
