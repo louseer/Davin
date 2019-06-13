@@ -96,6 +96,9 @@ export default class DomCavase {
     //let pos = GetPosition(selectContainer)
     
     console.log(selectContainer)
+    window.onresize=()=>{
+      this.pos=GetPosition(this.el)
+    }
     
     if (this.mode !== 'select') return
     this.canvasOnmousedown(e => {
@@ -157,8 +160,9 @@ export default class DomCavase {
       }
 
       console.log(selectedEls)
-      selDiv.remove()
       selDiv.style.display = 'none'
+      selDiv.remove()
+     
       this.mouseOn = false
       callback && typeof callback === 'function' && callback(selectedEls)
     })
