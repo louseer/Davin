@@ -1,19 +1,27 @@
 export default class DomCavase {
-  constructor(el, mode, grid = [5, 5]) {
+  constructor(el, mode='select', grid = [5, 5]) {
     this.el = el
-    this.mode = mode || 'select'
+    this.mode = mode 
     this.grid = grid
     this.mouseOn = false
     this.pos = GetPosition(this.el)
+    this.canvasZoom=1
   }
   set canvasZoom(val) {
-    this.el.style.transform = `scale(${val},${val})`
+    //this.el.style.cssText = `transform:scale(${val},${val})`
+    this.el.style.transform=`scale(${val},${val})`
+    this.el.style.transformOrigin=`0% 0%`
+    let pos=GetPosition(this.el)
+    // Object.keys(pos).forEach(key=>{
+    //   pos[key] =pos[key]*val
+    // })   
+    this.pos = pos   
   }
   get canvasZoom() {
     const arr = this.el.style.transform.toString().split(',')
-    if (arr.length === 0) {
+    if (arr.length !== 0) {
       const num = arr[1].substring(0, arr[1].length - 1)
-      return `${+num * 100}%`
+      return num
     }
   }
   set canvasOpcity(val) {
@@ -24,20 +32,20 @@ export default class DomCavase {
   }
   set canvasWidth(val) {
     this.el.style.width = `${val}px`
-    this.pos=GetPosition(this.el)
+    this.pos = GetPosition(this.el)
   }
   get canvasWidth() {
     return this.el.offsetWidth
   }
   set canvasHeight(val) {
     this.el.style.height = `${val}px`
-    this.pos=GetPosition(this.el)
+    this.pos = GetPosition(this.el)
   }
   get canvasHeight() {
     return this.el.offsetHeight
   }
   set canvasBackColor(val) {
-    this.el.style.backgroudColor = `#${val}`
+    this.el.style.backgroundColor = `${val}`
   }
   get canvasBackColor() {
     return getStyle(this.el, 'backgroundColor')
@@ -78,6 +86,15 @@ export default class DomCavase {
       callback && typeof callback === 'function' && callback(event)
     }
   }
+  domcumentOnmouseup(callback) {
+    document.onmouseup = e => {
+      if (!this.mouseOn) return
+      clearEventBubble(e)
+      const event = e || window.event
+      callback && typeof callback === 'function' && callback(event)
+    }
+  }
+ 
 
   canvasRightclick(callback) {
     this.el.oncontextmenu = e => {
@@ -87,6 +104,14 @@ export default class DomCavase {
       console.log('画布右击')
     }
   }
+  clearNode(){
+    let fileDivs = document.getElementsByClassName('layernode')   
+   console.log(Array.from(fileDivs)) 
+   Array.from(fileDivs).forEach(ele=>{
+    ele.remove()
+   })
+
+  }
   selectNode(callback) {
     let mouseStopId
     // let mouseOn = false
@@ -94,21 +119,24 @@ export default class DomCavase {
     let startY = 0
     let selectContainer = this.el
     //let pos = GetPosition(selectContainer)
-    
+
     console.log(selectContainer)
-    window.onresize=()=>{
-      this.pos=GetPosition(this.el)
+    window.onresize = () => {
+      console.log('画布变化')
+      this.pos = GetPosition(this.el)
     }
-    
+
     if (this.mode !== 'select') return
     this.canvasOnmousedown(e => {
       mouseStopId = setTimeout(() => {
         this.mouseOn = true
-        startX = e.clientX - this.pos.left + selectContainer.scrollLeft     
-        startY = e.clientY - this.pos.top + selectContainer.scrollTop      
+        
+        console.log(this.canvasZoom)
+        startX = (e.clientX - this.pos.left)/+this.canvasZoom + selectContainer.scrollLeft
+        startY = (e.clientY - this.pos.top)/+this.canvasZoom + selectContainer.scrollTop
         let selDiv = document.createElement('div')
         selDiv.style.cssText =
-          'position:absolute;width:0;height:0;margin:0;padding:0;border:1px dashed #eee;background-color:#aaa;z-index:1000;opacity:0.6;display:none'
+          'position:absolute;width:0;height:0;margin:0;padding:0;border:1px dashed #eee;background-color:#aaa;z-index:1000;opacity:0.6;display:none;;'
         selDiv.id = 'selectDiv'
         selectContainer.appendChild(selDiv)
         console.log(this.el)
@@ -117,8 +145,8 @@ export default class DomCavase {
       }, 0)
     })
     this.canvasOnmousemove(e => {
-      let _x = e.clientX - this.pos.left + selectContainer.scrollLeft
-      let _y = e.clientY - this.pos.top + selectContainer.scrollTop
+      let _x =  (e.clientX - this.pos.left)/+this.canvasZoom + selectContainer.scrollLeft
+      let _y = (e.clientY - this.pos.top)/+this.canvasZoom + selectContainer.scrollTop
       let _H = selectContainer.clientHeight
 
       if (_y >= _H && selectContainer.scrollTop <= _H) {
@@ -136,7 +164,7 @@ export default class DomCavase {
       selDiv.style.width = Math.abs(_x - startX) + 'px'
       selDiv.style.height = Math.abs(_y - startY) + 'px'
     })
-    this.canvasOnmouseup(e => {
+    this.domcumentOnmouseup(e => {
       let selDiv = document.getElementById('selectDiv')
       let pos = GetPosition(selDiv)
       let fileDivs = document.getElementsByClassName('layernode')
@@ -162,7 +190,6 @@ export default class DomCavase {
       console.log(selectedEls)
       selDiv.style.display = 'none'
       selDiv.remove()
-     
       this.mouseOn = false
       callback && typeof callback === 'function' && callback(selectedEls)
     })
@@ -190,6 +217,7 @@ function getStyle(obj, styleName) {
     return getComputedStyle(obj, null)[styleName]
   }
 }
+
 //阻止冒泡
 function clearEventBubble(e) {
   if (e.stopPropagation) e.stopPropagation()
@@ -197,6 +225,7 @@ function clearEventBubble(e) {
   if (e.preventDefault) e.preventDefault()
   else e.returnValue = false
 }
+
 //遍历父偏移
 function GetPosition(obj) {
   let left = 0
@@ -205,7 +234,8 @@ function GetPosition(obj) {
     //如果obj的有最近的父级定位元素就继续
     left += obj.offsetLeft
     top += obj.offsetTop
-    obj = obj.offsetParent 
+    obj = obj.offsetParent
   }
   return { left, top }
+  
 }

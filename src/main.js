@@ -8,7 +8,9 @@ import '@/assets/styles/base.less'
 import base from '@/mixins/base'
 Vue.mixin(base)
 
-
+document.oncontextmenu=()=>{
+  self.event.returnValue=false
+}
 Vue.config.productionTip = false
 
 new Vue({
