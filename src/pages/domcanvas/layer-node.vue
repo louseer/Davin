@@ -1,6 +1,6 @@
 <template>
-  <div>
-    节点
+  <div class="node">
+    
   </div>
 </template>
 
@@ -10,6 +10,13 @@
   }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
+.node{
+  position: absolute;
+  width: 30px;
+  height: 40px;
+  background: green;
+  border: 2px darkgoldenrod solid
 
+}
 </style>
