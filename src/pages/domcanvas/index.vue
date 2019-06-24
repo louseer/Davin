@@ -15,6 +15,9 @@
     <button @click="clearCanvas">清空画布</button>
     <div class="stage" ref="stage">
       <div class="canvas" ref="canvas" id="canvas">
+        <div class='node-box' v-if='configer'>
+          <Node class="layernode" v-for='(chart,index) in configer.charts' :key='index'  :config='chart' :draggable="mode === 'edit'"/>
+        </div>
         <layer-node v-for class="layernode" style="top:0px; left:0px"></layer-node>
         <layer-node v-for class="layernode" style="top:200px; left:90px"></layer-node>
         <layer-node v-for class="layernode" style="top:50px; left:300px"></layer-node>
@@ -28,9 +31,13 @@
 //import domCavase from '././domcanvas'
 import DomCanvas from './index';
 import layerNode from '././layer-node.vue'
+import Node from '../components/node/node.vue'
+import Configer from '../utils/dashboardConfiger.js'
+
 export default {
   components: {
-    layerNode
+    layerNode,
+    Node
   },
   data() {
     return {
@@ -43,7 +50,9 @@ export default {
       canvas:undefined,
       height:'',
       bkg:'',
-      sence:''
+      sence:'',
+      configer: null,
+      mode:'edit'
     }
   },
 
@@ -103,6 +112,9 @@ export default {
       this.domCavase.mode = 'select'
       console.log( this.domCavase.mode)
     }
+  },
+  created () {
+    this.configer = new Configer();
   }
 }
 </script>
