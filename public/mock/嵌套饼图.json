@@ -1,0 +1,37 @@
+{
+  "status": 0,
+  "msg": "",
+  "data": [
+      {
+          "name": "PC",
+          "value": 97,
+          "url": "http://www.baidu.com"
+      },
+      {
+          "name": "iOS",
+          "value": 50,
+          "url": "http://www.baidu.com"
+      },
+      {
+          "name": "Android",
+          "value": 59,
+          "url": "http://www.baidu.com"
+      },
+      {
+          "name": "windows phone",
+          "value": 29
+      },
+      {
+          "name": "Black berry",
+          "value": 3
+      },
+      {
+          "name": "Nokia S60",
+          "value": 2
+      },
+      {
+          "name": "Nokia S90",
+          "value": 1
+      }
+  ]
+}
