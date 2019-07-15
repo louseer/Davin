@@ -98,7 +98,8 @@ export default class Canvas {
    })
 
   }
-  
+ 
+
   createNode(ele) {
     return {
       elementType: ele.elementType || 'node',
@@ -124,11 +125,17 @@ function getStyle(obj, styleName) {
 }
 
 //阻止冒泡
+// function clearEventBubble(e) {
+//   if (e.stopPropagation) e.stopPropagation()
+//   else e.cancelBubble = true
+//   if (e.preventDefault) e.preventDefault()
+//   else e.returnValue = false
+// }
+
 function clearEventBubble(e) {
-  if (e.stopPropagation) e.stopPropagation()
-  else e.cancelBubble = true
-  if (e.preventDefault) e.preventDefault()
-  else e.returnValue = false
+  e.stopPropagation ? e.stopPropagation() : e.cancelBubble = true
+  e.preventDefault ? e.preventDefault() :  e.returnValue = false  
 }
+
 
 

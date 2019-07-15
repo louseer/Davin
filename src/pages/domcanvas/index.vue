@@ -99,6 +99,7 @@ export default {
       this.rightClick = true
     })
     this.sence.selectNode('layernode',node => {
+      this.select=[]
       this.select = node
     })
 

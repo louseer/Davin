@@ -4,6 +4,7 @@ export default class scene {
     this.stage = new Dcanvas.Stage(stage)
     this.canvas = new Dcanvas.Canvas(canvas)
   }
+ 
   selectNode(className, callback) {
     let mouseStopId
     let startX = 0
@@ -13,6 +14,7 @@ export default class scene {
     window.onresize = () => {
       console.log('变化了', '')
       this.stage.pos = GetPosition(this.stage.el)
+      this.autoZoom()
     }
 
     if (this.stage.mode !== 'select') return
@@ -86,6 +88,13 @@ export default class scene {
       callback && typeof callback === 'function' && callback(selectedEls)
     })
   }
+
+  autoZoom(){   
+      const sizeW=this.canvas.canvasWidth/this.stage.el.offsetWidth
+      const sizeH=this.canvas.canvasHeight/this.stage.el.offsetHeight
+      this.canvas.canvasZoom=1/sizeW
+      console.log(sizeW)    
+   }
 }
 function GetPosition(obj) {
   let left = 0

@@ -54,19 +54,12 @@ export default class Stage {
       clearEventBubble(e)
       const event = e || window.event
       callback && typeof callback === 'function' && callback(event)
-      console.log('画布右击')
+     // console.log('画布右击')
     }
   }
 }
 
-//获取相应属性
-function getStyle(obj, styleName) {
-  if (obj.currentStyle) {
-    return obj.currentStyle[styleName]
-  } else {
-    return getComputedStyle(obj, null)[styleName]
-  }
-}
+
 
 //阻止冒泡
 function clearEventBubble(e) {
