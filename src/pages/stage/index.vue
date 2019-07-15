@@ -21,10 +21,8 @@
             v-for="(node,index) in domCavase.nodeList"
             :node="node"
             :key="index"
-            
           />
         </div>
-
         <div v-if="rightClick" class="rightmenu" style="width:200px; height:200px; background:red"></div>
       </div>
     </div>
@@ -33,6 +31,7 @@
 
 <script>
 import Dcanvas from './dcanvas/dcanvas'
+
 import Node from './layer-node.vue'
 export default {
   components: {
@@ -57,22 +56,24 @@ export default {
 
   watch: {},
   mounted() {
-    const groupId = 1
-    this.domCavase.createNode({ w: 10, y: 20, groupId })
-    console.log('tag', this.domCavase.nodeList)
     const handler = this.domCavase.Handler(this.$refs.stage)
-    handler.clickHandler(e => {
-      
-      console.log(e.offsetX,e.offsetY)
-    })
+    handler.selectNodes()
   },
   methods: {
     addNode() {
-      this.domCavase.createNode({ x: 10, y: 20,active:true })
+      const nodes = [
+        new Dcanvas.Node({ x: 0, y: 0, w: 500, h: 500, id: '1' }),
+        new Dcanvas.Node({ x: 600, y: 0, w: 900, h: 500, id: '2' }),
+        new Dcanvas.Node({ x: 900, y: 500, w: 70, h: 200, id: '3' })
+      ]
+      nodes.forEach(node => {
+        this.domCavase.addNode(node)
+      })
+
       console.log('tag', this.domCavase.nodeList)
     }
   },
-  created() {   
+  created() {
     this.domCavase = new Dcanvas.Stage()
   }
 }

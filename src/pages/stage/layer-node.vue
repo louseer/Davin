@@ -1,5 +1,5 @@
 <template>
-  <div class="node" :id="node.id" :style="style">
+  <div class="node" :id="node.id" :style="style" @mousedown.stop="" @click="node.click($event)" >
     
   </div>
 </template>
@@ -14,7 +14,7 @@
     },
    computed: {
      style() {
-       return (this.node.active ? `left:${this.node.x}px;border:3px black solid` : `left:${this.node.x}px`)
+       return  `left:${this.node.x}px;top:${this.node.y}px;width:${this.node.w}px;height:${this.node.h}px`
      }
    },
     
