@@ -16,7 +16,7 @@
     <div class="stage" ref="stage">
       <div class="canvas" ref="canvas" id="canvas">
         <div class='node-box' v-if='configer'>
-          <Node class="layernode" v-for='(chart,index) in configer.charts' :key='index'  :config='chart' :draggable="mode === 'edit'"/>
+          <Node class="layernode" v-for='(chart,index) in configer.charts' :key='index' :scale='scale' :config='chart' :draggable="mode === 'edit'"/>
         </div>
         <layer-node v-for class="layernode" style="top:0px; left:0px"></layer-node>
         <layer-node v-for class="layernode" style="top:200px; left:90px"></layer-node>
@@ -52,7 +52,8 @@ export default {
       bkg:'',
       sence:'',
       configer: null,
-      mode:'edit'
+      mode:'edit',
+      scale:1
     }
   },
 

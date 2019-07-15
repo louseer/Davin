@@ -1,0 +1,358 @@
+{
+  "status": 0,
+  "msg": "",
+  "data": {
+      "mapData": [
+          {
+              "name": "北京",
+              "value": 8119,
+              "sizeValue": 575,
+              "tooltipValues": [
+                  60,
+                  6
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "天津",
+              "value": 5005,
+              "sizeValue": 619,
+              "tooltipValues": [
+                  71,
+                  5
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "上海",
+              "value": 6588,
+              "sizeValue": 719,
+              "tooltipValues": [
+                  98,
+                  9
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "重庆",
+              "value": 9778,
+              "sizeValue": 646,
+              "tooltipValues": [
+                  59,
+                  5
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "河北",
+              "value": 9220,
+              "sizeValue": 1000,
+              "tooltipValues": [
+                  83,
+                  9
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "河南",
+              "value": 8258,
+              "sizeValue": 759,
+              "tooltipValues": [
+                  32,
+                  6
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "云南",
+              "value": 9200,
+              "sizeValue": 513,
+              "tooltipValues": [
+                  31,
+                  7
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "辽宁",
+              "value": 8818,
+              "sizeValue": 792,
+              "tooltipValues": [
+                  59,
+                  8
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "黑龙江",
+              "value": 9429,
+              "sizeValue": 824,
+              "tooltipValues": [
+                  24,
+                  8
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "湖南",
+              "value": 6546,
+              "sizeValue": 628,
+              "tooltipValues": [
+                  61,
+                  7
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "安徽",
+              "value": 6792,
+              "sizeValue": 688,
+              "tooltipValues": [
+                  60,
+                  5
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "山东",
+              "value": 7256,
+              "sizeValue": 980,
+              "tooltipValues": [
+                  73,
+                  6
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "新疆",
+              "value": 7413,
+              "sizeValue": 774,
+              "tooltipValues": [
+                  90,
+                  9
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "江苏",
+              "value": 8343,
+              "sizeValue": 553,
+              "tooltipValues": [
+                  31,
+                  7
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "浙江",
+              "value": 8316,
+              "sizeValue": 783,
+              "tooltipValues": [
+                  72,
+                  8
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "江西",
+              "value": 6251,
+              "sizeValue": 543,
+              "tooltipValues": [
+                  25,
+                  6
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "湖北",
+              "value": 7841,
+              "sizeValue": 772,
+              "tooltipValues": [
+                  70,
+                  7
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "广西",
+              "value": 7748,
+              "sizeValue": 863,
+              "tooltipValues": [
+                  31,
+                  9
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "甘肃",
+              "value": 9271,
+              "sizeValue": 746,
+              "tooltipValues": [
+                  31,
+                  8
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "山西",
+              "value": 7181,
+              "sizeValue": 781,
+              "tooltipValues": [
+                  100,
+                  6
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "内蒙古",
+              "value": 6754,
+              "sizeValue": 868,
+              "tooltipValues": [
+                  45,
+                  5
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "陕西",
+              "value": 5145,
+              "sizeValue": 838,
+              "tooltipValues": [
+                  72,
+                  8
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "吉林",
+              "value": 9371,
+              "sizeValue": 849,
+              "tooltipValues": [
+                  31,
+                  8
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "福建",
+              "value": 8279,
+              "sizeValue": 869,
+              "tooltipValues": [
+                  64,
+                  10
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "贵州",
+              "value": 8123,
+              "sizeValue": 807,
+              "tooltipValues": [
+                  70,
+                  7
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "广东",
+              "value": 7756,
+              "sizeValue": 780,
+              "tooltipValues": [
+                  42,
+                  7
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "青海",
+              "value": 6300,
+              "sizeValue": 603,
+              "tooltipValues": [
+                  61,
+                  5
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "西藏",
+              "value": 5785,
+              "sizeValue": 1000,
+              "tooltipValues": [
+                  73,
+                  6
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "四川",
+              "value": 9054,
+              "sizeValue": 576,
+              "tooltipValues": [
+                  100,
+                  6
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "宁夏",
+              "value": 8692,
+              "sizeValue": 629,
+              "tooltipValues": [
+                  79,
+                  5
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "海南",
+              "value": 6726,
+              "sizeValue": 860,
+              "tooltipValues": [
+                  87,
+                  6
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "台湾",
+              "value": 6161,
+              "sizeValue": 996,
+              "tooltipValues": [
+                  26,
+                  6
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "香港",
+              "value": 7525,
+              "sizeValue": 730,
+              "tooltipValues": [
+                  86,
+                  9
+              ],
+              "url": "sugar.baidu.com"
+          },
+          {
+              "name": "澳门",
+              "value": 6804,
+              "sizeValue": 585,
+              "tooltipValues": [
+                  21,
+                  6
+              ],
+              "url": "sugar.baidu.com"
+          }
+      ],
+      "valueName": "人口",
+      "sizeValueName": "GDP",
+      "tooltipNames": [
+          "面积",
+          "流动人口"
+      ],
+      "tooltipUnits": [
+          "平方公里",
+          "人"
+      ]
+  }
+}
