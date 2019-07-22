@@ -14,6 +14,10 @@ export default class Stage {
     this.mode = 'select'
     this.canvas = {}
   }
+  hasGroup(nodes){
+   
+
+  }
   refreshNodes() {
     this.nodeList.forEach(node => {
       this.selectNodes.forEach(select => {

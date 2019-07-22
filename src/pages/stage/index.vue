@@ -81,6 +81,7 @@ export default {
       this.domCavase.clear()
     },
     totop() {
+      //TODO: group
       this.domCavase.topAlign()
     },
     toGroup() {
@@ -115,8 +116,8 @@ export default {
       const _y = this.domCavase.eventZoom(e).clientY
       const dx = _x - this.startX
       const dy = _y - this.startY
+      const names = this.domCavase.selectNodes.map(n => n.id)
       if (node.type === 'element') {
-        const names = this.domCavase.selectNodes.map(n => n.id)
         this.domCavase.nodeList.forEach(n => {
           if (names.includes(n.id)) {
             n.x = n.x + dx
@@ -128,7 +129,7 @@ export default {
       }
       if (node.type === 'group') {
         this.domCavase.nodeList.forEach(n => {
-          if (node.groupId === n.groupId) {
+          if (node.groupId === n.groupId || names.includes(n.id)) {
             n.x = n.x + dx
             n.y = n.y + dy
             this.startX = this.domCavase.eventZoom(e).clientX
