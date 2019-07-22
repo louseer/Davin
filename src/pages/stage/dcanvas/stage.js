@@ -1,5 +1,6 @@
 import Dcanvas from './dcanvas'
 import { type } from 'os'
+import { getuuid } from '../../utils/index'
 export default class Stage {
   constructor(id) {
     this.init(id)
@@ -8,28 +9,112 @@ export default class Stage {
     this.nodeList = []
     this.selectNodes = []
     this.id = id
-    this.zoomSize = 1
+    this.zoomSize = 0.5
     this.eventCrash = false
     this.mode = 'select'
+    this.canvas = {}
+  }
+  refreshNodes() {
+    this.nodeList.forEach(node => {
+      this.selectNodes.forEach(select => {
+        node.id === select.id && (node = { ...select })
+      })
+    })
+  }
+  refreshNode(node) {
+    this.nodeList.forEach(n => {
+      n.id === node.id && (n = { ...node })
+    })
+  }
+  topAlign() {
+    if (this.selectNodes.length > 1) {
+      let ws = this.selectNodes.map(n => n.y)
+      const min = Math.min.apply(null, ws)
+      this.selectNodes.forEach(n => {
+        n.y = min
+      })
+      this.refreshNodes()
+    }
+  }
+  eventZoom(e) {
+    const clientX = e.clientX / this.zoomSize
+    const clientY = e.clientY / this.zoomSize
+    return { clientX, clientY }
   }
   addNode(node) {
     this.nodeList.push(node)
   }
+  clear() {
+    this.nodeList = []
+  }
+  createCanvase(obj) {
+    this.canvas = obj
+  }
+
   filterNode(rect) {
+    console.log(rect)
     const { x, y, w, h } = rect
-    this.selectNodes = this.nodeList.filter(
+    //最小包围和
+    const choiceNodes = this.nodeList.filter(
       node =>
-        node.x + node.w >= x &&
-        node.y + node.h >= y &&
-        x + w >= node.x &&
-        y + h >= node.y
+        (node.x + node.w) * this.zoomSize >= x &&
+        (node.y + node.h) * this.zoomSize >= y &&
+        x + w >= node.x * this.zoomSize &&
+        y + h >= node.y * this.zoomSize
     )
 
-    console.log(this.selectNodes)
+    const nodesInGroup = []
+    choiceNodes.forEach(nodeInSelect => {
+      if (nodeInSelect.type === 'group') {
+        nodesInGroup.push(
+          ...this.nodeList.filter(
+            nodeInAll =>
+              nodeInSelect.groupId === nodeInAll.groupId &&
+              nodeInSelect.id !== nodeInAll.id
+          )
+        )
+      }
+    })
+    const newArry = [
+      ...new Set(nodesInGroup.concat(choiceNodes).map(n => n.id))
+    ]
+    this.selectNodes = this.nodeList.filter(n => newArry.includes(n.id))
+    this.nodeList.forEach(n => {
+      this.selectNodes.indexOf(n) !== -1 &&
+      nodesInGroup.filter(n => n.type !== 'group').indexOf(n) === -1
+        ? (n.active = true)
+        : (n.active = false)
+    })
   }
   layOutToUp(item) {}
   layOutToDown(item) {}
-  toGroup(nodes) {}
+  toGroup() {
+    if (this.selectNodes.length === 0) return
+    const { minX, minY, maxW, maxH } = this.nodesMaxArea(this.selectNodes)
+    const uid = getuuid()
+    this.selectNodes.forEach(n => {
+      n.groupId = uid
+      n.active = false
+    })
+
+    const Gnode = {
+      groupId: uid,
+      type: 'group',
+      x: minX,
+      y: minY,
+      w: maxW,
+      h: maxH,
+      active: true
+    }
+    this.nodeList.push(new Dcanvas.Node(Gnode))
+  }
+  nodesMaxArea(nodes) {
+    const minX = Math.min.apply(null, nodes.map(n => n.x))
+    const minY = Math.min.apply(null, nodes.map(n => n.y))
+    const maxW = Math.max.apply(null, nodes.map(n => n.x + n.w)) - minX
+    const maxH = Math.max.apply(null, nodes.map(n => n.y + n.h)) - minY
+    return { minX, minY, maxW, maxH }
+  }
   checkInStage(e) {
     const [x, y] = [e.target.offsetX, e.target.offsetY]
   }
@@ -67,21 +152,34 @@ export default class Stage {
           callback && typeof callback === 'function' && callback(event)
         }
       },
-      selectNodes() {
+      rightclickHandler(callback) {
+        ele.oncontextmenu = e => {
+          this.mouseOn = false
+          clearEventBubble(e)
+          const event = e || window.event
+          callback && typeof callback === 'function' && callback(event)
+          console.log('画布右击')
+        }
+      },
+      selectNodes(callback) {
         let startX = 0
         let startY = 0
         this.mousedownHandler(e => {
-          this.mouseOn = true
-          startX = e.clientX - GetPosition(ele).left + ele.scrollLeft
-          startY = e.clientY - GetPosition(ele).top + ele.scrollTop
-          let selDiv = document.createElement('div')
-          selDiv.style.cssText =
-            'position:absolute;width:0;height:0;margin:0;padding:0;border:1px dashed #eee;z-index:1000;opacity:0.6;display:none;'
-          selDiv.id = 'selectDiv'
-          ele.appendChild(selDiv)
-          selDiv.style.left = startX + 'px'
-          selDiv.style.top = startY + 'px'
-          console.log('回来了', '')
+          const mouseStopId = setTimeout(() => {
+            this.mouseOn = true
+
+            startX = e.clientX - GetPosition(ele).left + ele.scrollLeft
+            startY = e.clientY - GetPosition(ele).top + ele.scrollTop
+            let selDiv = document.createElement('div')
+            selDiv.style.cssText =
+              'position:absolute;width:0;height:0;margin:0;padding:0;border:1px dashed #eee;z-index:1000;opacity:0.6;display:none;'
+            selDiv.id = 'selectDiv'
+            ele.appendChild(selDiv)
+            selDiv.style.left = startX + 'px'
+            selDiv.style.top = startY + 'px'
+            console.log('回来了', '')
+          }, 50)
+          callback && typeof callback === 'function' && callback(event)
         })
         this.mousemoveHandler(e => {
           let _x = e.clientX - GetPosition(ele).left + ele.scrollLeft
@@ -114,7 +212,6 @@ export default class Stage {
             h: +selDiv.style.height.substring(0, selDiv.style.height.length - 2)
           }
           _this.filterNode(rect)
-          
           selDiv.style.display = 'none'
           selDiv.remove()
         })

@@ -1,15 +1,26 @@
+import { getuuid } from '../../utils/index'
+import Dcanvas from './dcanvas'
 export default class Node {
   constructor(node) {
-    this.id = node.id
-    this.active=node.active
-    this.x = node.x
-    this.y = node.y
-    this.w = node.w
-    this.h = node.h
-    this.groupId = node.groupId
-    
+    this.type=node.type || 'element'
+    this.id = node.id || getuuid()
+    this.active=node.active || false
+    this.x = node.x || 0
+    this.y = node.y || 0
+    this.w = node.w || 0
+    this.h = node.h || 0
+    this.groupId = node.groupId || ''
+    this.index=node.index      
+    this.disable=node.disable || false
   }
-  click(e){
-    console.log(this.id)
-  }
+  
+ 
+ 
+}
+
+function clearEventBubble(e) {
+  if (e.stopPropagation) e.stopPropagation()
+  else e.cancelBubble = true
+  if (e.preventDefault) e.preventDefault()
+  else e.returnValue = false
 }
