@@ -12,6 +12,8 @@ export default class Node {
     this.groupId = node.groupId || ''
     this.index=node.index      
     this.disable=node.disable || false
+    this.pid=node.pid || null
+    this.cid=node.cid || null
   }
   
  

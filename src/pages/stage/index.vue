@@ -52,15 +52,23 @@ export default {
       rightClick: false,
       mode: 'edit',
       startX: 0,
-      startY: 0
+      startY: 0,
+      nodelist:[]
     }
   },
 
   watch: {
     domCavase: {
       handler: function() {
-        console.log('选择节点', this.domCavase.selectNodes)
-        // console.log('全部节点',this.domCavase.nodeList)
+        console.log('全局监听', this.domCavase.selectNodes)      
+      
+      },
+      deep: true
+    },
+    nodelist: {
+      handler: function(val) {
+        console.log('list监听',val)
+       this.domCavase.refreshGroup(val)
       },
       deep: true
     }
@@ -104,7 +112,7 @@ export default {
       }
       if (node.type === 'group') {
         this.domCavase.selectNodes = this.domCavase.nodeList.filter(
-          n => n.groupId === node.groupId
+          n => node.cid.includes(n.id) || node.id===n.id
         )
       }
     },
@@ -129,7 +137,7 @@ export default {
       }
       if (node.type === 'group') {
         this.domCavase.nodeList.forEach(n => {
-          if (node.groupId === n.groupId || names.includes(n.id)) {
+          if (node.cid.includes(n.id) || names.includes(n.id)) {
             n.x = n.x + dx
             n.y = n.y + dy
             this.startX = this.domCavase.eventZoom(e).clientX
@@ -166,6 +174,7 @@ export default {
   },
   created() {
     this.domCavase = new Dcanvas.Stage()
+    this.nodelist= this.domCavase.nodeList
   }
 }
 </script>

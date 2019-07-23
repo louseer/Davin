@@ -14,9 +14,19 @@ export default class Stage {
     this.mode = 'select'
     this.canvas = {}
   }
-  hasGroup(nodes){
-   
-
+  refreshGroup(nodes) {
+    
+    nodes.forEach(n=>{
+      if(n.type === 'group'){
+        const arr = nodes.filter(c=>n.cid.includes(c.id))
+        const { minX, minY, maxW, maxH } = this.nodesMaxArea(arr)         
+       n.x=minX
+       n.y=minY
+       n.w=maxW
+       n.h=maxH
+      }       
+    })   
+    this.nodeList=nodes
   }
   refreshNodes() {
     this.nodeList.forEach(node => {
@@ -49,7 +59,7 @@ export default class Stage {
     this.nodeList.push(node)
   }
   clear() {
-    this.nodeList = []
+    this.nodeList.splice(0)
   }
   createCanvase(obj) {
     this.canvas = obj
@@ -71,10 +81,8 @@ export default class Stage {
     choiceNodes.forEach(nodeInSelect => {
       if (nodeInSelect.type === 'group') {
         nodesInGroup.push(
-          ...this.nodeList.filter(
-            nodeInAll =>
-              nodeInSelect.groupId === nodeInAll.groupId &&
-              nodeInSelect.id !== nodeInAll.id
+          ...this.nodeList.filter(nodeInAll =>
+            nodeInSelect.cid.includes(nodeInAll.id)
           )
         )
       }
@@ -94,20 +102,23 @@ export default class Stage {
   layOutToDown(item) {}
   toGroup() {
     if (this.selectNodes.length === 0) return
-    const { minX, minY, maxW, maxH } = this.nodesMaxArea(this.selectNodes)
+    //const { minX, minY, maxW, maxH } = this.nodesMaxArea(this.selectNodes)
     const uid = getuuid()
+    const cids = []
     this.selectNodes.forEach(n => {
-      n.groupId = uid
+      n.pid = uid
       n.active = false
+      cids.push(n.id)
     })
 
     const Gnode = {
-      groupId: uid,
+      id: uid,
+      cid: cids,
       type: 'group',
-      x: minX,
-      y: minY,
-      w: maxW,
-      h: maxH,
+      // x: minX,
+      // y: minY,
+      // w: maxW,
+      // h: maxH,
       active: true
     }
     this.nodeList.push(new Dcanvas.Node(Gnode))
