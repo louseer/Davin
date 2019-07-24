@@ -12,10 +12,15 @@
       <option value="blue">蓝色</option>
     </select>
     <h1>画布在下方⬇</h1>
-    <button @click="fillNode">添加</button>
-    <button @click="totop">对齐</button>
-    <button @click="toGroup">编组</button>
-    <button @click="clear">清空</button>
+    <div style="clear:both;padding:10px">
+      <div style="margin:0 auto; width:25%">
+        <button @click="fillNode">添加</button>
+        <button @click="totop">对齐</button>
+        <button @click="toGroup">编组</button>
+        <button @click="outGroup">解除编组</button>
+        <button @click="clear">清空</button>
+      </div>
+    </div>
     <div class="stage" ref="stage">
       <Cav :canvasConfig="domCavase.canvas">
         <Node
@@ -53,22 +58,27 @@ export default {
       mode: 'edit',
       startX: 0,
       startY: 0,
-      nodelist:[]
+      nodelist: []
     }
   },
 
   watch: {
     domCavase: {
-      handler: function() {
-        console.log('全局监听', this.domCavase.selectNodes)      
-      
+      handler: function(val) {
+        console.log(
+          '全局监听',
+          this.domCavase.selectNodes.filter(
+            n => n.type === 'group' && n.pid === null
+          )
+        )
+        console.log('list监听', val)
       },
       deep: true
     },
     nodelist: {
       handler: function(val) {
-        console.log('list监听',val)
-       this.domCavase.refreshGroup(val)
+        //console.log('list监听', val)
+        //this.domCavase.refreshGroup(val)
       },
       deep: true
     }
@@ -85,6 +95,9 @@ export default {
     })
   },
   methods: {
+    outGroup() {
+      this.domCavase.outGroup()
+    },
     clear() {
       this.domCavase.clear()
     },
@@ -112,7 +125,7 @@ export default {
       }
       if (node.type === 'group') {
         this.domCavase.selectNodes = this.domCavase.nodeList.filter(
-          n => node.cid.includes(n.id) || node.id===n.id
+          n => node.cid.includes(n.id) || node.id === n.id
         )
       }
     },
@@ -151,12 +164,7 @@ export default {
         { x: 0, y: 0, w: 500, h: 500 },
         { x: 600, y: 0, w: 900, h: 500 },
         { x: 900, y: 500, w: 70, h: 200 },
-        {
-          x: 0,
-          y: 0,
-          w: 200,
-          h: 60
-        }
+        { x: 0, y: 0, w: 200, h: 60 }
       ]
       nodes.forEach(node => {
         this.addNode(node)
@@ -174,12 +182,24 @@ export default {
   },
   created() {
     this.domCavase = new Dcanvas.Stage()
-    this.nodelist= this.domCavase.nodeList
+    this.nodelist = this.domCavase.nodeList
   }
 }
 </script>
 
 <style scoped lang='less'>
+button {
+  border: 1px white solid;
+  font: 16px/1 '微软雅黑';
+  padding: 10px;
+  border-radius: 4px;
+  margin-right: 10px;
+  cursor: pointer;
+  &:hover {
+    background: darkgray;
+    color: #ffffff;
+  }
+}
 input {
   border: 1px #dddddd solid;
   height: 40px;

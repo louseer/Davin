@@ -1,39 +1,35 @@
 <template>
-  
-   
-    <div class="node-room" v-else>
-      <div
-        @mousedown.stop="nodeMousedown($event) "
-        :draggable="candrage"
-        @dragover="dragover"
-        @dragstart="dragStart($event)"
-        :class="rnode.type === 'element' ? 'node' : 'group'"
-        :id="rnode.id"
-        :style="style"
-        @drag.stop="nodeDrag($event)"
-        @click.stop="nodeClick($event)"
-        @drop.stop="nodeDrop"
-        @dragenter="dragenter"
-      >
-        <div class="select-mask" v-if="rnode.active">
-          <i
-            v-for="(p,pindex) in Control"
-            :class="p.name"
-            draggable
-            @dragover.prevent
-            @drop.prevent
-            @mousedown="resizeMousedown"
-            @drag.stop="resizeNode(p.event,$event)"
-            :style="p.type==='circle'? ' border-radius: 50% 50%;':''"
-          ></i>
-        </div>
-      </div>
+  <div class="node-room">
+    <div
+      @mousedown.stop="nodeMousedown($event) "
+      :draggable="candrage"
+      @dragover="dragover"
+      @dragstart="dragStart($event)"
+      :class="rnode.type === 'element' ? 'node' : 'group'"
+      :id="rnode.id"
+      :style="style"
+      @drag.stop="nodeDrag($event)"
+      @click.stop="nodeClick($event)"
+      @drop.stop="nodeDrop"
+      @dragenter="dragenter"
+    >
+      <div class="select-mask" v-if="rnode.active">
+        <i
+          v-for="(p,pindex) in Control"
+          :class="p.name"
+          draggable
+          @dragover.prevent
+          @drop.prevent
+          @mousedown="resizeMousedown"
+          @drag.stop="resizeNode(p.event,$event)"
+          :style="p.type==='circle'? ' border-radius: 50% 50%;':''"
+        ></i>
+      </div>{{node.type === 'group' ? `Group-${node.index}`: `Node-${node.index}`}}
     </div>
-  
+  </div>
 </template>
 
 <script>
-
 export default {
   name: 'Node',
   props: {
@@ -92,21 +88,11 @@ export default {
       ]
     }
   },
-  // watch: {
-  //   node:{
-  //     handler:function(val){
-  //       console.log('变化啊  @@@', val.x,val.y)
-  //       this.rnode=val
-  //     },
-  //     deep:true
-  //   }
-  // },
 
   computed: {
-    style() {    
-        return `transform-origin:0 0;transform:translate(${this.rnode.x}px,${this.rnode.y}px);width:${this.rnode.w}px;height:${this.rnode.h}px`
-      }
-    
+    style() {
+      return `transform-origin:0 0;transform:translate(${this.rnode.x}px,${this.rnode.y}px);width:${this.rnode.w}px;height:${this.rnode.h}px`
+    }
   },
 
   methods: {
@@ -156,7 +142,7 @@ export default {
           break
       }
 
-      console.log('node', '')
+     
       this.$emit('resizeNode', e, this.rnode)
     },
     nodeDrop(e) {
@@ -168,9 +154,9 @@ export default {
       e.preventDefault()
       this.$emit('nodeDrag', e, this.node)
     },
-    nodeMousedown(e){
-    this.candrage=true
-     this.$emit('nodeMousedown', this.rnode)
+    nodeMousedown(e) {
+      this.candrage = true
+      this.$emit('nodeMousedown', this.rnode)
     },
     nodeClick(e) {
       this.$emit('nodeClick', this.rnode)
@@ -182,16 +168,20 @@ export default {
 <style lang="less" scoped>
 .node-room {
   position: absolute;
+  color: #616161;
+  font: 30px/100%;
 }
 .node {
   position: absolute;
-  background: black;
+  background: #7d7d7d;
   border: 1px darkgray solid;
 }
-.group{position: absolute;
-//  background: rgba(255, 0, 0, 0.2);
- 
-  border: 1px darkgray solid;}
+.group {
+  position: absolute;
+  //  background: rgba(255, 0, 0, 0.2);
+
+  border: 1px white dotted;
+}
 .select-mask {
   width: 100%;
   height: 100%;

@@ -1,5 +1,6 @@
 <template>
   <div class="canvas" ref="canvas" id="canvas" :style="style ">
+   
     <slot></slot>
   </div>
 </template>
@@ -25,9 +26,9 @@ computed: {
   position: absolute;
   width: 500px;
   height: 500px;
-  background: gray;
-  top: 0;
-  left: 0;
+  background: #a0a0a0;
+  top: 50px;
+  left: 50px;
   
 }
 </style>

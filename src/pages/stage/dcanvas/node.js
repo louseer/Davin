@@ -9,8 +9,8 @@ export default class Node {
     this.y = node.y || 0
     this.w = node.w || 0
     this.h = node.h || 0
-    this.groupId = node.groupId || ''
-    this.index=node.index      
+    //this.groupId = node.groupId || ''
+    this.index=node.index || 1   
     this.disable=node.disable || false
     this.pid=node.pid || null
     this.cid=node.cid || null

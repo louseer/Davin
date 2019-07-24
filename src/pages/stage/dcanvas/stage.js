@@ -14,20 +14,22 @@ export default class Stage {
     this.mode = 'select'
     this.canvas = {}
   }
+
+  //todo//一次性调用
   refreshGroup(nodes) {
-    
-    nodes.forEach(n=>{
-      if(n.type === 'group'){
-        const arr = nodes.filter(c=>n.cid.includes(c.id))
-        const { minX, minY, maxW, maxH } = this.nodesMaxArea(arr)         
-       n.x=minX
-       n.y=minY
-       n.w=maxW
-       n.h=maxH
-      }       
-    })   
-    this.nodeList=nodes
+    nodes.forEach(n => {
+      if (n.type === 'group') {
+        const arr = nodes.filter(c => n.cid.includes(c.id))
+        const { minX, minY, maxW, maxH } = this.nodesMaxArea(arr)
+        n.x = minX
+        n.y = minY
+        n.w = maxW
+        n.h = maxH
+      }
+    })
+    this.nodeList = nodes
   }
+  //todo//一次性调用
   refreshNodes() {
     this.nodeList.forEach(node => {
       this.selectNodes.forEach(select => {
@@ -100,13 +102,29 @@ export default class Stage {
   }
   layOutToUp(item) {}
   layOutToDown(item) {}
+  outGroup() {
+   
+    if (this.selectNodes.length === 0) return
+    const rootNode = this.selectNodes.filter(
+      n => n.type === 'group' && n.pid === null
+    )[0]
+    this.nodeList.forEach(n => {
+      if (rootNode.cid.includes(n.id) && n.pid === rootNode.id) {
+        n.pid = null
+      }
+      
+    })
+
+    this.nodeList = this.nodeList.filter(n => n.id !== rootNode.id)
+    this.selectNodes=[]
+  }
   toGroup() {
     if (this.selectNodes.length === 0) return
-    //const { minX, minY, maxW, maxH } = this.nodesMaxArea(this.selectNodes)
+    const { minX, minY, maxW, maxH } = this.nodesMaxArea(this.selectNodes)
     const uid = getuuid()
     const cids = []
     this.selectNodes.forEach(n => {
-      n.pid = uid
+      n.pid === null && (n.pid = uid)
       n.active = false
       cids.push(n.id)
     })
@@ -115,10 +133,10 @@ export default class Stage {
       id: uid,
       cid: cids,
       type: 'group',
-      // x: minX,
-      // y: minY,
-      // w: maxW,
-      // h: maxH,
+      x: minX,
+      y: minY,
+      w: maxW,
+      h: maxH,
       active: true
     }
     this.nodeList.push(new Dcanvas.Node(Gnode))
