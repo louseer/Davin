@@ -36,6 +36,17 @@ export default {
     node: {
       type: Object,
       default: () => {}
+    },
+    
+
+  },
+  watch: {
+    node:{
+      handler:function (val) {
+        console.log('CHANGE', '')
+        this.rnode=val
+      },
+      deep:true
     }
   },
   data() {
@@ -111,39 +122,11 @@ export default {
     },
     resizeMousedown(e) {
       this.candrage = false
-      this.dx = e.clientX
-      this.dy = e.clientY
-      console.log('tag', this.$parent)
+      
+      this.$emit('nodeResizeMousedown', e, this.rnode)
     },
     resizeNode(type, e) {
-      e.target.style.opacity = '1'
-      const event = e || window.event
-      const _x = e.clientX - this.dx
-      const _y = e.clientY - this.dy
-      switch (type) {
-        case 'mr':
-          this.rnode.w = this.rnode.w + _x / 0.5
-          this.dx = e.clientX
-          this.dy = e.clientY
-          break
-        case 'rb':
-          this.rnode.w = this.rnode.w + _x / 0.5
-          this.rnode.h = this.rnode.h + _y / 0.5
-          this.dx = e.clientX
-          this.dy = e.clientY
-          break
-        case 'mb':
-          this.rnode.h = this.rnode.h + _y / 0.5
-          this.dx = e.clientX
-          this.dy = e.clientY
-          break
-
-        default:
-          break
-      }
-
-     
-      this.$emit('resizeNode', e, this.rnode)
+      this.$emit('nodeResizeNode',type, e, this.rnode)
     },
     nodeDrop(e) {
       this.candrage = false

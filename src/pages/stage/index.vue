@@ -1,24 +1,25 @@
 <template>
   <div style="overflow: hidden;position: relative; ">
-    <input type="text" placeholder="请输入宽度" />
-    <input type="text" placeholder="请输入高度" />
-    <input type="text" placeholder="请输入放大值" />
-    <input type="text" placeholder="请输入透明度" />
+    <input type="text" v-model="domCavase.canvas.width" placeholder="请输入宽度" />
+    <input type="text" v-model="domCavase.canvas.height" />
+    <input type="text" v-model="domCavase.zoomSize" placeholder="请输入放大值" />
+    <!-- <input type="text"  placeholder="请输入透明度" />
     <input type="select" placeholder="请输入背景色" />
     <select>
       <option value="black">黑色</option>
       <option value="red">红色</option>
       <option value="yellow">黄色</option>
       <option value="blue">蓝色</option>
-    </select>
+    </select>-->
     <h1>画布在下方⬇</h1>
     <div style="clear:both;padding:10px">
-      <div style="margin:0 auto; width:25%">
+      <div style="margin:0 auto; width:30%">
         <button @click="fillNode">添加</button>
         <button @click="totop">对齐</button>
         <button @click="toGroup">编组</button>
         <button @click="outGroup">解除编组</button>
         <button @click="clear">清空</button>
+        <button @click="deleteNode">删除</button>
       </div>
     </div>
     <div class="stage" ref="stage">
@@ -34,6 +35,8 @@
           @nodeClick
           @nodeDrop="nodeDrop"
           @nodeMousedown="nodeMousedown"
+          @nodeResizeMousedown="nodeResizeMousedown"
+          @nodeResizeNode="nodeResizeNode"
         />
       </Cav>
       <div v-if="rightClick" class="rightmenu" style="width:200px; height:200px; background:red"></div>
@@ -58,31 +61,38 @@ export default {
       mode: 'edit',
       startX: 0,
       startY: 0,
+      dx: 0,
+      dy: 0,
+      dnode:'',
       nodelist: []
     }
   },
 
-  watch: {
-    domCavase: {
-      handler: function(val) {
-        console.log(
-          '全局监听',
-          this.domCavase.selectNodes.filter(
-            n => n.type === 'group' && n.pid === null
-          )
-        )
-        console.log('list监听', val)
-      },
-      deep: true
-    },
-    nodelist: {
-      handler: function(val) {
-        //console.log('list监听', val)
-        //this.domCavase.refreshGroup(val)
-      },
-      deep: true
-    }
-  },
+  // watch: {
+  //   domCavase: {
+  //     handler: function(val) {
+  //       // console.log(
+  //       //   '全局监听',
+  //       //   this.domCavase.selectNodes.filter(
+  //       //     n => n.type === 'group' && n.pid === null
+  //       //   )
+  //       //)
+
+  //       console.log('list监听-全部', val.nodeList)
+  //        console.log('list监听-全部', val.nodeList.map(n=>n.id))
+  //         console.log('list监听-全部', val.nodeList.map(n=>n.name))
+  //       console.log('list监听-选择', val.selectNodes.map(n=>n.name))
+  //     },
+  //     deep: true
+  //   },
+  //   nodelist: {
+  //     handler: function(val) {
+  //       //console.log('list监听', val)
+  //       //this.domCavase.refreshGroup(val)
+  //     },
+  //     deep: true
+  //   }
+  // },
   mounted() {
     const handler = this.domCavase.Handler(this.$refs.stage)
 
@@ -95,6 +105,68 @@ export default {
     })
   },
   methods: {
+    nodeResizeNode(type, e, node) {
+      e.target.style.opacity = '1'
+      const event = e || window.event
+      const _x = e.clientX - this.dx
+      const _y = e.clientY - this.dy
+      
+      switch (type) {
+        case 'mr':
+          node.w = node.w + _x / this.domCavase.zoomSize
+
+          this.dx = e.clientX
+          this.dy = e.clientY
+          break
+        case 'rb':
+          node.w = node.w + _x / this.domCavase.zoomSize
+          node.h = node.h + _y / this.domCavase.zoomSize
+          this.dx = e.clientX
+          this.dy = e.clientY
+          break
+        case 'mb':
+          node.h = node.h + _y / this.domCavase.zoomSize
+          this.dx = e.clientX
+          this.dy = e.clientY
+          break
+
+        default:
+          break
+      }
+      
+      const { zW, zH, zX, zY } = this.nodeResizeZoom(this.dnode, node)
+     
+      if(node.cid===null)return
+      const chilrenlist = node.cid
+      this.domCavase.nodeList.forEach(n => {
+        
+        if (chilrenlist.includes(n.id)) {
+         
+          n.x = n.x * zW-(_x*zW)
+          n.y = n.y * zH-(_y*zH)
+          n.w = n.w * zW
+          n.h = n.h * zH
+        }
+      })
+      this.dnode=JSON.parse(JSON.stringify(node))
+    },
+    nodeResizeZoom(oldNode, newNode) {
+      const zW = newNode.w / oldNode.w
+      const zH = newNode.h / oldNode.h
+      const zX = newNode.x / oldNode.x
+      const zY = newNode.y / oldNode.y
+      return { zW, zH, zX, zY }
+    },
+    nodeResizeMousedown(e,node) {
+      this.dx = e.clientX
+      this.dy = e.clientY
+      this.dnode=JSON.parse(JSON.stringify(node))
+      console.log(this.dnode.w, '')
+    },
+
+    deleteNode() {
+      this.domCavase.removeNodes()
+    },
     outGroup() {
       this.domCavase.outGroup()
     },
@@ -161,10 +233,10 @@ export default {
     },
     fillNode() {
       const nodes = [
-        { x: 0, y: 0, w: 500, h: 500 },
-        { x: 600, y: 0, w: 900, h: 500 },
-        { x: 900, y: 500, w: 70, h: 200 },
-        { x: 0, y: 0, w: 200, h: 60 }
+        { x: 0, y: 0, w: 200, h: 200, name: '1' },
+        { x: 250, y: 0, w: 200, h: 200, name: '2' },
+        { x: 450, y: 0, w: 200, h: 200, name: '3' },
+        { x: 650, y: 0, w: 200, h: 200, name: '4' }
       ]
       nodes.forEach(node => {
         this.addNode(node)
@@ -182,6 +254,8 @@ export default {
   },
   created() {
     this.domCavase = new Dcanvas.Stage()
+    this.domCavase.createCanvas()
+    console.log('@@@@@@@@', this.domCavase.canvas)
     this.nodelist = this.domCavase.nodeList
   }
 }
@@ -218,11 +292,11 @@ select {
 }
 .stage {
   width: 100%;
-  height: 800px;
+  height: 1080px;
   background: url(~images/pointe.png) repeat #666666;
   position: relative;
   overflow: hidden;
-  perspective: 1920px;
-  perspective-origin: 0% 0%;
+  // perspective: 1920px;
+  // perspective-origin: 0% 0%;
 }
 </style>

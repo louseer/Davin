@@ -13,9 +13,24 @@ export default {
       default: ()=>{}
     },
   },
+  data() {
+    return {
+      config: this.canvasConfig
+    }
+  },
+  watch: {
+    canvasConfig:{
+      handler:function (val) {
+        console.log('CANVASCHANGE', '')
+        this.config=val
+      },
+       deep:true
+    }
+   
+  },
 computed: {
   style(){
-     return `width:1920px;height:1080px;transform: translate3d(0,0,-1920px);transform-origin: 0 0; `
+     return `width:${this.config.width}px;height:${this.config.height}px; transform:scale(${this.config.zoomSize});transform-origin: 0 0; top:${this.config.offset}px ; left:${this.config.offset}px `
   }
 },
 }
@@ -24,11 +39,9 @@ computed: {
 <style lang="less" scoped>
 .canvas {
   position: absolute;
-  width: 500px;
-  height: 500px;
+ 
   background: #a0a0a0;
-  top: 50px;
-  left: 50px;
+ 
   
 }
 </style>

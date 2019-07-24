@@ -9,12 +9,39 @@ export default class Stage {
     this.nodeList = []
     this.selectNodes = []
     this.id = id
-    this.zoomSize = 0.5
+    this._zoomSize = 0.5
     this.eventCrash = false
     this.mode = 'select'
     this.canvas = {}
+    this._offset = 30
+  }
+  get zoomSize() {
+    return this._zoomSize
+  }
+  set zoomSize(val) {
+    this._zoomSize = val
+    this.canvas.zoomSize = val
+  }
+  get offset() {
+    return this._offset
+  }
+  set offset(val) {
+    this._offset = val
+    this.canvas.offset = val
   }
 
+  createCanvas(config) {
+    const _this = this
+    const obj = {
+      id: getuuid(),
+      zoomSize: _this.zoomSize,
+      width: 1920,
+      height: 1080,
+      offset: _this.offset
+    }
+    this.canvas = new Dcanvas.Canvas(obj)
+    console.log('tag', this.canvas)
+  }
   //todo//一次性调用
   refreshGroup(nodes) {
     nodes.forEach(n => {
@@ -60,6 +87,16 @@ export default class Stage {
   addNode(node) {
     this.nodeList.push(node)
   }
+  removeNodes() {
+    const dNode = this.selectNodes
+    dNode.forEach(n => {
+      this.removeNode(n)
+    })
+    this.selectNodes = []
+  }
+  removeNode(node) {
+    this.nodeList = this.nodeList.filter(n => n.id !== node.id)
+  }
   clear() {
     this.nodeList.splice(0)
   }
@@ -70,13 +107,14 @@ export default class Stage {
   filterNode(rect) {
     console.log(rect)
     const { x, y, w, h } = rect
+    const offset = this.offset
     //最小包围和
     const choiceNodes = this.nodeList.filter(
       node =>
-        (node.x + node.w) * this.zoomSize >= x &&
-        (node.y + node.h) * this.zoomSize >= y &&
-        x + w >= node.x * this.zoomSize &&
-        y + h >= node.y * this.zoomSize
+        (node.x + node.w) * this.zoomSize + offset >= x &&
+        (node.y + node.h) * this.zoomSize + offset >= y &&
+        x + w >= node.x * this.zoomSize + offset &&
+        y + h >= node.y * this.zoomSize + offset
     )
 
     const nodesInGroup = []
@@ -103,7 +141,7 @@ export default class Stage {
   layOutToUp(item) {}
   layOutToDown(item) {}
   outGroup() {
-   
+    //TODO:多根节点
     if (this.selectNodes.length === 0) return
     const rootNode = this.selectNodes.filter(
       n => n.type === 'group' && n.pid === null
@@ -112,11 +150,10 @@ export default class Stage {
       if (rootNode.cid.includes(n.id) && n.pid === rootNode.id) {
         n.pid = null
       }
-      
     })
 
     this.nodeList = this.nodeList.filter(n => n.id !== rootNode.id)
-    this.selectNodes=[]
+    this.selectNodes = []
   }
   toGroup() {
     if (this.selectNodes.length === 0) return
@@ -139,7 +176,9 @@ export default class Stage {
       h: maxH,
       active: true
     }
-    this.nodeList.push(new Dcanvas.Node(Gnode))
+    const groupNode = new Dcanvas.Node(Gnode)
+    this.nodeList.push(groupNode)
+    this.selectNodes.push(groupNode)
   }
   nodesMaxArea(nodes) {
     const minX = Math.min.apply(null, nodes.map(n => n.x))
@@ -210,7 +249,6 @@ export default class Stage {
             ele.appendChild(selDiv)
             selDiv.style.left = startX + 'px'
             selDiv.style.top = startY + 'px'
-            console.log('回来了', '')
           }, 50)
           callback && typeof callback === 'function' && callback(event)
         })

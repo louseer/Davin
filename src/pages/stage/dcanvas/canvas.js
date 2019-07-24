@@ -1,6 +1,9 @@
 export default class Canvas {
-  constructor(width, height, id) {
-    this.width = width
-    this.height = height
+  constructor(config) {
+    this.width = config.width
+    this.height = config.height
+    this.offset=config.offset
+    this.zoomSize=config.zoomSize
+    this.id=config.id
   }
 }
