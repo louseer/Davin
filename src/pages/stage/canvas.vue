@@ -33,6 +33,9 @@ computed: {
      return `width:${this.config.width}px;height:${this.config.height}px; transform:scale(${this.config.zoomSize});transform-origin: 0 0; top:${this.config.offset}px ; left:${this.config.offset}px `
   }
 },
+methods: {
+  
+},
 }
 </script>
 

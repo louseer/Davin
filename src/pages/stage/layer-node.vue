@@ -20,6 +20,7 @@
           draggable
           @dragover.prevent
           @drop.prevent
+          @dragend.prevent
           @mousedown="resizeMousedown"
           @drag.stop="resizeNode(p.event,$event)"
           :style="p.type==='circle'? ' border-radius: 50% 50%;':''"
@@ -42,8 +43,7 @@ export default {
   },
   watch: {
     node:{
-      handler:function (val) {
-        console.log('CHANGE', '')
+      handler:function (val) {       
         this.rnode=val
       },
       deep:true

@@ -14,6 +14,7 @@ export default class Stage {
     this.mode = 'select'
     this.canvas = {}
     this._offset = 30
+    this.grid = 10
   }
   get zoomSize() {
     return this._zoomSize
@@ -56,7 +57,7 @@ export default class Stage {
     })
     this.nodeList = nodes
   }
-  //todo//一次性调用
+
   refreshNodes() {
     this.nodeList.forEach(node => {
       this.selectNodes.forEach(select => {
@@ -64,21 +65,178 @@ export default class Stage {
       })
     })
   }
-  refreshNode(node) {
+  refreshSetNode(node, obj) {
     this.nodeList.forEach(n => {
-      n.id === node.id && (n = { ...node })
+      n.id === node.id && (n = Object.assign(n, obj))
     })
   }
-  topAlign() {
-    if (this.selectNodes.length > 1) {
-      let ws = this.selectNodes.map(n => n.y)
-      const min = Math.min.apply(null, ws)
-      this.selectNodes.forEach(n => {
-        n.y = min
-      })
-      this.refreshNodes()
+  multipleNodesAlign(type) {
+    if (this.selectNodes < 3) return
+    const rootNodes = this.selectNodes.filter(n => n.pid === null)
+    const { minX, minY, maxX, maxY, maxW, maxH } = this.nodesMaxArea(rootNodes)
+
+    let begin = 0
+    const betweenX = (maxX - minX) / (rootNodes.length - 1)
+
+    const betweenY = (maxY - minY) / (rootNodes.length - 1)
+    switch (type) {
+      case 'HorizontalAverage':
+        rootNodes
+          .sort((a, b) => a.x - b.x)
+          .forEach(node => {
+            const dx = minX + begin * betweenX - node.x
+            node.x = minX + begin * betweenX
+            begin += 1
+            if (node.type === 'group') {
+              this.getNodeChildren(node, n => {
+                n.x = n.x + dx
+              })
+            }
+          })
+        break
+      case 'VerticalAverage':
+        rootNodes
+          .sort((a, b) => a.y - b.y)
+          .forEach(node => {
+            const dy = minY + begin * betweenY - node.y
+            node.y = minY + begin * betweenY
+            begin += 1
+            if (node.type === 'group') {
+              this.getNodeChildren(node, n => {
+                n.y = n.y + dy
+              })
+            }
+          })
+        break
+
+      default:
+        break
     }
   }
+  nodesAlign(type) {
+    if (this.selectNodes.length > 1) {
+      const rootNodes = this.selectNodes.filter(n => n.pid === null)
+      const { minX, minY, maxX, maxY, maxW, maxH } = this.nodesMaxArea(
+        rootNodes
+      )
+      let begin = 0
+      switch (type) {
+        case 'top':
+          rootNodes.forEach(node => {
+            const dy = minY - node.y
+            node.y = minY
+            if (node.type === 'group') {
+              this.getNodeChildren(node, n => {
+                n.y = n.y + dy
+              })
+            }
+          })
+          break
+
+        case 'right':
+          rootNodes.forEach(node => {
+            const dx = maxW + minX - node.w - node.x
+            node.x = maxW + minX - node.w
+            if (node.type === 'group') {
+              this.getNodeChildren(node, n => {
+                n.x = n.x + dx
+              })
+            }
+          })
+          break
+
+        case 'bottom':
+          rootNodes.forEach(node => {
+            const dy = maxH + minY - node.h - node.y
+            node.y = maxH + minY - node.h
+            if (node.type === 'group') {
+              this.getNodeChildren(node, n => {
+                n.y = n.y + dy
+              })
+            }
+          })
+          break
+
+        case 'left':
+          rootNodes.forEach(node => {
+            const dx = minX - node.x
+            node.x = minX
+            if (node.type === 'group') {
+              this.getNodeChildren(node, n => {
+                n.x = n.x + dx
+              })
+            }
+          })
+          break
+
+        case 'VCenter':
+          rootNodes.forEach(node => {
+            const dy = maxH / 2 + minY - node.h / 2 - node.y
+            node.y = maxH / 2 + minY - node.h / 2
+            if (node.type === 'group') {
+              this.getNodeChildren(node, n => {
+                n.y = n.y + dy
+              })
+            }
+          })
+          break
+
+        case 'HCenter':
+          rootNodes.forEach(node => {
+            const dx = maxW / 2 + minX - node.w / 2 - node.x
+            node.x = maxW / 2 + minX - node.w / 2
+            if (node.type === 'group') {
+              this.getNodeChildren(node, n => {
+                n.x = n.x + dx
+              })
+            }
+          })
+          break
+        case 'Hline':
+          rootNodes
+            .sort((a, b) => a.x - b.x)
+            .forEach(node => {
+              const dx = minX + begin - node.x
+              node.x = minX + begin
+
+              begin += node.w
+
+              if (node.type === 'group') {
+                this.getNodeChildren(node, n => {
+                  n.x = n.x + dx
+                })
+              }
+            })
+          break
+        case 'Vline':
+          rootNodes
+            .sort((a, b) => a.x - b.x)
+            .forEach(node => {
+              const dy = minY + begin - node.y
+              node.y = minY + begin
+
+              begin += node.h
+
+              if (node.type === 'group') {
+                this.getNodeChildren(node, n => {
+                  n.y = n.y + dy
+                })
+              }
+            })
+          break
+        default:
+          break
+      }
+    }
+  }
+  getNodeChildren(node, callback) {
+    this.nodeList.forEach(n => {
+      if (node.cid.includes(n.id)) {
+        callback && typeof callback === 'function' && callback(n)
+      }
+    })
+  }
+
   eventZoom(e) {
     const clientX = e.clientX / this.zoomSize
     const clientY = e.clientY / this.zoomSize
@@ -141,8 +299,8 @@ export default class Stage {
   layOutToUp(item) {}
   layOutToDown(item) {}
   outGroup() {
-    //TODO:多根节点
-    if (this.selectNodes.length === 0) return
+   const pNodes=this.selectNodes.filter(n=>n.type==='group')
+    if (pNodes.length < 1) return
     const rootNode = this.selectNodes.filter(
       n => n.type === 'group' && n.pid === null
     )[0]
@@ -183,10 +341,14 @@ export default class Stage {
   nodesMaxArea(nodes) {
     const minX = Math.min.apply(null, nodes.map(n => n.x))
     const minY = Math.min.apply(null, nodes.map(n => n.y))
+    const maxX = Math.max.apply(null, nodes.map(n => n.x))
+    const maxY = Math.max.apply(null, nodes.map(n => n.y))
     const maxW = Math.max.apply(null, nodes.map(n => n.x + n.w)) - minX
     const maxH = Math.max.apply(null, nodes.map(n => n.y + n.h)) - minY
-    return { minX, minY, maxW, maxH }
+
+    return { minX, minY, maxX, maxY, maxW, maxH }
   }
+
   checkInStage(e) {
     const [x, y] = [e.target.offsetX, e.target.offsetY]
   }
@@ -203,6 +365,13 @@ export default class Stage {
       },
       mousedownHandler(callback) {
         ele.onmousedown = e => {
+          clearEventBubble(e)
+          const event = e || window.event
+          callback && typeof callback === 'function' && callback(event)
+        }
+      },
+      onmousewheelHandler(callback) {
+        ele.onmousewheel = e => {
           clearEventBubble(e)
           const event = e || window.event
           callback && typeof callback === 'function' && callback(event)
@@ -233,6 +402,17 @@ export default class Stage {
           console.log('画布右击')
         }
       },
+      mouseWheelZoom(callback) {
+        this.onmousewheelHandler(e => {
+          console.log('tag', e.wheelDelta)
+          if (e.wheelDelta == 120) {
+            _this.zoomSize += 0.01
+          } else {
+            _this.zoomSize -= 0.01
+          }
+        })
+      },
+
       selectNodes(callback) {
         let startX = 0
         let startY = 0

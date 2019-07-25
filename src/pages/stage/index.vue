@@ -13,14 +13,22 @@
     </select>-->
     <h1>画布在下方⬇</h1>
     <div style="clear:both;padding:10px">
-      <div style="margin:0 auto; width:30%">
+      <div style="margin:0 auto; width:100%">
+        
+        <button v-for="(btn,index) in  aglinList" :key='index' style="float:right" @click="nodeAlign(btn.type)">{{btn.name}}</button>
+     
+       
+        
         <button @click="fillNode">添加</button>
-        <button @click="totop">对齐</button>
         <button @click="toGroup">编组</button>
         <button @click="outGroup">解除编组</button>
         <button @click="clear">清空</button>
         <button @click="deleteNode">删除</button>
         <button @click="selectAll">全选</button>
+        <button style="float:right" v-if="multiple.length>=3" @click="multipleNodesAlign('VerticalAverage')">垂直均分</button>
+         <button style="float:right" v-if="multiple.length>=3" @click="multipleNodesAlign('HorizontalAverage')">水平均分</button>
+         <button style="float:right" v-if="multiple.length>=2" @click="nodeAlign('Hline')">水平联排</button>
+         <button style="float:right" v-if="multiple.length>=2" @click="nodeAlign('Vline')">垂直联排</button>
       </div>
     </div>
     <div class="stage" ref="stage">
@@ -65,11 +73,25 @@ export default {
       dx: 0,
       dy: 0,
       dnode: '',
-
-      nodelist: []
+      nodelist: [],
+      aglinList:[
+        {type:"top",name:'顶对齐'},
+        {type:"right",name:'右对齐'},
+        {type:"bottom",name:'底对齐'},
+        {type:"left",name:'左对齐'},
+        {type:"VCenter",name:'垂直居中'},
+        {type:"HCenter",name:'水平居中'},
+      ],
+      
+     
+     
     }
   },
-
+  computed: {
+    multiple(){
+      return this.domCavase.selectNodes.filter(n=>n.pid===null)
+    }
+  },
   // watch: {
   //   domCavase: {
   //     handler: function(val) {
@@ -101,7 +123,7 @@ export default {
     handler.selectNodes(e => {
       this.rightClick = false
     })
-
+    handler.mouseWheelZoom()
     handler.rightclickHandler(e => {
       this.rightClick = true
     })
@@ -109,54 +131,37 @@ export default {
   methods: {
     selectAll() {
       this.domCavase.selectNodes = this.domCavase.nodeList
-      this.domCavase.selectNodes.map(n => Object.assign(n, { active: true }))
+      this.domCavase.selectNodes = this.domCavase.selectNodes.map(n =>
+        Object.assign(n, { active: true })
+      )
     },
     nodeResizeNode(type, e, node) {
       e.target.style.opacity = '1'
       const event = e || window.event
       const _x = e.clientX - this.dx
       const _y = e.clientY - this.dy
-
       switch (type) {
         case 'mr':
           node.w = node.w + _x / this.domCavase.zoomSize
-          this.dx = e.clientX
-          this.dy = e.clientY
           break
         case 'rb':
           node.w = node.w + _x / this.domCavase.zoomSize
           node.h = node.h + _y / this.domCavase.zoomSize
-          this.dx = e.clientX
-          this.dy = e.clientY
           break
         case 'mb':
           node.h = node.h + _y / this.domCavase.zoomSize
-          this.dx = e.clientX
-          this.dy = e.clientY
           break
-
         default:
           break
       }
-
+      this.dx = e.clientX
+      this.dy = e.clientY
       const { zW, zH, zX, zY } = this.nodeResizeZoom(this.dnode, node)
 
       if (node.cid === null) return
       const chilrenlist = node.cid
       this.domCavase.nodeList.forEach(n => {
-        let dnX = n.x
-        let dnY = n.y
         if (chilrenlist.includes(n.id)) {
-          console.log(
-            'n.x=',
-            n.x,
-            'n.y=',
-            n.y,
-            'node.x=',
-            node.x,
-            'node.y=',
-            node.y
-          )
           n.x = node.x + (n.x - node.x) * zW
           n.y = node.y + (n.y - node.y) * zH
           n.w = n.w * zW
@@ -188,9 +193,11 @@ export default {
     clear() {
       this.domCavase.clear()
     },
-    totop() {
-      //TODO: group
-      this.domCavase.topAlign()
+    nodeAlign(type) {      
+      this.domCavase.nodesAlign(type)
+    },
+    multipleNodesAlign(type) {      
+      this.domCavase.multipleNodesAlign(type)
     },
     toGroup() {
       this.domCavase.toGroup()
@@ -214,6 +221,9 @@ export default {
         this.domCavase.selectNodes = this.domCavase.nodeList.filter(
           n => node.cid.includes(n.id) || node.id === n.id
         )
+        this.domCavase.nodeList.forEach(n => {
+          n.id === node.id ? (n.active = true) : (n.active = false)
+        })
       }
     },
     resizeNode(e, node) {
@@ -224,10 +234,10 @@ export default {
       const _y = this.domCavase.eventZoom(e).clientY
       const dx = _x - this.startX
       const dy = _y - this.startY
-      const names = this.domCavase.selectNodes.map(n => n.id)
+      const idList = this.domCavase.selectNodes.map(n => n.id)
       if (node.type === 'element') {
         this.domCavase.nodeList.forEach(n => {
-          if (names.includes(n.id)) {
+          if (idList.includes(n.id)) {
             n.x = n.x + dx
             n.y = n.y + dy
             this.startX = this.domCavase.eventZoom(e).clientX
@@ -237,7 +247,7 @@ export default {
       }
       if (node.type === 'group') {
         this.domCavase.nodeList.forEach(n => {
-          if (node.cid.includes(n.id) || names.includes(n.id)) {
+          if (node.cid.includes(n.id) || idList.includes(n.id)) {
             n.x = n.x + dx
             n.y = n.y + dy
             this.startX = this.domCavase.eventZoom(e).clientX

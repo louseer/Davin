@@ -16,7 +16,7 @@ export default class Node {
     this.cid=node.cid || null
     this.name=node.name || ''
   }
-  
+ 
  
  
 }
