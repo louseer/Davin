@@ -163,12 +163,12 @@ export default {
   position: absolute;
   //  background: rgba(255, 0, 0, 0.2);
 
-  border: 1px white dotted;
+  border: 1px #ffffff dashed;
 }
 .select-mask {
   width: 100%;
   height: 100%;
-
+ cursor: move;
   background: rgba(77, 211, 248, 0.2);
   position: absolute;
   border: 1px #41acca dotted;
@@ -182,39 +182,47 @@ export default {
   .lt {
     left: -5px;
     top: -5px;
+    cursor: nw-resize;
   }
   .mt {
     left: 50%;
     margin-left: -5px;
     top: -5px;
+     cursor: n-resize;
   }
   .rt {
     right: -5px;
     top: -5px;
+     cursor: ne-resize;
   }
   .ml {
     top: 50%;
     margin-top: -5px;
 
     left: -5px;
+     cursor: w-resize;
   }
   .mr {
     top: 50%;
     margin-top: -5px;
     right: -5px;
+     cursor: e-resize;
   }
   .lb {
     bottom: -5px;
     left: -5px;
+     cursor: sw-resize;
   }
   .mb {
     left: 50%;
     margin-left: -5px;
     bottom: -5px;
+     cursor: s-resize;
   }
   .rb {
     right: -5px;
     bottom: -5px;
+     cursor: se-resize;
   }
 }
 </style>
