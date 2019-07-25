@@ -20,6 +20,7 @@
         <button @click="outGroup">解除编组</button>
         <button @click="clear">清空</button>
         <button @click="deleteNode">删除</button>
+        <button @click="selectAll">全选</button>
       </div>
     </div>
     <div class="stage" ref="stage">
@@ -63,7 +64,8 @@ export default {
       startY: 0,
       dx: 0,
       dy: 0,
-      dnode:'',
+      dnode: '',
+
       nodelist: []
     }
   },
@@ -105,16 +107,19 @@ export default {
     })
   },
   methods: {
+    selectAll() {
+      this.domCavase.selectNodes = this.domCavase.nodeList
+      this.domCavase.selectNodes.map(n => Object.assign(n, { active: true }))
+    },
     nodeResizeNode(type, e, node) {
       e.target.style.opacity = '1'
       const event = e || window.event
       const _x = e.clientX - this.dx
       const _y = e.clientY - this.dy
-      
+
       switch (type) {
         case 'mr':
           node.w = node.w + _x / this.domCavase.zoomSize
-
           this.dx = e.clientX
           this.dy = e.clientY
           break
@@ -133,22 +138,32 @@ export default {
         default:
           break
       }
-      
+
       const { zW, zH, zX, zY } = this.nodeResizeZoom(this.dnode, node)
-     
-      if(node.cid===null)return
+
+      if (node.cid === null) return
       const chilrenlist = node.cid
       this.domCavase.nodeList.forEach(n => {
-        
+        let dnX = n.x
+        let dnY = n.y
         if (chilrenlist.includes(n.id)) {
-         
-          n.x = n.x * zW-(_x*zW)
-          n.y = n.y * zH-(_y*zH)
+          console.log(
+            'n.x=',
+            n.x,
+            'n.y=',
+            n.y,
+            'node.x=',
+            node.x,
+            'node.y=',
+            node.y
+          )
+          n.x = node.x + (n.x - node.x) * zW
+          n.y = node.y + (n.y - node.y) * zH
           n.w = n.w * zW
           n.h = n.h * zH
         }
       })
-      this.dnode=JSON.parse(JSON.stringify(node))
+      this.dnode = JSON.parse(JSON.stringify(node))
     },
     nodeResizeZoom(oldNode, newNode) {
       const zW = newNode.w / oldNode.w
@@ -157,10 +172,10 @@ export default {
       const zY = newNode.y / oldNode.y
       return { zW, zH, zX, zY }
     },
-    nodeResizeMousedown(e,node) {
+    nodeResizeMousedown(e, node) {
       this.dx = e.clientX
       this.dy = e.clientY
-      this.dnode=JSON.parse(JSON.stringify(node))
+      this.dnode = JSON.parse(JSON.stringify(node))
       console.log(this.dnode.w, '')
     },
 
