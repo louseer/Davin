@@ -42,8 +42,9 @@ methods: {
 <style lang="less" scoped>
 .canvas {
   position: absolute;
- 
-  background: #a0a0a0;
+ border-radius: 8px;
+ box-shadow: 0px 0px 50px rgba(0,0,0,0.2);
+  background: #bfbfbf;
  
   
 }

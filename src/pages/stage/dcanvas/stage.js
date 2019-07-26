@@ -15,6 +15,10 @@ export default class Stage {
     this.canvas = {}
     this._offset = 30
     this.grid = 10
+    this.bassIndex=9000   
+  }
+  get indexList(){
+    return this.nodeList.sort((a,b)=>a.zindex-b.zindex)
   }
   get zoomSize() {
     return this._zoomSize
@@ -86,7 +90,7 @@ export default class Stage {
           .forEach(node => {
             const dx = minX + begin * betweenX - node.x
             node.x = minX + begin * betweenX
-            begin += 1
+            begin ++
             if (node.type === 'group') {
               this.getNodeChildren(node, n => {
                 n.x = n.x + dx
@@ -100,7 +104,7 @@ export default class Stage {
           .forEach(node => {
             const dy = minY + begin * betweenY - node.y
             node.y = minY + begin * betweenY
-            begin += 1
+            begin ++
             if (node.type === 'group') {
               this.getNodeChildren(node, n => {
                 n.y = n.y + dy
@@ -243,6 +247,8 @@ export default class Stage {
     return { clientX, clientY }
   }
   addNode(node) {
+    node.zindex = this.bassIndex
+    this.bassIndex++
     this.nodeList.push(node)
   }
   removeNodes() {
@@ -257,6 +263,8 @@ export default class Stage {
   }
   clear() {
     this.nodeList.splice(0)
+    this.selectNodes=[]
+    this.bassIndex=9000
   }
   createCanvase(obj) {
     this.canvas = obj
@@ -314,16 +322,27 @@ export default class Stage {
     this.selectNodes = []
   }
   toGroup() {
-    if (this.selectNodes.length === 0) return
+    const pNodes=this.selectNodes.filter(n=>n.pid===null)
+    if (pNodes.length < 2) return
     const { minX, minY, maxW, maxH } = this.nodesMaxArea(this.selectNodes)
     const uid = getuuid()
     const cids = []
+    let maxIndex = 0
     this.selectNodes.forEach(n => {
-      n.pid === null && (n.pid = uid)
+      n.pid === null && (n.pid = uid) 
       n.active = false
       cids.push(n.id)
+      n.zindex >= maxIndex && (maxIndex = n.zindex+1)
     })
 
+    if(this.indexList.map(n=>n.zindex).includes(maxIndex)){
+      this.nodeList.filter(n=>n.zindex>=maxIndex).forEach(n=>{
+        n.zindex++
+      })
+      this.bassIndex++
+    }else{
+      this.bassIndex=maxIndex+1
+    }
     const Gnode = {
       id: uid,
       cid: cids,
@@ -332,11 +351,25 @@ export default class Stage {
       y: minY,
       w: maxW,
       h: maxH,
-      active: true
+      active: true,
+      zindex:maxIndex
     }
     const groupNode = new Dcanvas.Node(Gnode)
+    let mIndex = maxIndex-1
     this.nodeList.push(groupNode)
     this.selectNodes.push(groupNode)
+    this.nodeList.sort((a,b)=>b.zindex-a.zindex).forEach(n=>{
+      if(groupNode.cid.includes(n.id)){
+        n.zindex=mIndex
+        mIndex--
+      }
+    })
+    console.log('t@@@@@@ag', mIndex,maxIndex)
+   const minIndexNodes = this.nodeList.filter(n=>n.zindex<maxIndex && !groupNode.cid.includes(n.id))
+   minIndexNodes.forEach(n=>{
+     n.zindex=mIndex
+     mIndex--
+   })
   }
   nodesMaxArea(nodes) {
     const minX = Math.min.apply(null, nodes.map(n => n.x))

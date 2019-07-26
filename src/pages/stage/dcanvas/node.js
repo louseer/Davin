@@ -10,7 +10,7 @@ export default class Node {
     this.w = node.w || 0
     this.h = node.h || 0
     //this.groupId = node.groupId || ''
-    this.index=node.index || 1   
+    this.zindex=node.zindex || 9000   
     this.disable=node.disable || false
     this.pid=node.pid || null
     this.cid=node.cid || null

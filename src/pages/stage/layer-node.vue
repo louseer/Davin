@@ -17,6 +17,7 @@
         <i
           v-for="(p,pindex) in Control"
           :class="p.name"
+           @click.stop
           draggable
           @dragover.prevent
           @drop.prevent
@@ -25,7 +26,7 @@
           @drag.stop="resizeNode(p.event,$event)"
           :style="p.type==='circle'? ' border-radius: 50% 50%;':''"
         ></i>
-      </div>{{node.type === 'group' ? `Group-${node.index}`: `Node-${node.index}`}}
+      </div>{{node.type === 'group' ? `Group-${node.zindex}`: `Node-${node.zindex}`}}
     </div>
   </div>
 </template>
@@ -102,7 +103,7 @@ export default {
 
   computed: {
     style() {
-      return `transform-origin:0 0;transform:translate(${this.rnode.x}px,${this.rnode.y}px);width:${this.rnode.w}px;height:${this.rnode.h}px`
+      return `z-index:${this.rnode.zindex};transform-origin:0 0;transform:translate(${this.rnode.x}px,${this.rnode.y}px);width:${this.rnode.w}px;height:${this.rnode.h}px`
     }
   },
 

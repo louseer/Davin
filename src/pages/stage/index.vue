@@ -25,6 +25,10 @@
         <button @click="clear">清空</button>
         <button @click="deleteNode">删除</button>
         <button @click="selectAll">全选</button>
+        <!-- <button @click="upLayer">上移一层</button>
+        <button @click="downLayer">下移一层</button>
+        <button @click="toTopLayer">置于顶层</button>
+        <button @click="toBottomLayer">置于底层</button> -->
         <button style="float:right" v-if="multiple.length>=3" @click="multipleNodesAlign('VerticalAverage')">垂直均分</button>
          <button style="float:right" v-if="multiple.length>=3" @click="multipleNodesAlign('HorizontalAverage')">水平均分</button>
          <button style="float:right" v-if="multiple.length>=2" @click="nodeAlign('Hline')">水平联排</button>
@@ -122,6 +126,7 @@ export default {
 
     handler.selectNodes(e => {
       this.rightClick = false
+      console.log('##@@@', this.domCavase.indexList.map(n=>n.zindex))
     })
     handler.mouseWheelZoom()
     handler.rightclickHandler(e => {
