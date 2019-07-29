@@ -17,6 +17,7 @@ import DataMap from 'pages/project/datamap'
 import Setting from 'pages/project/setting'
 import DomCanvas from 'pages/stage/index.vue';
 import dashboardEditor from 'pages/edit/dashboardEditor.vue';
+import formEditor from 'pages/edit2/formEditor.vue';
 
 Vue.use(VueRouter)
 const routes = [
@@ -37,7 +38,12 @@ const routes = [
 
   },
   {
-    path:'/project:proId',
+    path:'/edit/form/:id',
+    name:'editform',
+    component:formEditor,
+  },
+  {
+    path:'/project/:proId',
     name:'project',
     component:Project,
     children:[
@@ -47,17 +53,17 @@ const routes = [
         component:Preview,
         children:[
           {
-            path:'dashboard:id',
+            path:'dashboard/:id',
             name:'dashboard',
             component:Dashboard
           },
           {
-            path:'report:id',
+            path:'report/:id',
             name:'report',
             component:Report
           },
           {
-            path:'analysis:id',
+            path:'analysis/:id',
             name:'analysis',
             component:Analysis
           }

@@ -1,38 +1,49 @@
-<!-- grid component -->
+<!-- dashboard编辑页 -->
 <template>
-  <div>
-    <div class='x'>
-    </div>
+  <div class='edit-page'>
+    <Header />
+    <Layer />
+    <Editor />
+    <Stage />
+    <Domcanvas :id={id} mode='edit'></Domcanvas>
   </div>
 </template>
 
 <script>
 //import {组件名称} from '组件路径';
+import Domcanvas from './domcanvas/domcanvas.vue'
+import Layer from './layer/layer.vue'
+import Editor from './editor/editor.vue'
+import Stage from './stage/stage.vue'
+import Header from './header/header.vue'
 
 export default {
-  props:['cwidth','width','height'],
-  components: {},
+  components: {Header,Domcanvas,Layer,Editor,Stage},
   data() {
     return {
-    
+      id:5
     };
   },
-  computed: {
-    xNum () {
-      
-    }
-  },
+  computed: {},
   watch: {},
   methods: {
-  
+    handleDrop (e) {
+
+      e.dataTransfer.dropEffect = 'move';
+    },
+
+    addNewNode () {
+
+    }    
+    
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
-    
+  
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    
+  
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
@@ -45,5 +56,19 @@ export default {
 </script>
 <style lang='less' scoped>
 //@import url(); 引入公共css类
-
+.edit-page {
+  width:100%;
+  height: 800px;
+  
+  .stage {
+    flex: 1;
+    width:auto;
+    background-color: #eee;
+    padding:20px;
+  }
+  .side-bar-right {
+    width:350px;
+    border:1px solid #ccc;
+  }
+}
 </style>

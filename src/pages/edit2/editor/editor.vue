@@ -1,38 +1,22 @@
-<!-- dashboard编辑页 -->
+<!--  -->
 <template>
-  <div class='edit-page'>
-    <div class='side-bar-left'>
-      <button @click='addNewNode'>new chart</button>
-    </div>
-    <div class='stage' ref='stage' @drop = 'handleDrop'>
-      <Dashboard :id={id} mode='edit'></Dashboard>
-    </div>
-    <div class='side-bar-right'></div> 
-  </div>
+  <div class='side-bar-right'></div> 
 </template>
 
 <script>
 //import {组件名称} from '组件路径';
-import Dashboard from './dashboard/dashboard.vue'
+
 export default {
-  components: {Dashboard},
+  components: {},
   data() {
     return {
-      id:5
+    
     };
   },
   computed: {},
   watch: {},
   methods: {
-    handleDrop (e) {
-
-      e.dataTransfer.dropEffect = 'move';
-    },
-
-    addNewNode () {
-
-    }    
-    
+  
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
@@ -53,23 +37,5 @@ export default {
 </script>
 <style lang='less' scoped>
 //@import url(); 引入公共css类
-.edit-page {
-  display:flex;
-  width:100%;
-  height: 800px;
-  .side-bar-left {
-    width:200px;
-    background-color: #ccc;
-  }
-  .stage {
-    flex: 1;
-    width:auto;
-    background-color: #eee;
-    padding:20px;
-  }
-  .side-bar-right {
-    width:350px;
-    border:1px solid #ccc;
-  }
-}
+
 </style>

@@ -25,8 +25,8 @@ requestService.interceptors.request.use(
 requestService.interceptors.response.use(
   response => {
     !--requestTimes && store.commit('showLoading', false)
-    if (response.data && response.data.code === 200) {
-      return response.data.data
+    if (response.data && response.status === 200) {
+      return response.data
     }else {
       return Promise.reject("出现错误，请检查算子流以及算子流配置信息！")
     }
