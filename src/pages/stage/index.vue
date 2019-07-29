@@ -14,25 +14,38 @@
     <h1>画布在下方⬇</h1>
     <div style="clear:both;padding:10px">
       <div style="margin:0 auto; width:100%">
-        
-        <button v-for="(btn,index) in  aglinList" :key='index' style="float:right" @click="nodeAlign(btn.type)">{{btn.name}}</button>
-     
-       
-        
+        <button
+          v-for="(btn,index) in  aglinList"
+          :key="index"
+          style="float:right"
+          @click="nodeAlign(btn.type)"
+        >{{btn.name}}</button>
+
         <button @click="fillNode">添加</button>
         <button @click="toGroup">编组</button>
         <button @click="outGroup">解除编组</button>
         <button @click="clear">清空</button>
         <button @click="deleteNode">删除</button>
         <button @click="selectAll">全选</button>
-        <!-- <button @click="upLayer">上移一层</button>
+        <!-- 
         <button @click="downLayer">下移一层</button>
+        
+        -->
+        <button @click="upLayer">上移一层</button>
+        <button @click="toBottomLayer">置于底层</button>
         <button @click="toTopLayer">置于顶层</button>
-        <button @click="toBottomLayer">置于底层</button> -->
-        <button style="float:right" v-if="multiple.length>=3" @click="multipleNodesAlign('VerticalAverage')">垂直均分</button>
-         <button style="float:right" v-if="multiple.length>=3" @click="multipleNodesAlign('HorizontalAverage')">水平均分</button>
-         <button style="float:right" v-if="multiple.length>=2" @click="nodeAlign('Hline')">水平联排</button>
-         <button style="float:right" v-if="multiple.length>=2" @click="nodeAlign('Vline')">垂直联排</button>
+        <button
+          style="float:right"
+          v-if="multiple.length>=3"
+          @click="multipleNodesAlign('VerticalAverage')"
+        >垂直均分</button>
+        <button
+          style="float:right"
+          v-if="multiple.length>=3"
+          @click="multipleNodesAlign('HorizontalAverage')"
+        >水平均分</button>
+        <button style="float:right" v-if="multiple.length>=2" @click="nodeAlign('Hline')">水平联排</button>
+        <button style="float:right" v-if="multiple.length>=2" @click="nodeAlign('Vline')">垂直联排</button>
       </div>
     </div>
     <div class="stage" ref="stage">
@@ -78,22 +91,19 @@ export default {
       dy: 0,
       dnode: '',
       nodelist: [],
-      aglinList:[
-        {type:"top",name:'顶对齐'},
-        {type:"right",name:'右对齐'},
-        {type:"bottom",name:'底对齐'},
-        {type:"left",name:'左对齐'},
-        {type:"VCenter",name:'垂直居中'},
-        {type:"HCenter",name:'水平居中'},
-      ],
-      
-     
-     
+      aglinList: [
+        { type: 'top', name: '顶对齐' },
+        { type: 'right', name: '右对齐' },
+        { type: 'bottom', name: '底对齐' },
+        { type: 'left', name: '左对齐' },
+        { type: 'VCenter', name: '垂直居中' },
+        { type: 'HCenter', name: '水平居中' }
+      ]
     }
   },
   computed: {
-    multiple(){
-      return this.domCavase.selectNodes.filter(n=>n.pid===null)
+    multiple() {
+      return this.domCavase.selectNodes.filter(n => n.pid === null)
     }
   },
   // watch: {
@@ -126,7 +136,7 @@ export default {
 
     handler.selectNodes(e => {
       this.rightClick = false
-      console.log('##@@@', this.domCavase.indexList.map(n=>n.zindex))
+      console.log('##@@@', this.domCavase.indexList.map(n => n.zindex))
     })
     handler.mouseWheelZoom()
     handler.rightclickHandler(e => {
@@ -188,7 +198,15 @@ export default {
       this.dnode = JSON.parse(JSON.stringify(node))
       console.log(this.dnode.w, '')
     },
-
+    upLayer(){
+this.domCavase.LayerToUp()
+    },
+    toTopLayer() {
+      this.domCavase.LayerToTop()
+    },
+     toBottomLayer() {
+      this.domCavase.LayerToBottom()
+    },
     deleteNode() {
       this.domCavase.removeNodes()
     },
@@ -198,10 +216,10 @@ export default {
     clear() {
       this.domCavase.clear()
     },
-    nodeAlign(type) {      
+    nodeAlign(type) {
       this.domCavase.nodesAlign(type)
     },
-    multipleNodesAlign(type) {      
+    multipleNodesAlign(type) {
       this.domCavase.multipleNodesAlign(type)
     },
     toGroup() {

@@ -15,10 +15,10 @@ export default class Stage {
     this.canvas = {}
     this._offset = 30
     this.grid = 10
-    this.bassIndex=9000   
+    this.bassIndex = 9000
   }
-  get indexList(){
-    return this.nodeList.sort((a,b)=>a.zindex-b.zindex)
+  get indexList() {
+    return this.nodeList.sort((a, b) => a.zindex - b.zindex)
   }
   get zoomSize() {
     return this._zoomSize
@@ -90,7 +90,7 @@ export default class Stage {
           .forEach(node => {
             const dx = minX + begin * betweenX - node.x
             node.x = minX + begin * betweenX
-            begin ++
+            begin++
             if (node.type === 'group') {
               this.getNodeChildren(node, n => {
                 n.x = n.x + dx
@@ -104,7 +104,7 @@ export default class Stage {
           .forEach(node => {
             const dy = minY + begin * betweenY - node.y
             node.y = minY + begin * betweenY
-            begin ++
+            begin++
             if (node.type === 'group') {
               this.getNodeChildren(node, n => {
                 n.y = n.y + dy
@@ -253,9 +253,17 @@ export default class Stage {
   }
   removeNodes() {
     const dNode = this.selectNodes
+    let bindex = 9000
     dNode.forEach(n => {
       this.removeNode(n)
     })
+    this.nodeList
+      .sort((a, b) => a.zindex - b.zindex)
+      .forEach(n => {
+        n.zindex = bindex
+        bindex++
+      })
+    this.bassIndex -= this.selectNodes.length
     this.selectNodes = []
   }
   removeNode(node) {
@@ -263,8 +271,8 @@ export default class Stage {
   }
   clear() {
     this.nodeList.splice(0)
-    this.selectNodes=[]
-    this.bassIndex=9000
+    this.selectNodes = []
+    this.bassIndex = 9000
   }
   createCanvase(obj) {
     this.canvas = obj
@@ -304,10 +312,63 @@ export default class Stage {
         : (n.active = false)
     })
   }
-  layOutToUp(item) {}
-  layOutToDown(item) {}
+  LayerToUp() {
+    const selectPnodes = this.selectNodes.filter(n => n.pid === null)
+    selectPnodes.forEach(n => {
+      const nextPnode = this.nodeList
+        .sort((a, b) => a.zindex - b.zindex)
+        .find(node => node.zindex > n.zindex && node.pid === null)
+      if (nextPnode !== undefined) {
+        let pindex = nextPnode.zindex
+        n.zindex = pindex
+        if(n.cid){
+          this.nodeList
+          .filter(cnode => n.cid.includes(cnode.id))
+          .forEach(cnode => {
+            cnode.zindex = pindex-1 
+            pindex--
+          })
+        }
+        n.cid ?  nextPnode.zindex -= (n.cid.length+1) :   nextPnode.zindex -= 1
+        if (nextPnode.cid) {
+          this.nodeList
+            .filter(cnode => nextPnode.cid.includes(cnode.id))
+            .forEach(cn => {
+              n.cid ? cn.zindex -= (n.cid.length+1) : cn.zindex -= 1
+            })
+        }
+      }
+    })
+  }
+  LayerToDown(nodes) {}
+  LayerToTop() {
+    let bindex = 9000
+    const arry = this.nodeList
+      .sort((a, b) => a.zindex - b.zindex)
+      .filter(n => !this.selectNodes.map(n => n.id).includes(n.id))
+    const newArry = arry.concat(
+      this.selectNodes.sort((a, b) => a.zindex - b.zindex)
+    )
+    newArry.forEach(n => {
+      n.zindex = bindex
+      bindex++
+    })
+  }
+  LayerToBottom() {
+    let bindex = 9000
+    const arry = this.nodeList
+      .sort((a, b) => a.zindex - b.zindex)
+      .filter(n => !this.selectNodes.map(n => n.id).includes(n.id))
+    const newArry = this.selectNodes
+      .sort((a, b) => a.zindex - b.zindex)
+      .concat(arry)
+    newArry.forEach(n => {
+      n.zindex = bindex
+      bindex++
+    })
+  }
   outGroup() {
-   const pNodes=this.selectNodes.filter(n=>n.type==='group')
+    const pNodes = this.selectNodes.filter(n => n.type === 'group')
     if (pNodes.length < 1) return
     const rootNode = this.selectNodes.filter(
       n => n.type === 'group' && n.pid === null
@@ -319,29 +380,37 @@ export default class Stage {
     })
 
     this.nodeList = this.nodeList.filter(n => n.id !== rootNode.id)
+    this.nodeList
+      .sort((a, b) => a.zindex - b.zindex)
+      .filter(n => n.zindex > rootNode.zindex)
+      .forEach(n => {
+        n.zindex--
+      })
     this.selectNodes = []
   }
   toGroup() {
-    const pNodes=this.selectNodes.filter(n=>n.pid===null)
+    const pNodes = this.selectNodes.filter(n => n.pid === null)
     if (pNodes.length < 2) return
     const { minX, minY, maxW, maxH } = this.nodesMaxArea(this.selectNodes)
     const uid = getuuid()
     const cids = []
     let maxIndex = 0
     this.selectNodes.forEach(n => {
-      n.pid === null && (n.pid = uid) 
+      n.pid === null && (n.pid = uid)
       n.active = false
       cids.push(n.id)
-      n.zindex >= maxIndex && (maxIndex = n.zindex+1)
+      n.zindex >= maxIndex && (maxIndex = n.zindex + 1)
     })
 
-    if(this.indexList.map(n=>n.zindex).includes(maxIndex)){
-      this.nodeList.filter(n=>n.zindex>=maxIndex).forEach(n=>{
-        n.zindex++
-      })
+    if (this.indexList.map(n => n.zindex).includes(maxIndex)) {
+      this.nodeList
+        .filter(n => n.zindex >= maxIndex)
+        .forEach(n => {
+          n.zindex++
+        })
       this.bassIndex++
-    }else{
-      this.bassIndex=maxIndex+1
+    } else {
+      this.bassIndex = maxIndex + 1
     }
     const Gnode = {
       id: uid,
@@ -352,24 +421,28 @@ export default class Stage {
       w: maxW,
       h: maxH,
       active: true,
-      zindex:maxIndex
+      zindex: maxIndex
     }
     const groupNode = new Dcanvas.Node(Gnode)
-    let mIndex = maxIndex-1
+    let mIndex = maxIndex - 1
     this.nodeList.push(groupNode)
     this.selectNodes.push(groupNode)
-    this.nodeList.sort((a,b)=>b.zindex-a.zindex).forEach(n=>{
-      if(groupNode.cid.includes(n.id)){
-        n.zindex=mIndex
-        mIndex--
-      }
+    this.nodeList
+      .sort((a, b) => b.zindex - a.zindex)
+      .forEach(n => {
+        if (groupNode.cid.includes(n.id)) {
+          n.zindex = mIndex
+          mIndex--
+        }
+      })
+    console.log('t@@@@@@ag', mIndex, maxIndex)
+    const minIndexNodes = this.nodeList.filter(
+      n => n.zindex < maxIndex && !groupNode.cid.includes(n.id)
+    )
+    minIndexNodes.forEach(n => {
+      n.zindex = mIndex
+      mIndex--
     })
-    console.log('t@@@@@@ag', mIndex,maxIndex)
-   const minIndexNodes = this.nodeList.filter(n=>n.zindex<maxIndex && !groupNode.cid.includes(n.id))
-   minIndexNodes.forEach(n=>{
-     n.zindex=mIndex
-     mIndex--
-   })
   }
   nodesMaxArea(nodes) {
     const minX = Math.min.apply(null, nodes.map(n => n.x))
