@@ -6,8 +6,8 @@
 <script>
 //import {组件名称} from '组件路径';
 import ECharts from 'vue-echarts'
-import 'echarts/lib/chart/line'
-import 'echarts/lib/component/polar'
+
+
 // import theme from '../theme.json' //引入主题
 // ECharts.registerTheme('ovilia-green', theme); //引入主题
 import { getChartData } from '@/api/api.js'
@@ -60,7 +60,7 @@ export default {
       this.options = options
     },
     getInstance () {
-      import(`./${this.type}.js`).then((module) => {
+      import(`./lib/${this.type}.js`).then((module) => {
         let chart = module.default;
         this.instance = new chart(this.config);
       }).catch(e=>{

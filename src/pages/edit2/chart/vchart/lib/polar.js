@@ -1,12 +1,12 @@
 import Echart from './echart.js';
 import { POLARCENTER } from "pages/config/optionItems.js";
+import 'echarts/lib/chart/line'
+import 'echarts/lib/component/polar'
 
 export default class Polar extends Echart{
   constructor(config) {
     super(config);
     this.editItems = [POLARCENTER];
-    this.options = null;
-    this.setData = this.setData.bind(this);
     this.initOpitions();
   }
 
@@ -24,8 +24,6 @@ export default class Polar extends Echart{
         data: s.data || []
       })
     })
-    
-
     this.options.legend = {data:legend};
     this.options.series = newSeries;
 
