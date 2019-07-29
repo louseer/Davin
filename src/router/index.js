@@ -16,7 +16,6 @@ import SQLModels from 'pages/project/sqlmodels'
 import DataMap from 'pages/project/datamap'
 import Setting from 'pages/project/setting'
 import DomCanvas from 'pages/stage/index.vue';
-import dashboardEditor from 'pages/edit/dashboardEditor.vue';
 import formEditor from 'pages/edit2/formEditor.vue';
 
 Vue.use(VueRouter)
@@ -31,12 +30,11 @@ const routes = [
     name:'console',
     component:Console
   },
-  {
-    path:'/edit/dashboard',
-    name:'editdashboard',
-    component:dashboardEditor,
-
-  },
+  // {
+  //   path:'/edit/dashboard',
+  //   name:'editdashboard',
+  //   component:dashboardEditor,
+  // },
   {
     path:'/edit/form/:id',
     name:'editform',

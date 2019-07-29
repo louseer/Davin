@@ -1,0 +1,99 @@
+{
+  "status": 0,
+  "msg": "",
+  "data": {
+    "id":"adcsfer8ewq56r54415dsa",
+    "title":"",
+    "des":"",
+    "background":{
+      "custom":false,
+      "setType":0,
+      "bgImgSrc":"",
+      "bgImgScaleType":3,
+      "bgImgBlur":0,
+      "bgImgOpacity":0.8,
+      "bgColor":"",
+      "titleColor":"",
+      "radio":8,
+      "borderWidth":0,
+      "borderStyle":0,
+      "borderColor":"",
+      "shadowWidht":10,
+      "shadowOffset":3,
+      "shadowColor":"",
+      "showWatermark":false
+    },
+    "watermark":{
+      "show":false,
+      "contentType":0,
+      "content":"",
+      "color":"",
+      "opacity":0.8,
+      "fontSize":18,
+      "width":250,
+      "xSpacing":100,
+      "ySpacing":50
+    },
+    "layout":[
+      {
+        "x":0,"y":0,"w":5,"h":10,"i":"0",
+        "chart":{
+          "title":"极坐标双数值轴",
+          "type":"polar",
+          "id":"c_sdewqag34wqr5t3gt6",
+          "polarCenter":["50%", "54%"],
+          "data":{
+            "type":"1",
+            "apiUrl":"/sampledata/polar.json",
+            "dataSource":"",
+            "staticPath":""
+          },
+          "options":{
+            "legend": {
+              "data": ["line"]
+            },
+            "tooltip": {
+              "trigger": "axis",
+              "axisPointer": {
+                "type": "cross"
+              }
+            },
+            "angleAxis": {
+              "type": "value",
+              "startAngle": 0
+            },
+            "radiusAxis": {
+              "min": 0
+            },
+            "series": [{
+              "coordinateSystem": "polar",
+              "name": "line",
+              "type": "line",
+              "showSymbol": false
+            }],
+            "animationDuration": 2000
+          }
+        }
+      },
+      {"x":2,"y":0,"w":2,"h":4,"i":"1"},
+      {"x":4,"y":0,"w":2,"h":5,"i":"2"},
+      {"x":6,"y":0,"w":2,"h":3,"i":"3"},
+      {"x":8,"y":0,"w":2,"h":3,"i":"4"},
+      {"x":10,"y":0,"w":2,"h":3,"i":"5"},
+      {"x":0,"y":5,"w":2,"h":5,"i":"6"},
+      {"x":2,"y":5,"w":2,"h":5,"i":"7"},
+      {"x":4,"y":5,"w":2,"h":5,"i":"8"},
+      {"x":6,"y":3,"w":2,"h":4,"i":"9"},
+      {"x":8,"y":4,"w":2,"h":4,"i":"10"},
+      {"x":10,"y":4,"w":2,"h":4,"i":"11"},
+      {"x":0,"y":10,"w":2,"h":5,"i":"12"},
+      {"x":2,"y":10,"w":2,"h":5,"i":"13"},
+      {"x":4,"y":8,"w":2,"h":4,"i":"14"},
+      {"x":6,"y":8,"w":2,"h":4,"i":"15"},
+      {"x":8,"y":10,"w":2,"h":5,"i":"16"},
+      {"x":10,"y":4,"w":2,"h":2,"i":"17"},
+      {"x":0,"y":9,"w":2,"h":3,"i":"18"},
+      {"x":2,"y":6,"w":2,"h":2,"i":"19"}
+    ]
+  }
+}
