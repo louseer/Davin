@@ -1,34 +1,41 @@
-<!-- grid component -->
+<!-- form Editor -->
 <template>
-  <div>
-    <div class='x'>
+  <div class='form-edit-page'>
+    <div class='top-nav'>
+      <button>new</button>
     </div>
+    <div>form title</div>
+    <grid-layout></grid-layout>
   </div>
 </template>
 
 <script>
 //import {组件名称} from '组件路径';
+import GridLayout from './gridLayout/gridlayout.vue'
+import { mapMutations } from 'vuex';
 
 export default {
-  props:['cwidth','width','height'],
-  components: {},
+  components: {
+    GridLayout
+  },
   data() {
     return {
-    
     };
   },
   computed: {
-    xNum () {
-      
-    }
+
   },
   watch: {},
   methods: {
-  
+    ...mapMutations([
+      'setFormID',
+      'openEditMode'
+    ])
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
-    
+    this.openEditMode()
+    this.setFormID(this.$route.params.id)
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
@@ -45,5 +52,9 @@ export default {
 </script>
 <style lang='less' scoped>
 //@import url(); 引入公共css类
+.form-edit-page{
+  width:100%;
+  height:100%;
+}
 
 </style>

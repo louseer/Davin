@@ -1,6 +1,6 @@
 <!-- chart -->
 <template>
-  <div class='location-layer' :style='initStyle' draggable='!config.isLocked && draggable' ref='locationLayer' @dragstart = 'handleDragstart' @drag='handleDrag' @dragend='handleDragend'>
+  <div class='location-layer' :style="{width:`${width}px`,height:`${height}px`,top:`${top}px`,left:`${left}px`}" ref='locationLayer' @dragstart = 'handleDragstart' @drag='handleDrag' @dragend='handleDragend'>
     <div class='zoom-layer'></div>
     <Chart :config = 'config' />
   </div>
@@ -9,7 +9,7 @@
 <script>
 //import {组件名称} from '组件路径';
 import Chart from '../chart/chart.vue';
-
+import Node from './node.js'
 export default {
   props:{
     config: {
@@ -27,23 +27,25 @@ export default {
   components: {Chart},
   data () {
     return {
-      displayW:parseInt(this.config.width * this.scale),
-      displayH:parseInt(this.config.height * this.scale),
-      displayT:parseInt(this.config.top * this.scale),
-      displayL:parseInt(this.config.left * this.scale),
-      zIndex:this.config.zIndex
+      instance:null,
     }
     
   },
   computed: {
-    initStyle () {
-      return {
-        'width':`${this.displayW}px`,
-        'height':`${this.displayH}px`,
-        'left':`${this.displayL}px`,
-        'top':`${this.displayT}px`,
-        'z-index': this.zIndex
-      }
+    width() {
+      return this.instance.width
+    },
+    height() {
+      return this.instance.height
+    },
+    left() {
+      return this.instance.left
+    },
+    top() {
+      return this.instance.top
+    },
+    zIndex() {
+      return this.instance.zIndex
     }
   },
   watch: {
@@ -57,19 +59,22 @@ export default {
     },
     handleDrag (event){
       var e = event || window.event;
-      this.displayT = e.clientY - this._dy;
-      this.displayL = e.clientX - this._dx
+      this.instance.top = e.clientY - this._dy;
+      this.instance.left = e.clientX - this._dx
       //this.locationDom.style.left = `${(e.clientX - this._dx)}px`;
       //this.locationDom.style.top = `${(e.clientY - this._dy)}px`;
     },
     handleDragend (event) {
       var e = event || window.event;
-      this.displayT = e.clientY - this._dy;
-      this.displayL = e.clientX - this._dx
+      this.instance.top = e.clientY - this._dy;
+      this.instance.left = e.clientX - this._dx
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
+
+    this.instance = new Node(this.config);
+        debugger
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {

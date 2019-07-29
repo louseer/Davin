@@ -1,14 +1,16 @@
-<!--  -->
+<!-- layer -->
 <template>
-  <div class='chart' ref='chart'></div>
+  <div class='layer'>
+    <div class='side-bar-left'>
+      <button @click='addNewNode'>new chart</button>
+    </div>
+  </div>
 </template>
 
 <script>
 //import {组件名称} from '组件路径';
-import Chart from './chart.js';
 
 export default {
-  props:['config'],
   components: {},
   data() {
     return {
@@ -22,26 +24,26 @@ export default {
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
+  
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    this.chart = new Chart(this.$refs.chart,this.config);
+  
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
-  updated() {
-  }, //生命周期 - 更新之后
+  updated() {}, //生命周期 - 更新之后
   beforeDestroy() {}, //生命周期 - 销毁之前
   destroyed() {}, //生命周期 - 销毁完成
   activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
 }
 </script>
 <style lang='less' scoped>
-//@import url(); 引入公共css类
-.chart {
-  width: calc(100% - 10px);
-  height: calc(100% - 10px);
-  margin: 5px;
+.side-bar-left {
+  position: absolute;
+  
+  width:200px;
+  background-color: #ccc;
 }
 </style>

@@ -1,6 +1,6 @@
 <!-- dashboard -->
 <template>
-  <div class='container' ref='container'>
+  <div class='wrapper' ref='wrapper'>
     <div class='dashboard' :style='style' ref='dashboard'>
       <div class='background-img'></div>
       <div class='node-box' v-if='canShowNode'>
@@ -23,10 +23,10 @@ export default {
   },
   data() {
     return {
-      container:null,
+      wrapper:null,
       configer:null,
-      containerCW:0,
-      containerCH:0,
+      wrapperCW:0,
+      wrapperCH:0,
       displayWidth:0,
       displayHeight:0,
       scale:1,
@@ -43,25 +43,26 @@ export default {
     selfAdaption () {
       let _h = 0;
       let r = this.configer.width / this.configer.height;
-      _h = this.containerCW / r;
-      if(_h <= this.containerCH){
-        this.displayWidth = this.containerCW;
+      _h = this.wrapperCW / r;
+      if(_h <= this.wrapperCH){
+        this.displayWidth = this.wrapperCW;
         this.displayHeight = parseInt(_h);
       }else{
-        this.displayWidth = parseInt(this.containerCH * r);
-        this.displayHeight = this.containerCH
+        this.displayWidth = parseInt(this.wrapperCH * r);
+        this.displayHeight = this.wrapperCH
       }
       this.scale = this.displayWidth / this.configer.width;
       this.canShowNode = true;
     }
   },
   created() {
+    
     this.configer = new Configer();
   },
   mounted() {
-    this.container = this.$refs.container;
-    this.containerCW = this.container.clientWidth;
-    this.containerCH = this.container.clientHeight;
+    this.wrapper = this.$refs.wrapper;
+    this.wrapperCW = this.wrapper.clientWidth;
+    this.wrapperCH = this.wrapper.clientHeight;
     this.selfAdaption();
 
    
@@ -76,7 +77,7 @@ export default {
 }
 </script>
 <style lang='less' scoped>
-.container{
+.wrapper{
   width:100%;
   height:100%;
 }
