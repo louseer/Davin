@@ -23,7 +23,7 @@
         @resize="resizeEvent"
         @move="moveEvent"
         @click.native="clickEvent(item.i)">
-          <chart 
+          <d-chart 
             v-if='item.chart && isMounted' 
             :config='item.chart'
           />
@@ -35,7 +35,7 @@
 <script>
 //import {组件名称} from '组件路径';
 import VueGridLayout from 'vue-grid-layout'
-import Chart from '../chart/chart.vue'
+import DChart from '../dynamicChart/dynamicChart.vue'
 import { mapActions, mapState, mapMutations } from 'vuex'
 import { EDIT_MODE } from "@/store/constants"
 
@@ -43,7 +43,7 @@ export default {
   components: {
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
-    Chart
+    DChart
   },
   data() {
     return {

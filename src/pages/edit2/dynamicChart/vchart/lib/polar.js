@@ -1,5 +1,5 @@
 import Echart from './echart.js';
-import { POLARCENTER } from "pages/config/optionItems.js";
+import { POLARCENTER } from "../optionsMap/index.js";
 import 'echarts/lib/chart/line'
 import 'echarts/lib/component/polar'
 
@@ -14,7 +14,7 @@ export default class Polar extends Echart{
     const {series} = data;
     let legend = [];
     let newSeries = []
-    series.forEach((s) => {
+    series.forEach((s) => {s
       legend.push(s.name);
       newSeries.push({
         coordinateSystem:'polar',
@@ -26,7 +26,6 @@ export default class Polar extends Echart{
     })
     this.options.legend = {data:legend};
     this.options.series = newSeries;
-
   }
 
   setSample () {

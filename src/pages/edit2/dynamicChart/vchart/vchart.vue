@@ -29,8 +29,7 @@ export default {
     return {
       instance:null,
       chartData:null,
-      options:'',
-      ready:false
+      options:''
     }
   },
   computed: {
@@ -56,7 +55,6 @@ export default {
       }
       this.instance.setData( this.chartData );
       let options =  JSON.parse(JSON.stringify( this.instance.options))
-      this.ready = true;
       this.options = options
     },
     getInstance () {
