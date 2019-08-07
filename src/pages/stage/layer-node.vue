@@ -26,7 +26,13 @@
           @drag.stop="resizeNode(p.event,$event)"
           :style="p.type==='circle'? ' border-radius: 50% 50%;':''"
         ></i>
-      </div>{{node.type === 'group' ? `Group-${node.zindex}`: `Node-${node.zindex}`}}
+      </div>{{node.type === 'group' ? `Group index-${node.zindex}`: `Node index-${node.zindex}`}}
+          <ul>
+            <li>w:{{node.w}}</li>
+            <li>h:{{node.h}}</li>
+            <li>x:{{node.x}}</li>
+            <li>y:{{node.y}}</li>
+          </ul>     
     </div>
   </div>
 </template>
