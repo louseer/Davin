@@ -1,15 +1,14 @@
 import Echart from './echart.js';
-import { POLARCENTER } from "../optionsMap/index.js"; 
 
-//V-chart极坐标依赖
-import 'echarts/lib/chart/line'
-import 'echarts/lib/component/polar'
 
 export default class Polar extends Echart{
-  constructor(config) {
-    super(config);
-    this.editItems = [POLARCENTER];
+  constructor(el,config) {
+    super(el,config);
     this.initOpitions();
+  }
+
+  refresh() {
+    this.chart.setOption(this.options);
   }
 
   //设置图例
@@ -39,7 +38,8 @@ export default class Polar extends Echart{
   setData(data) {
     const {series} = data;
     this.setLegend(series);
-    this.setSeries(series)
+    this.setSeries(series);
+    this.refresh();
   }
 
   setSample () {
@@ -84,5 +84,4 @@ export default class Polar extends Echart{
     this.setSample();
     this.combineConfig();
   }
-
 }

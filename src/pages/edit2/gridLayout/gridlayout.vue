@@ -5,15 +5,15 @@
       :layout.sync="layout"
       :col-num="12"
       :row-height="30"
-      :is-draggable="isEditing"
-      :is-resizable="isEditing"
+      :is-draggable="editing"
+      :is-resizable="editing"
       :is-mirrored="false"
       :vertical-compact="true"
       :margin="[marginTB, marginLR]"
       :use-css-transforms="false"
       @layout-updated="layoutUpdatedEvent"
-    >
-      <grid-item v-for="(item,index) in layout"  class='griditem' :class="{'active-border':item.i === activeGrid}"
+      @click.native="clickGridLayout()">
+      <grid-item v-for="(item,index) in layout"  class='griditem' :class="{'active-border':item.i === activeGridID}"
         :key = 'index'
         :x="item.x"
         :y="item.y"
@@ -22,7 +22,7 @@
         :i="item.i"
         @resize="resizeEvent"
         @move="moveEvent"
-        @click.native="clickEvent(item.i)">
+        @click.native="clickGridItem(item, $event)">
           <d-chart 
             v-if='item.chart && isMounted' 
             :config='item.chart'
@@ -36,8 +36,8 @@
 //import {组件名称} from '组件路径';
 import VueGridLayout from 'vue-grid-layout'
 import DChart from '../dynamicChart/dynamicChart.vue'
-import { mapActions, mapState, mapMutations } from 'vuex'
 import { EDIT_MODE } from "@/store/constants"
+import { mapState, mapActions, mapMutations,mapGetter } from 'vuex'
 
 export default {
   components: {
@@ -45,24 +45,26 @@ export default {
     GridItem: VueGridLayout.GridItem,
     DChart
   },
+  props:{
+    layout:{
+      tpye:Object,
+      default:null
+    },
+    editing: {
+      type:Boolean,
+      default:false
+    }
+  },
   data() {
     return {
       isMounted:false,
       marginTB:15,
-      marginLR:15
+      marginLR:15,
+      activeGridID: ''
     };
   },
   computed: {
-    ...mapState({
-      'formID': state => state.form.formID,
-      'form':state => state.form.form,
-      'layout':state => state.form.layout,
-      'mode':state => state.form.mode,
-      'activeGrid':state => state.form.activeGrid
-    }),
-    isEditing () {
-      return this.mode === EDIT_MODE;
-    }
+
   },
   watch: {},
   methods: {
@@ -81,10 +83,28 @@ export default {
     layoutUpdatedEvent(newLayout) {
       this.updateLayout(newLayout)
     },
-    clickEvent(i) {
-      i = i || '';
-      this.setActiveGrid(i)
+    clickGridLayout(event){
+      if(!this.editing){
+        return;
+      }
+      this.activeGridID =  "";
+      this.cancelActiveGrid();
     },
+
+    clickGridItem(item,event) {
+      if(!this.editing){
+        return;
+      }
+      event = event || window.event;
+      if (event && event.stopPropagation) {
+          event.stopPropagation();
+      } else {
+          event.cancelBubble = true;
+      }
+      this.activeGridID = item.i
+      this.setActiveGrid(item)
+    },
+    
     moveEvent(i, newX, newY) {
       this.setActiveGrid(i)
         console.log("MOVE i=" + i + ", X=" + newX + ", Y=" + newY);
@@ -99,17 +119,17 @@ export default {
     resizedEvent(i, newH, newW, newHPx, newWPx) {
         console.log("RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx);
     },
-    ...mapMutations([
-      'setActiveGrid'
+    ...mapMutations('form',[
+      'setActiveGrid',
+      'cancelActiveGrid'
     ]),
-    ...mapActions([
-      'queryFormData',
+    ...mapActions('form',[
       'updateLayout'
     ])
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
-    this.queryFormData()
+    
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {

@@ -16,6 +16,9 @@ const myStore = new Vuex.Store({
   mutations: {
     showLoading(state,status){
       state.loading = status
+    },
+    globaltest(state,str){
+      console.log(str)
     }
   },
   getters
