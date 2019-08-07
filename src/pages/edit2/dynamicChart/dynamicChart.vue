@@ -15,9 +15,10 @@
 //import NChart from "./js/nchart.js";
 import { getchartmock } from '@/api/api.js';
 import VChart from './vchart/vchart.vue'
+import EChart from './echart/echart.vue'
 
 const echartsTypes = [
-  'pie','polar'
+  'pie','polar','line'
 ]
 export default {
   props:{
@@ -27,7 +28,8 @@ export default {
     }
   },
   components: {
-    VChart
+    VChart,
+    EChart
   },
   data() {
     return {
@@ -46,6 +48,8 @@ export default {
     },
     chart () {
       if(echartsTypes.includes(this.type)){
+        return 'VChart';
+      }else{
         return 'VChart';
       }
     }
@@ -90,7 +94,7 @@ export default {
   }
   .chart-body {
     width:calc(100% - 0.4rem);
-    height: calc(100% - 0.4rem);
+    height: calc(100% - 0.55rem);
     margin:0 auto;
     overflow: hidden;
   }

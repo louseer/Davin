@@ -2,40 +2,64 @@
 <template>
   <div class='form-edit-page'>
     <div class='top-nav'>
-      <button>new</button>
+      <button @click='addChart("line")'>new line</button>
     </div>
     <div>form title</div>
-    <grid-layout></grid-layout>
+    <div class = 'edit-body'>
+      <div class='page-left'>
+        <grid-layout :layout='layout' :editing='isEditing'></grid-layout>
+      </div>
+      <div class='page-right'>
+        <Editor :target='modifyTarget'/>
+      </div>
+    </div>
+    
   </div>
 </template>
 
 <script>
 //import {组件名称} from '组件路径';
 import GridLayout from './gridLayout/gridlayout.vue'
-import { mapMutations } from 'vuex';
+import Editor from './editor/editor.vue'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+
 
 export default {
   components: {
-    GridLayout
+    GridLayout,
+    Editor
   },
   data() {
     return {
     };
   },
   computed: {
-
+    ...mapState({
+      'layout':state => state.form.layout,
+    }),
+    ...mapGetters ('form',[
+      'isEditing',
+      'modifyTarget'
+    ])
   },
   watch: {},
   methods: {
-    ...mapMutations([
-      'setFormID',
+    ...mapMutations('form',[
+      'setRFormID',
       'openEditMode'
-    ])
+    ]),
+    ...mapActions('form',[
+      'queryFormData'
+    ]),
+    addChart(type){
+
+    }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
     this.openEditMode()
-    this.setFormID(this.$route.params.id)
+    this.queryFormData()
+    this.setRFormID(this.$route.params.id)
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
@@ -55,6 +79,15 @@ export default {
 .form-edit-page{
   width:100%;
   height:100%;
+  .edit-body {
+    display: flex;
+    .page-left {
+      flex-grow: 1;
+    }
+    .page-right {
+      width:4rem;
+    }
+  }
 }
 
 </style>

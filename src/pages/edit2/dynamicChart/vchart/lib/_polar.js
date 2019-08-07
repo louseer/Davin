@@ -1,5 +1,7 @@
 import Echart from './echart.js';
-import { POLARCENTER } from "pages/config/optionItems.js";
+import { POLARCENTER } from "../optionsMap/index.js"; 
+
+//V-chart极坐标依赖
 import 'echarts/lib/chart/line'
 import 'echarts/lib/component/polar'
 
@@ -10,12 +12,19 @@ export default class Polar extends Echart{
     this.initOpitions();
   }
 
-  setData(data) {
-    const {series} = data;
+  //设置图例
+  setLegend(series){
     let legend = [];
-    let newSeries = []
-    series.forEach((s) => {
+    series.forEach((s) => {s
       legend.push(s.name);
+    })
+    this.options.legend = {data:legend};
+  }
+
+  //设置系列数据
+  setSeries(series){
+    let newSeries = []
+    series.forEach((s) => {s
       newSeries.push({
         coordinateSystem:'polar',
         name: s.name || 'line',
@@ -24,9 +33,13 @@ export default class Polar extends Echart{
         data: s.data || []
       })
     })
-    this.options.legend = {data:legend};
     this.options.series = newSeries;
+  }
 
+  setData(data) {
+    const {series} = data;
+    this.setLegend(series);
+    this.setSeries(series)
   }
 
   setSample () {
@@ -61,7 +74,6 @@ export default class Polar extends Echart{
       ],
       animationDuration: 2000
     }
-    console.log(this.options)
   }
 
   combineConfig() {

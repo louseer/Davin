@@ -41,12 +41,16 @@
           "title":"极坐标双数值轴",
           "type":"polar",
           "id":"c_sdewqag34wqr5t3gt6",
-          "polarCenter":["50%", "54%"],
           "data":{
             "type":"1",
             "apiUrl":"/sampledata/polar.json",
             "dataSource":"",
-            "staticPath":""
+            "staticPath":"",
+            "fieldMap":{
+              "x":"x",
+              "y":"y",
+              "s":"s"
+            }
           },
           "options":{
             "legend": {
@@ -75,7 +79,37 @@
           }
         }
       },
-      {"x":2,"y":0,"w":2,"h":4,"i":"1"},
+      {"x":2,"y":0,"w":2,"h":4,"i":"1",
+        "chart":{
+          "title":"折线图",
+          "type":"line",
+          "id":"c_sde56rdfrrwqret3gt",
+          "data":{
+            "type":"1",
+            "apiUrl":"/sampledata/line.json",
+            "fieldMap":{
+              "x":"x",
+              "y":"y",
+              "s":"s"
+            },
+            "dataSource":"",
+            "staticPath":""
+          },
+          "options":{
+            "xAxis": {
+                "type": "category",
+                "data": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+            },
+            "yAxis": {
+                "type": "value"
+            },
+            "series": [{
+                "data": [820, 932, 901, 934, 1290, 1330, 1320],
+                "type": "line"
+            }]
+          }
+        }
+      },
       {"x":4,"y":0,"w":2,"h":5,"i":"2"},
       {"x":6,"y":0,"w":2,"h":3,"i":"3"},
       {"x":8,"y":0,"w":2,"h":3,"i":"4"},

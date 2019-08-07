@@ -29,8 +29,7 @@ export default {
     return {
       instance:null,
       chartData:null,
-      options:'',
-      ready:false
+      options:''
     }
   },
   computed: {
@@ -41,14 +40,6 @@ export default {
       return this.config.data.apiUrl;
     }
   },
-  watch: {
-    instance () {
-      this.refreshData();
-    },
-    chartData () {
-      this.refreshData();
-    }
-  },
   methods: {
     refreshData () {
       if(!this.instance || !this.chartData){
@@ -56,21 +47,23 @@ export default {
       }
       this.instance.setData( this.chartData );
       let options =  JSON.parse(JSON.stringify( this.instance.options))
-      this.ready = true;
       this.options = options
     },
     getInstance () {
       import(`./lib/${this.type}.js`).then((module) => {
         let chart = module.default;
         this.instance = new chart(this.config);
+        this.refreshData();
       }).catch(e=>{
-        console.log("加载实例js失败")
+        console.log(`加载./lib/${this.type}.js失败`)
+        console.log(e)
       })
     },
     getData () {
       getChartData(this.apiUrl).then(rsp => {
       if(rsp.status == 0){
           this.chartData = rsp.data;
+          this.refreshData();
         }
       }).catch(e => {
 
@@ -78,8 +71,8 @@ export default {
     }
   },
   created () {
-    this.getInstance();
     this.getData();
+    this.getInstance();
   },
   mounted() {
 

@@ -1,35 +1,58 @@
 <!--  -->
 <template>
-  <div class='side-bar-right'></div> 
+  <div class='side-bar-right'>
+    
+  </div> 
 </template>
 
 <script>
 //import {组件名称} from '组件路径';
+import { mapGetters } from 'vuex'
+import { ELEMENT_RFORM,ELEMENT_GRID,ELEMENT_SCREEN,ELEMENT_GROUP,ELEMENT_NODE } from "@/store/constants"
 
 export default {
   components: {},
+  props:{
+    target:{
+      type:Object,
+      default:null
+    }
+  },
   data() {
     return {
-    
+      
     };
   },
-  computed: {},
+  computed: {
+    targetType () {
+      return this.target.type
+    },
+    options () {
+      if(!this.target.target){
+        return []
+      }
+      switch(this.targetType){
+   
+      }
+    }
+  },
   watch: {},
   methods: {
   
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
-  
+    console.log(this.target)
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-  
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
-  updated() {}, //生命周期 - 更新之后
+  updated() {
+
+  }, //生命周期 - 更新之后
   beforeDestroy() {}, //生命周期 - 销毁之前
   destroyed() {}, //生命周期 - 销毁完成
   activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
