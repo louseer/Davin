@@ -19,8 +19,8 @@
 
 <script>
 //import {组件名称} from '组件路径';
-import GridLayout from './gridLayout/gridlayout.vue'
-import Editor from './editor/editor.vue'
+import GridLayout from './components/gridlayout.vue'
+import Editor from '../common/editor/editor.vue'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
 

@@ -34,8 +34,8 @@
 
 <script>
 //import {组件名称} from '组件路径';
-import VueGridLayout from 'vue-grid-layout'
-import DChart from '../dynamicChart/dynamicChart.vue'
+import VueGridLayout from 'vue-grid-layout' 
+import DChart from 'pages/common/dynamicChart/dynamicChart.vue'
 import { EDIT_MODE } from "@/store/constants"
 import { mapState, mapActions, mapMutations,mapGetter } from 'vuex'
 
