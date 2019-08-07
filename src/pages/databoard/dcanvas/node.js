@@ -1,4 +1,4 @@
-import { getuuid } from '../../utils/index'
+import { getuuid } from '@/utils/index'
 import Dcanvas from './dcanvas'
 export default class Node {
   constructor(node) {

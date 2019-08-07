@@ -15,7 +15,7 @@ import Tables from 'pages/project/tables'
 import SQLModels from 'pages/project/sqlmodels'
 import DataMap from 'pages/project/datamap'
 import Setting from 'pages/project/setting'
-import DomCanvas from 'pages/stage/index.vue';
+import DomCanvas from 'pages/databoard/index.vue';
 import formEditor from 'pages/edit2/formEditor.vue';
 
 Vue.use(VueRouter)

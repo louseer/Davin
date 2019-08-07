@@ -1,6 +1,6 @@
 import Dcanvas from './dcanvas'
 import { type } from 'os'
-import { getuuid } from '../../utils/index'
+import { getuuid } from '@/utils/index'
 export default class Stage {
   constructor(id) {
     this.init(id)
