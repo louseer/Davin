@@ -70,6 +70,9 @@ export default {
         color: @icon_DataC_main;
         margin-right: 0.2rem;
         font-size: 0.20rem;
+        :hover{
+        color: @Font_mainC_white;
+        }
         
       }
     }

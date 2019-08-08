@@ -108,31 +108,15 @@ export default {
       return this.domCavase.selectNodes.filter(n => n.pid === null)
     }
   },
-  // watch: {
-  //   domCavase: {
-  //     handler: function(val) {
-  //       // console.log(
-  //       //   '全局监听',
-  //       //   this.domCavase.selectNodes.filter(
-  //       //     n => n.type === 'group' && n.pid === null
-  //       //   )
-  //       //)
-
-  //       console.log('list监听-全部', val.nodeList)
-  //        console.log('list监听-全部', val.nodeList.map(n=>n.id))
-  //         console.log('list监听-全部', val.nodeList.map(n=>n.name))
-  //       console.log('list监听-选择', val.selectNodes.map(n=>n.name))
-  //     },
-  //     deep: true
-  //   },
-  //   nodelist: {
-  //     handler: function(val) {
-  //       //console.log('list监听', val)
-  //       //this.domCavase.refreshGroup(val)
-  //     },
-  //     deep: true
-  //   }
-  // },
+  watch: {
+    domCavase: {
+      handler: function(val) {
+       this.$emit("nodechange",val)      
+      },
+      deep: true
+    },
+   
+  },
   mounted() {
     const handler = this.domCavase.Handler(this.$refs.stage)
 
