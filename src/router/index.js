@@ -17,18 +17,19 @@ import DataMap from 'pages/project/datamap'
 import Setting from 'pages/project/setting'
 import DomCanvas from 'pages/databoard/index.vue';
 import formEditor from 'pages/reportform/edit.vue';
+import Edit from 'pages/databoard/edit.vue';
 
 Vue.use(VueRouter)
 const routes = [
   {
     path:'/',
     name:'home',
-    redirect: { name: 'console' }
+    redirect: { name: 'edie' }
   },
   {
-    path:'/console',
-    name:'console',
-    component:Console
+    path:'/edie',
+    name:'edie',
+    component:Edit
   },
   // {
   //   path:'/edit/dashboard',

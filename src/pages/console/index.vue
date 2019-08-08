@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import Cheader from './components/header';
+import Cheader from './components/header.vue';
 
 export default {
   components: {

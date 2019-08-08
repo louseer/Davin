@@ -1,74 +1,113 @@
 <!-- dashboard编辑页 -->
 <template>
-  <div class='edit-page'>
-    <Header />
-    <Layer />
-    <Editor />
-    <Stage />
-    <Domcanvas :id={id} mode='edit'></Domcanvas>
+  <div class="edit-page">
+    <Eheader :maintit="maintit" :toptools="toptools" />
+    <div class="content">
+      <div class="setbar"></div>
+      <div class="leftbar"></div>
+      <div class="rightbar">
+        <Stage></Stage>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-//import {组件名称} from '组件路径';
-import Domcanvas from './domcanvas/domcanvas.vue'
-import Layer from './layer/layer.vue'
-import Editor from './editor/editor.vue'
-import Stage from './stage/stage.vue'
-import Header from './header/header.vue'
+// import Domcanvas from './domcanvas/domcanvas.vue'
+// import Layer from './layer/layer.vue'
+// import Editor from './editor/editor.vue'
+import Stage from './index.vue'
+import Eheader from './edit-header.vue'
 
 export default {
-  components: {Header,Domcanvas,Layer,Editor,Stage},
+  components: { Eheader, Stage },
   data() {
     return {
-      id:5
-    };
+      maintit: '春风隧道(V1.0)',
+      toptools: [
+        {
+          name: '发布',
+          icon: 'icon-ico_db_public',
+          event: this.public,
+          type: 'icon'
+        },
+        {
+          name: '预览',
+          icon: 'icon-ico_db_view',
+          event: this.view,
+          type: 'icon'
+        },
+        {
+          name: '保存',
+          icon: 'icon-ico_db_save',
+          event: this.save,
+          type: 'icon'
+        },
+        {
+          name: '退出',
+          icon: 'icon-ico_db_back',
+          event: this.quit,
+          type: 'icon'
+        }
+      ]
+    }
   },
   computed: {},
   watch: {},
   methods: {
-    handleDrop (e) {
-
-      e.dataTransfer.dropEffect = 'move';
+    public() {
+      console.log('发布')
     },
-
-    addNewNode () {
-
-    }    
-    
-  },
-  //生命周期 - 创建完成（可以访问当前this实例）
-  created() {
-  
-  },
-  //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {
-  
-  },
-  beforeCreate() {}, //生命周期 - 创建之前
-  beforeMount() {}, //生命周期 - 挂载之前
-  beforeUpdate() {}, //生命周期 - 更新之前
-  updated() {}, //生命周期 - 更新之后
-  beforeDestroy() {}, //生命周期 - 销毁之前
-  destroyed() {}, //生命周期 - 销毁完成
-  activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
+    view() {
+      console.log('预览')
+    },
+    save() {
+      console.log('保存')
+    },
+    quit() {
+      console.log('退出')
+    }
+  }
 }
 </script>
 <style lang='less' scoped>
-//@import url(); 引入公共css类
+@import '../../assets/styles/base.less';
+
 .edit-page {
-  width:100%;
-  height: 800px;
-  
-  .stage {
-    flex: 1;
-    width:auto;
-    background-color: #eee;
-    padding:20px;
-  }
-  .side-bar-right {
-    width:350px;
-    border:1px solid #ccc;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #272a2e;
+  display: flex;
+  flex-flow: column nowrap;
+
+  .content {
+    background: burlywood;
+    width: 100%;
+    height: calc(100% - 0.5rem);
+    background: teal;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    position: relative;
+    .leftbar {
+      width: 2rem;
+      background: darkcyan;
+    }
+    .rightbar {
+      background: #272a2e;
+      width: calc(100% - 2rem);
+      height: 100%;
+      position: relative;
+    }
+    .setbar {
+      position: absolute;
+      width: 2rem;
+      background: yellowgreen;
+      right: 0;
+      height: 100%;
+      z-index: 999999;
+    }
   }
 }
 </style>

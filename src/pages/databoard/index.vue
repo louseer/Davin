@@ -1,6 +1,7 @@
 <template>
-  <div style="overflow: hidden;position: relative; ">
-    <input type="text" v-model="domCavase.canvas.width" placeholder="请输入宽度" />
+  <div style="overflow: hidden;position: relative; height:100% ">
+ <div class="ex">
+      <input type="text" v-model="domCavase.canvas.width" placeholder="请输入宽度" />
     <input type="text" v-model="domCavase.canvas.height" />
     <input type="text" v-model="domCavase.zoomSize" placeholder="请输入放大值" />
     <!-- <input type="text"  placeholder="请输入透明度" />
@@ -11,7 +12,7 @@
       <option value="yellow">黄色</option>
       <option value="blue">蓝色</option>
     </select>-->
-    <h1>画布在下方⬇</h1>
+    
     <div style="clear:both;padding:10px">
       <div style="margin:0 auto; width:100%">
         <button
@@ -48,6 +49,7 @@
         <button style="float:right" v-if="multiple.length>=2" @click="nodeAlign('Vline')">垂直联排</button>
       </div>
     </div>
+ </div>
     <div class="stage" ref="stage">
       <Cav :canvasConfig="domCavase.canvas">
         <Node
@@ -312,10 +314,10 @@ this.domCavase.LayerToUp()
 <style scoped lang='less'>
 button {
   border: 1px white solid;
-  font: 16px/1 '微软雅黑';
-  padding: 10px;
+  font: 12px/1 '微软雅黑';
+  padding: 5px;
   border-radius: 4px;
-  margin-right: 10px;
+  margin-right: 2px;
   cursor: pointer;
   &:hover {
     background: darkgray;
@@ -324,11 +326,12 @@ button {
 }
 input {
   border: 1px #dddddd solid;
-  height: 40px;
-  width: 200px;
+  height: 25px;
+  width: 50px;
   // float: left;
   margin-right: 20px;
   float: left;
+  font-size: 12px;
 }
 select {
   border: 1px #dddddd solid;
@@ -338,13 +341,21 @@ select {
   margin-right: 20px;
   float: left;
 }
+.ex{
+  position: absolute;
+  width: 100%;
+  height: 200px;
+  bottom: 0;
+  z-index: 9999;
+}
 .stage {
   width: 100%;
-  height: 1080px;
+  height: 100%;
   background: url(~images/pointe.png) repeat #666666;
   position: relative;
   overflow: hidden;
   // perspective: 1920px;
   // perspective-origin: 0% 0%;
+  
 }
 </style>

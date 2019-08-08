@@ -6,6 +6,7 @@ import store from './store'
 import './plugins/element.js'
 import '@/assets/styles/base.less'
 import base from '@/mixins/base'
+import '@/assets/iconfont/iconfont.css'
 Vue.mixin(base)
 
 document.oncontextmenu=()=>{
