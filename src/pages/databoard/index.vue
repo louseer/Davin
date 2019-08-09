@@ -335,7 +335,7 @@ select {
 .stage {
   width: 100%;
   height: 100%;
-  background: url(~images/pointe.png) repeat #666666;
+  background: url(~images/pointe.png) repeat #27272b;
   position: relative;
   overflow: hidden;
   // perspective: 1920px;

@@ -3,7 +3,7 @@
  * @param {Number} timestamp 时间戳
  * @param {String} fmt 日期格式
  */
-function timeFormat (timestamp, fmt) {
+function timeFormat(timestamp, fmt) {
   const date = new Date(timestamp)
   const o = {
     'M+': date.getMonth() + 1,
@@ -30,6 +30,21 @@ function timeFormat (timestamp, fmt) {
   }
   return fmt
 }
+//转换树形结构
+function nodeListToTree(list) {
+  let DOList = list.sort((a, b) => b.zindex - a.zindex)
+  for (let i = 0; i < DOList.length; i++) {
+    if (DOList[i].type === 'group' && DOList[i].cid !== null) {
+      DOList[i].children = []
+      for (let j = 0; j < DOList.length; j++) {
+        if (DOList[i].id === DOList[j].pid) {
+          DOList[i].children.push(DOList[j])
+        }
+      }
+      nodeListToTree(DOList[i].children)
+    }
+  }
+  return DOList.filter(n => n.pid === null)
+}
 
-
-export { timeFormat }
+export { timeFormat, nodeListToTree }

@@ -15,6 +15,7 @@ export default class Node {
     this.pid=node.pid || null
     this.cid=node.cid || null
     this.name=node.name || ''
+    this.hide=node.hide || false
   }
  
  
