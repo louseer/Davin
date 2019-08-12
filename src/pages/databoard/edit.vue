@@ -14,7 +14,13 @@
                 <Dbutton :btn="bbtn" />
               </b>
             </div>
-            <Dtree :data="treenode" :renderContent="renderContent" style="margin-top:0.1rem" />
+            <LayerTree
+              :listType="listType"
+              :treenode="treenode"
+              @treeNodeClick="treeNodeClick"
+              @unhideNode="unhideNode"
+              @unlockNode="unlockNode"
+            />
           </div>
           <div slot="tab2">组件的组件</div>
         </Dtab>
@@ -30,14 +36,13 @@
 <script>
 import Dswitch from '../../components/switch.vue'
 import Dbutton from '../../components/button.vue'
-import Dtree from '../../components/edit-tree.vue'
 import Dtab from '../../components/tabmenu.vue'
 import Stage from './index.vue'
 import Eheader from './edit-header.vue'
 import LeftBottom from './leftbottom.vue'
 import { nodeListToTree, ordlistToTree } from '../../utils/format'
 import thumbnail from '../../components/thumbnail.vue'
-
+import LayerTree from './layer-tree.vue'
 export default {
   components: {
     Eheader,
@@ -46,8 +51,8 @@ export default {
     Dtab,
     Dswitch,
     LeftBottom,
-    Dtree,
-    thumbnail
+    thumbnail,
+    LayerTree
   },
   data() {
     return {
@@ -110,7 +115,7 @@ export default {
         {
           name: '编组',
           icon: 'icon-ico_db_folder',
-          event: this.toGroup,
+          event: this.toggleGrop,
           type: 'icon'
         },
         {
@@ -132,6 +137,7 @@ export default {
           type: 'icon'
         }
       ],
+      listType: 'thumbnail',
       leftTab: [
         {
           name: '图层',
@@ -167,6 +173,7 @@ export default {
     },
 
     switchChange(val) {
+      val ? (this.listType = 'thumbnail') : (this.listType = 'list')
       this.showMmore = val
       console.log('开关', val)
     },
@@ -175,7 +182,6 @@ export default {
         Object.assign(n, { label: `${n.type}-${n.zindex}` })
       )
       this.treenode = nodeListToTree(nodetree)
-      // console.log('画布变化', nodeListToTree(nodetree))
     },
     hide() {
       console.log('隐藏图层')
@@ -189,9 +195,10 @@ export default {
       console.log('删除图层')
       this.$refs.stage.deleteNode()
     },
-    toGroup() {
+    toggleGrop() {
       console.log('编组')
-      this.$refs.stage.toGroup()
+      
+      this.$refs.stage.toggleGrop()
     },
     public() {
       console.log('发布')
@@ -205,195 +212,14 @@ export default {
     quit() {
       console.log('退出')
     },
-    renderContent(h, { node, data, store }) {
-      console.log('tag', node)
-      if (data.type === 'element') {
-        return h(
-          'span',
-          {
-            style: {
-              display: 'inline-block',
-              width: '100%',
-              height: '100%',
-              position: 'relative'
-            },
-            on:{
-              click:()=>{
-               this.$refs.stage.choiceNodeById(data.id)
-              }
-            }
-            
-          },
-          [
-            h('thumbnail', {
-              props: {
-                nodeEltype: data.elType
-              },
-              style: {
-                margin: '0.06rem 0.1rem',
-                float: 'left'
-              }
-            }),
-            h(
-              'span',
-              {
-                style: {
-                  float: 'left',
-                  color: data.active ? '#f60606' : '',
-                  fontSize: '0.12rem',
-                  lineHeight: '0.36rem',
-                  width: '50%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                }
-              },
-
-              data.name
-            ),
-            h(
-              'div',
-              {
-                style: {
-                  position: 'absolute',
-                  right: '0',
-                  width: '0.5rem',
-
-                  height: '0.36rem',
-                  color: data.active ? '#f60606' : '',
-                  fontSize: '0.12rem',
-                  lineHeight: '0.36rem'
-                }
-              },
-              [
-                h('i', {
-                  class: data.hide ? ['iconfont', 'icon-ico_db_visiable'] : [],
-                  style: {
-                    float: 'left',
-                    fontSize: '0.16rem',
-                    lineHeight: '0.36rem',
-                    background: '#313438'
-                  },
-                   on: {
-                    click: () => {
-                      console.log('中华显影王', '')
-                      this.$refs.stage.unhideNode(data.id)
-                    }
-                  }
-                }),
-                h('i', {
-                  class: data.disable ? ['iconfont', 'icon-ico_db_lock'] : [],
-                  style: {
-                    float: 'left',
-                    fontSize: '0.16rem',
-                    lineHeight: '0.36rem',
-                    background: '#313438'
-                  },
-                  on: {
-                    click: () => {
-                      console.log('中华解锁王', '')
-                      this.$refs.stage.unlockNode(data.id)
-                    }
-                  }
-                })
-              ]
-            )
-          ]
-        )
-      }
-
-      if (data.type === 'group') {
-        return h(
-          'div',
-          {
-            style: {
-              overflow: 'hidden',
-              float: 'left'
-            },
-             on:{
-              click:()=>{
-               this.$refs.stage.choiceNodeById(data.id)
-              }
-            }
-          },
-
-          [
-            h('i', {
-              class: node.expanded
-                ? ['icon-ico_db_laytreef_open ', 'iconfont']
-                : ['icon-ico_db_laytreef_close ', 'iconfont'],
-              style: {
-                display: 'inline-block',
-                float: 'left',
-                margin: '0.08rem',
-                fontSize: '0.2rem',
-                color: '#d4e1ee'
-              }
-            }),
-            h(
-              'span',
-              {
-                style: {
-                  display: 'inline-block',
-                  float: 'left',
-
-                  fontSize: '0.12rem',
-                  lineHeight: '0.36rem',
-                  color: data.active ? '#f60606' : '#d4e1ee'
-                }
-              },
-              data.name
-            ),
-            h(
-              'div',
-              {
-                style: {
-                  position: 'absolute',
-                  right: '0',
-                  width: '0.5rem',
-
-                  height: '0.36rem',
-                  color: data.active ? '#f60606' : '',
-                  fontSize: '0.12rem',
-                  lineHeight: '0.36rem'
-                }
-              },
-              [
-                h('i', {
-                  class: data.hide ? ['iconfont', 'icon-ico_db_visiable'] : [],
-                  style: {
-                    float: 'left',
-                    fontSize: '0.16rem',
-                    lineHeight: '0.36rem',
-                    background: '#313438'
-                  },
-                  on: {
-                    click: () => {
-                      console.log('中华显影王', '')
-                      this.$refs.stage.unhideNode(data.id)
-                    }
-                  }
-                }),
-                h('i', {
-                  class: data.disable ? ['iconfont', 'icon-ico_db_lock'] : [],
-                  style: {
-                    float: 'left',
-                    fontSize: '0.16rem',
-                    lineHeight: '0.36rem',
-                    background: '#313438'
-                  },
-                  on: {
-                    click: () => {
-                      console.log('中华解锁王', '')
-                      this.$refs.stage.unlockNode(data.id)
-                    }
-                  }
-                })
-              ]
-            )
-          ]
-        )
-      }
+    treeNodeClick(nodeId) {
+      this.$refs.stage.choiceNodeById(nodeId)
+    },
+    unhideNode(nodeId) {
+      this.$refs.stage.unhideNode(nodeId)
+    },
+    unlockNode(nodeId) {
+      this.$refs.stage.unlockNode(nodeId)
     }
   }
 }

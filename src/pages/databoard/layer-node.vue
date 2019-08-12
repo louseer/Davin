@@ -167,11 +167,12 @@ export default {
   position: absolute;
   background: #7d7d7d;
   border: 1px darkgray solid;
+  cursor: pointer;
 }
 .group {
   position: absolute;
   //  background: rgba(255, 0, 0, 0.2);
-
+  cursor: pointer;
   border: 1px #ffffff dashed;
 }
 .select-mask {

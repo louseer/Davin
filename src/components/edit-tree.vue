@@ -6,7 +6,7 @@
       :expand-on-click-node="false"
       :render-content="renderContent"
       default-expand-all
-      indent='8'
+      :indent='8'
       empty-text=''
     ></el-tree>
   </div>

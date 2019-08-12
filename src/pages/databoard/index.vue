@@ -298,6 +298,17 @@ export default {
         })
       }
     },
+     toggleGrop(){
+      const rootLIst=this.domCavase.selectNodes.filter(n=>n.pid === null && n.type === 'group')
+      if(rootLIst.length === 1  ){
+       this.domCavase.outGroup()
+      }
+      else{
+       this.domCavase.toGroup()
+      }
+      this.$emit('nodelistChange', this.domCavase.nodeList)
+     },
+
     fillNode() {
       const nodes = [
         { x: 0, y: 0, w: 200, h: 200, name: '1基本饼图' },
