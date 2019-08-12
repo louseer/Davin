@@ -465,7 +465,10 @@ export default class Stage {
       .forEach(n => {
         n.zindex--
       })
-   
+   this.selectNodes.forEach(n=>{
+     n.pid ===null  &&( n.active=true)
+     
+   })
   }
   toGroup() {
     const pNodes = this.selectNodes.filter(n => n.pid === null)
