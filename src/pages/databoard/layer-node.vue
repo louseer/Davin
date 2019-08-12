@@ -12,7 +12,7 @@
       @click.stop="nodeClick($event)"
       @drop.stop="nodeDrop"
       @dragenter="dragenter"
-      v-if='!rnode.hide'
+      v-show='!rnode.hide'
     >
       <div class="select-mask" v-if="rnode.active && !rnode.disable">
         <i

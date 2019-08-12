@@ -179,9 +179,11 @@ export default {
     },
     hide() {
       console.log('隐藏图层')
+      this.$refs.stage.hideNode()
     },
     lock() {
       console.log('锁定图层')
+      this.$refs.stage.lockNode()
     },
     layDelete() {
       console.log('删除图层')
@@ -214,7 +216,13 @@ export default {
               width: '100%',
               height: '100%',
               position: 'relative'
+            },
+            on:{
+              click:()=>{
+               this.$refs.stage.choiceNodeById(data.id)
+              }
             }
+            
           },
           [
             h('thumbnail', {
@@ -231,7 +239,7 @@ export default {
               {
                 style: {
                   float: 'left',
-                  color: data.active ? 'red' : '',
+                  color: data.active ? '#f60606' : '',
                   fontSize: '0.12rem',
                   lineHeight: '0.36rem',
                   width: '50%',
@@ -252,7 +260,7 @@ export default {
                   width: '0.5rem',
 
                   height: '0.36rem',
-                  color: data.active ? 'red' : '',
+                  color: data.active ? '#f60606' : '',
                   fontSize: '0.12rem',
                   lineHeight: '0.36rem'
                 }
@@ -263,7 +271,14 @@ export default {
                   style: {
                     float: 'left',
                     fontSize: '0.16rem',
-                    lineHeight: '0.36rem'
+                    lineHeight: '0.36rem',
+                    background: '#313438'
+                  },
+                   on: {
+                    click: () => {
+                      console.log('中华显影王', '')
+                      this.$refs.stage.unhideNode(data.id)
+                    }
                   }
                 }),
                 h('i', {
@@ -271,11 +286,13 @@ export default {
                   style: {
                     float: 'left',
                     fontSize: '0.16rem',
-                    lineHeight: '0.36rem'
+                    lineHeight: '0.36rem',
+                    background: '#313438'
                   },
                   on: {
                     click: () => {
                       console.log('中华解锁王', '')
+                      this.$refs.stage.unlockNode(data.id)
                     }
                   }
                 })
@@ -292,6 +309,11 @@ export default {
             style: {
               overflow: 'hidden',
               float: 'left'
+            },
+             on:{
+              click:()=>{
+               this.$refs.stage.choiceNodeById(data.id)
+              }
             }
           },
 
@@ -301,7 +323,7 @@ export default {
                 ? ['icon-ico_db_laytreef_open ', 'iconfont']
                 : ['icon-ico_db_laytreef_close ', 'iconfont'],
               style: {
-                display: 'inline-block',                
+                display: 'inline-block',
                 float: 'left',
                 margin: '0.08rem',
                 fontSize: '0.2rem',
@@ -314,13 +336,60 @@ export default {
                 style: {
                   display: 'inline-block',
                   float: 'left',
-                  
+
                   fontSize: '0.12rem',
                   lineHeight: '0.36rem',
-                  color: data.active ? 'red' : '#d4e1ee'
+                  color: data.active ? '#f60606' : '#d4e1ee'
                 }
               },
               data.name
+            ),
+            h(
+              'div',
+              {
+                style: {
+                  position: 'absolute',
+                  right: '0',
+                  width: '0.5rem',
+
+                  height: '0.36rem',
+                  color: data.active ? '#f60606' : '',
+                  fontSize: '0.12rem',
+                  lineHeight: '0.36rem'
+                }
+              },
+              [
+                h('i', {
+                  class: data.hide ? ['iconfont', 'icon-ico_db_visiable'] : [],
+                  style: {
+                    float: 'left',
+                    fontSize: '0.16rem',
+                    lineHeight: '0.36rem',
+                    background: '#313438'
+                  },
+                  on: {
+                    click: () => {
+                      console.log('中华显影王', '')
+                      this.$refs.stage.unhideNode(data.id)
+                    }
+                  }
+                }),
+                h('i', {
+                  class: data.disable ? ['iconfont', 'icon-ico_db_lock'] : [],
+                  style: {
+                    float: 'left',
+                    fontSize: '0.16rem',
+                    lineHeight: '0.36rem',
+                    background: '#313438'
+                  },
+                  on: {
+                    click: () => {
+                      console.log('中华解锁王', '')
+                      this.$refs.stage.unlockNode(data.id)
+                    }
+                  }
+                })
+              ]
             )
           ]
         )

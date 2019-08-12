@@ -1,5 +1,10 @@
 <template>
   <div style="overflow: hidden;position: relative; height:100% ">
+    <div
+      v-if="rightClick"
+      class="rightmenu"
+      style="width:200px; height:200px; background:red; z-index:999999;position: absolute;"
+    ></div>
     <div class="ex">
       <input type="text" v-model="domCavase.canvas.width" placeholder="请输入宽度" />
       <input type="text" v-model="domCavase.canvas.height" />
@@ -28,6 +33,8 @@
           <button @click="clear">清空</button>
           <button @click="deleteNode">删除</button>
           <button @click="selectAll">全选</button>
+          <button @click="lockNode">锁定</button>
+          <button @click="hideNode">隐藏</button>
           <!-- 
         <button @click="downLayer">下移一层</button>
         
@@ -67,7 +74,6 @@
           @nodeResizeNode="nodeResizeNode"
         />
       </Cav>
-      <div v-if="rightClick" class="rightmenu" style="width:200px; height:200px; background:red"></div>
     </div>
   </div>
 </template>
@@ -121,7 +127,7 @@ export default {
     handler.selectNodes(e => {
       this.rightClick = false
       console.log('##@@@sdfsdfsfdsdf')
-      this.$emit('nodelistChange', this.domCavase.nodeList)
+      //this.$emit('nodelistChange', this.domCavase.nodeList)
     })
     handler.mouseWheelZoom()
     handler.rightclickHandler(e => {
@@ -129,8 +135,29 @@ export default {
     })
   },
   methods: {
+    choiceNodeById(id){
+     this.domCavase.choiceNodeById(id)
+      this.$emit('nodelistChange', this.domCavase.nodeList)
+    },
+    hideNode() {
+      this.domCavase.hideNode()
+      this.$emit('nodelistChange', this.domCavase.nodeList)
+    },
+    unhideNode(id) {
+      this.domCavase.unhideNode(id)
+      this.$emit('nodelistChange', this.domCavase.nodeList)
+    },
+    lockNode() {
+      this.domCavase.lockNode()
+      this.$emit('nodelistChange', this.domCavase.nodeList)
+    },
+    unlockNode(id) {
+      this.domCavase.unlockNode(id)
+    },
     selectAll() {
-      this.domCavase.selectNodes = this.domCavase.nodeList.filter(n=> !n.disable)
+      this.domCavase.selectNodes = this.domCavase.nodeList.filter(
+        n => !n.disable
+      )
       this.domCavase.selectNodes = this.domCavase.selectNodes.map(n =>
         Object.assign(n, { active: true })
       )

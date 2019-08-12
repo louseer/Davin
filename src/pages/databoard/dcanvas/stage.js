@@ -74,6 +74,83 @@ export default class Stage {
       n.id === node.id && (n = Object.assign(n, obj))
     })
   }
+  choiceNodeById(id){
+    this.selectNodes=[]
+    this.nodeList.forEach(n=>{
+      n.active=false
+      if(n.id === id){
+        if(n.disable) return
+        if(n.type === 'group'){
+         this.selectNodes=  [n,...this.nodeList.filter(node=>n.cid.includes(node.id))].map(en=>Object.assign(en,{active:true}))
+        
+        }
+        else{
+          n.active=true
+          this.selectNodes=[n]
+        }
+      }
+    })
+  }
+  lockNode() {
+    this.selectNodes.forEach(n => {
+      n.disable = true
+      n.active = false
+      n.cid &&
+        this.nodeList.forEach(node => {
+          if (n.cid.includes(node.id)) node.disable = true
+          node.active = false
+        })
+    })
+    this.selectNodes = []
+  }
+  unlockNode(id) {
+    this.nodeList.forEach(n => {
+      if (n.id === id) {
+        if (n.type === 'group') {
+          this.nodeList
+            .filter(node => n.cid.includes(node.id))
+            .forEach(n => {
+              n.disable = false
+            })
+          n.disable = false
+        } else if (n.type === 'element' && n.pid === null) {
+          n.disable = false
+        } else {
+          return
+        }
+      }
+    })
+  }
+  hideNode() {
+    this.selectNodes.forEach(n => {
+      n.hide = true
+      n.active = false
+      n.cid &&
+        this.nodeList.forEach(node => {
+          if (n.cid.includes(node.id)) node.hide = true
+          node.active = false
+        })
+    })
+    this.selectNodes = []
+  }
+  unhideNode(id){
+    this.nodeList.forEach(n => {
+      if (n.id === id) {
+        if (n.type === 'group') {
+          this.nodeList
+            .filter(node => n.cid.includes(node.id))
+            .forEach(n => {
+              n.hide = false
+            })
+          n.hide = false
+        } else if (n.type === 'element' && n.pid === null) {
+          n.hide = false
+        } else {
+          return
+        }
+      }
+    })
+  }
   multipleNodesAlign(type) {
     if (this.selectNodes < 3) return
     const rootNodes = this.selectNodes.filter(n => n.pid === null)
@@ -304,7 +381,9 @@ export default class Stage {
     const newArry = [
       ...new Set(nodesInGroup.concat(choiceNodes).map(n => n.id))
     ]
-    this.selectNodes = this.nodeList.filter(n => newArry.includes(n.id) && !n.hide && !n.disable)
+    this.selectNodes = this.nodeList.filter(
+      n => newArry.includes(n.id) && !n.hide && !n.disable
+    )
     this.nodeList.forEach(n => {
       this.selectNodes.indexOf(n) !== -1 &&
       nodesInGroup.filter(n => n.type !== 'group').indexOf(n) === -1
@@ -321,20 +400,20 @@ export default class Stage {
       if (nextPnode !== undefined) {
         let pindex = nextPnode.zindex
         n.zindex = pindex
-        if(n.cid){
+        if (n.cid) {
           this.nodeList
-          .filter(cnode => n.cid.includes(cnode.id))
-          .forEach(cnode => {
-            cnode.zindex = pindex-1 
-            pindex--
-          })
+            .filter(cnode => n.cid.includes(cnode.id))
+            .forEach(cnode => {
+              cnode.zindex = pindex - 1
+              pindex--
+            })
         }
-        n.cid ?  nextPnode.zindex -= (n.cid.length+1) :   nextPnode.zindex -= 1
+        n.cid ? (nextPnode.zindex -= n.cid.length + 1) : (nextPnode.zindex -= 1)
         if (nextPnode.cid) {
           this.nodeList
             .filter(cnode => nextPnode.cid.includes(cnode.id))
             .forEach(cn => {
-              n.cid ? cn.zindex -= (n.cid.length+1) : cn.zindex -= 1
+              n.cid ? (cn.zindex -= n.cid.length + 1) : (cn.zindex -= 1)
             })
         }
       }
@@ -535,8 +614,7 @@ export default class Stage {
             ele.appendChild(selDiv)
             selDiv.style.left = startX + 'px'
             selDiv.style.top = startY + 'px'
-          },50)
-          
+          }, 50)
         })
         this.mousemoveHandler(e => {
           let _x = e.clientX - GetPosition(ele).left + ele.scrollLeft
