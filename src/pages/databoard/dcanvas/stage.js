@@ -457,7 +457,7 @@ export default class Stage {
         n.pid = null
       }
     })
-
+    
     this.nodeList = this.nodeList.filter(n => n.id !== rootNode.id)
     this.nodeList
       .sort((a, b) => a.zindex - b.zindex)
@@ -465,7 +465,7 @@ export default class Stage {
       .forEach(n => {
         n.zindex--
       })
-    this.selectNodes = []
+   
   }
   toGroup() {
     const pNodes = this.selectNodes.filter(n => n.pid === null)

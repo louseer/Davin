@@ -299,7 +299,7 @@ export default {
       }
     },
      toggleGrop(){
-      const rootLIst=this.domCavase.selectNodes.filter(n=>n.pid === null && n.type === 'group')
+      const rootLIst=this.domCavase.selectNodes.filter(n=>n.pid === null )
       if(rootLIst.length === 1  ){
        this.domCavase.outGroup()
       }
