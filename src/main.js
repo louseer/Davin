@@ -7,10 +7,13 @@ import './plugins/element.js'
 import '@/assets/styles/base.less'
 import base from '@/mixins/base'
 import '@/assets/iconfont/iconfont.css'
+import 'element-ui/lib/theme-chalk/index.css'
+import thumbnail from './components/thumbnail.vue'
+Vue.component('thumbnail', thumbnail)
 Vue.mixin(base)
 
-document.oncontextmenu=()=>{
-  self.event.returnValue=false
+document.oncontextmenu = () => {
+  self.event.returnValue = false
 }
 Vue.config.productionTip = false
 

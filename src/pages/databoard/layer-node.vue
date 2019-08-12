@@ -12,8 +12,9 @@
       @click.stop="nodeClick($event)"
       @drop.stop="nodeDrop"
       @dragenter="dragenter"
+      v-if='!rnode.hide'
     >
-      <div class="select-mask" v-if="rnode.active">
+      <div class="select-mask" v-if="rnode.active && !rnode.disable">
         <i
           v-for="(p,pindex) in Control"
           :class="p.name"
@@ -51,10 +52,12 @@ export default {
   watch: {
     node:{
       handler:function (val) {       
-        this.rnode=val
+        this.rnode=val;
+       
       },
       deep:true
-    }
+    },
+  
   },
   data() {
     return {
@@ -128,9 +131,8 @@ export default {
       this.$emit('nodeDragStart', e)
     },
     resizeMousedown(e) {
-      this.candrage = false
-      
-      this.$emit('nodeResizeMousedown', e, this.rnode)
+      this.candrage = false      
+     this.$emit('nodeResizeMousedown', e, this.rnode)
     },
     resizeNode(type, e) {
       this.$emit('nodeResizeNode',type, e, this.rnode)
@@ -145,8 +147,8 @@ export default {
       this.$emit('nodeDrag', e, this.node)
     },
     nodeMousedown(e) {
-      this.candrage = true
-      this.$emit('nodeMousedown', this.rnode)
+     this.rnode.disable? this.candrage = false :this.candrage=true
+     !this.rnode.disable &&  this.$emit('nodeMousedown', this.rnode)
     },
     nodeClick(e) {
       this.$emit('nodeClick', this.rnode)

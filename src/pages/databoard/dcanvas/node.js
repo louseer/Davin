@@ -9,12 +9,12 @@ export default class Node {
     this.y = node.y || 0
     this.w = node.w || 0
     this.h = node.h || 0
-    //this.groupId = node.groupId || ''
+    this.elType=node.elType || 'normal'
     this.zindex=node.zindex || 9000   
     this.disable=node.disable || false
     this.pid=node.pid || null
     this.cid=node.cid || null
-    this.name=node.name || ''
+    this.name=node.name || (this.type ==='group' ? '组' : '元素')
     this.hide=node.hide || false
   }
  

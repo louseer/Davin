@@ -17,6 +17,7 @@
 
 <script>
 import Dbutton from '../../components/button.vue'
+
 export default {
   components:{Dbutton},
   props: {

@@ -304,7 +304,7 @@ export default class Stage {
     const newArry = [
       ...new Set(nodesInGroup.concat(choiceNodes).map(n => n.id))
     ]
-    this.selectNodes = this.nodeList.filter(n => newArry.includes(n.id))
+    this.selectNodes = this.nodeList.filter(n => newArry.includes(n.id) && !n.hide && !n.disable)
     this.nodeList.forEach(n => {
       this.selectNodes.indexOf(n) !== -1 &&
       nodesInGroup.filter(n => n.type !== 'group').indexOf(n) === -1
@@ -535,8 +535,8 @@ export default class Stage {
             ele.appendChild(selDiv)
             selDiv.style.left = startX + 'px'
             selDiv.style.top = startY + 'px'
-          }, 50)
-          callback && typeof callback === 'function' && callback(event)
+          },50)
+          
         })
         this.mousemoveHandler(e => {
           let _x = e.clientX - GetPosition(ele).left + ele.scrollLeft
@@ -571,6 +571,7 @@ export default class Stage {
           _this.filterNode(rect)
           selDiv.style.display = 'none'
           selDiv.remove()
+          callback && typeof callback === 'function' && callback(event)
         })
       }
     }

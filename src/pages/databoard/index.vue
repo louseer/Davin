@@ -1,55 +1,55 @@
 <template>
   <div style="overflow: hidden;position: relative; height:100% ">
- <div class="ex">
+    <div class="ex">
       <input type="text" v-model="domCavase.canvas.width" placeholder="请输入宽度" />
-    <input type="text" v-model="domCavase.canvas.height" />
-    <input type="text" v-model="domCavase.zoomSize" placeholder="请输入放大值" />
-    <!-- <input type="text"  placeholder="请输入透明度" />
+      <input type="text" v-model="domCavase.canvas.height" />
+      <input type="text" v-model="domCavase.zoomSize" placeholder="请输入放大值" />
+      <!-- <input type="text"  placeholder="请输入透明度" />
     <input type="select" placeholder="请输入背景色" />
     <select>
       <option value="black">黑色</option>
       <option value="red">红色</option>
       <option value="yellow">黄色</option>
       <option value="blue">蓝色</option>
-    </select>-->
-    
-    <div style="clear:both;padding:10px">
-      <div style="margin:0 auto; width:100%">
-        <button
-          v-for="(btn,index) in  aglinList"
-          :key="index"
-          style="float:right"
-          @click="nodeAlign(btn.type)"
-        >{{btn.name}}</button>
+      </select>-->
 
-        <button @click="fillNode">添加</button>
-        <button @click="toGroup">编组</button>
-        <button @click="outGroup">解除编组</button>
-        <button @click="clear">清空</button>
-        <button @click="deleteNode">删除</button>
-        <button @click="selectAll">全选</button>
-        <!-- 
+      <div style="clear:both;padding:10px">
+        <div style="margin:0 auto; width:100%">
+          <button
+            v-for="(btn,index) in  aglinList"
+            :key="index"
+            style="float:left"
+            @click="nodeAlign(btn.type)"
+          >{{btn.name}}</button>
+
+          <button @click="fillNode">添加</button>
+          <button @click="toGroup">编组</button>
+          <button @click="outGroup">解除编组</button>
+          <button @click="clear">清空</button>
+          <button @click="deleteNode">删除</button>
+          <button @click="selectAll">全选</button>
+          <!-- 
         <button @click="downLayer">下移一层</button>
         
-        -->
-        <button @click="upLayer">上移一层</button>
-        <button @click="toBottomLayer">置于底层</button>
-        <button @click="toTopLayer">置于顶层</button>
-        <button
-          style="float:right"
-          v-if="multiple.length>=3"
-          @click="multipleNodesAlign('VerticalAverage')"
-        >垂直均分</button>
-        <button
-          style="float:right"
-          v-if="multiple.length>=3"
-          @click="multipleNodesAlign('HorizontalAverage')"
-        >水平均分</button>
-        <button style="float:right" v-if="multiple.length>=2" @click="nodeAlign('Hline')">水平联排</button>
-        <button style="float:right" v-if="multiple.length>=2" @click="nodeAlign('Vline')">垂直联排</button>
+          -->
+          <button @click="upLayer">上移一层</button>
+          <button @click="toBottomLayer">置于底层</button>
+          <button @click="toTopLayer">置于顶层</button>
+          <button
+            style="float:left"
+            v-if="multiple.length>=3"
+            @click="multipleNodesAlign('VerticalAverage')"
+          >垂直均分</button>
+          <button
+            style="float:left"
+            v-if="multiple.length>=3"
+            @click="multipleNodesAlign('HorizontalAverage')"
+          >水平均分</button>
+          <button style="float:left" v-if="multiple.length>=2" @click="nodeAlign('Hline')">水平联排</button>
+          <button style="float:left" v-if="multiple.length>=2" @click="nodeAlign('Vline')">垂直联排</button>
+        </div>
       </div>
     </div>
- </div>
     <div class="stage" ref="stage">
       <Cav :canvasConfig="domCavase.canvas">
         <Node
@@ -108,21 +108,20 @@ export default {
       return this.domCavase.selectNodes.filter(n => n.pid === null)
     }
   },
-  watch: {
-    domCavase: {
-      handler: function(val) {
-       this.$emit("nodechange",val)      
-      },
-      deep: true
-    },
-   
-  },
+  // watch: {
+  //   domCavase: {
+  //     handler: function(val) {
+  //       this.$emit('nodelistChange', val)
+  //     },
+  //     deep: true
+  //   }
+  // },
   mounted() {
     const handler = this.domCavase.Handler(this.$refs.stage)
-
     handler.selectNodes(e => {
       this.rightClick = false
-      console.log('##@@@', this.domCavase.indexList.map(n => n.zindex))
+      console.log('##@@@sdfsdfsfdsdf')
+      this.$emit('nodelistChange', this.domCavase.nodeList)
     })
     handler.mouseWheelZoom()
     handler.rightclickHandler(e => {
@@ -131,7 +130,7 @@ export default {
   },
   methods: {
     selectAll() {
-      this.domCavase.selectNodes = this.domCavase.nodeList
+      this.domCavase.selectNodes = this.domCavase.nodeList.filter(n=> !n.disable)
       this.domCavase.selectNodes = this.domCavase.selectNodes.map(n =>
         Object.assign(n, { active: true })
       )
@@ -184,23 +183,29 @@ export default {
       this.dnode = JSON.parse(JSON.stringify(node))
       console.log(this.dnode.w, '')
     },
-    upLayer(){
-this.domCavase.LayerToUp()
+    upLayer() {
+      this.domCavase.LayerToUp()
+      this.$emit('nodelistChange', this.domCavase.nodeList)
     },
     toTopLayer() {
       this.domCavase.LayerToTop()
+      this.$emit('nodelistChange', this.domCavase.nodeList)
     },
-     toBottomLayer() {
+    toBottomLayer() {
       this.domCavase.LayerToBottom()
+      this.$emit('nodelistChange', this.domCavase.nodeList)
     },
     deleteNode() {
       this.domCavase.removeNodes()
+      this.$emit('nodelistChange', this.domCavase.nodeList)
     },
     outGroup() {
       this.domCavase.outGroup()
+      this.$emit('nodelistChange', this.domCavase.nodeList)
     },
     clear() {
       this.domCavase.clear()
+      this.$emit('nodelistChange', this.domCavase.nodeList)
     },
     nodeAlign(type) {
       this.domCavase.nodesAlign(type)
@@ -210,6 +215,7 @@ this.domCavase.LayerToUp()
     },
     toGroup() {
       this.domCavase.toGroup()
+      this.$emit('nodelistChange', this.domCavase.nodeList)
     },
     nodeDragStart(e) {
       this.startX = this.domCavase.eventZoom(e).clientX
@@ -267,10 +273,28 @@ this.domCavase.LayerToUp()
     },
     fillNode() {
       const nodes = [
-        { x: 0, y: 0, w: 200, h: 200, name: '1' },
-        { x: 250, y: 0, w: 200, h: 200, name: '2' },
-        { x: 450, y: 0, w: 200, h: 200, name: '3' },
-        { x: 650, y: 0, w: 200, h: 200, name: '4' }
+        { x: 0, y: 0, w: 200, h: 200, name: '1基本饼图' },
+        { x: 250, y: 0, w: 200, h: 200, name: '2基本什么图' },
+        { x: 450, y: 0, w: 200, h: 200, name: '3ZZZZXXX图' },
+        { x: 650, y: 0, w: 200, h: 200, name: '4各种图' },
+        {
+          x: 850,
+          y: 0,
+          w: 200,
+          h: 200,
+          elType: 'title',
+          disable: true,
+          name: '中华锁王'
+        },
+        {
+          x: 1050,
+          y: 0,
+          w: 200,
+          h: 200,
+          elType: 'pie',
+          name: '小透明',
+          hide: true
+        }
       ]
       nodes.forEach(node => {
         this.addNode(node)
@@ -281,6 +305,7 @@ this.domCavase.LayerToUp()
     addNode(node) {
       const newNode = new Dcanvas.Node(node)
       this.domCavase.addNode(newNode)
+      this.$emit('nodelistChange', this.domCavase.nodeList)
     },
     eventZoom(e) {
       this.domCavase.eventZoom(e)
@@ -325,7 +350,7 @@ select {
   margin-right: 20px;
   float: left;
 }
-.ex{
+.ex {
   position: absolute;
   width: 100%;
   height: 200px;
@@ -340,6 +365,5 @@ select {
   overflow: hidden;
   // perspective: 1920px;
   // perspective-origin: 0% 0%;
-  
 }
 </style>

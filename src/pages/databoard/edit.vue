@@ -11,42 +11,49 @@
           <div slot="tab1">
             <div class="laysetbar">
               <b v-for="(bbtn,bbindex) in  laysets" :key="bbindex">
-                <Dbutton :btn="bbtn"  />
+                <Dbutton :btn="bbtn" />
               </b>
-              <el-tree :data='treenode'/>
             </div>
+            <Dtree :data="treenode" :renderContent="renderContent" style="margin-top:0.1rem" />
           </div>
           <div slot="tab2">组件的组件</div>
         </Dtab>
         <LeftBottom :leftBottomtools="leftBottomtools"></LeftBottom>
       </div>
       <div class="rightbar">
-        <Stage @nodechange="nodechange" ref="stage"></Stage>
+        <Stage @nodelistChange="nodechange" ref="stage"></Stage>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-// import Domcanvas from './domcanvas/domcanvas.vue'
-// import Layer from './layer/layer.vue'
-// import Editor from './editor/editor.vue'
 import Dswitch from '../../components/switch.vue'
 import Dbutton from '../../components/button.vue'
+import Dtree from '../../components/edit-tree.vue'
 import Dtab from '../../components/tabmenu.vue'
 import Stage from './index.vue'
 import Eheader from './edit-header.vue'
 import LeftBottom from './leftbottom.vue'
-import { nodeListToTree } from '../../utils/format'
-
+import { nodeListToTree, ordlistToTree } from '../../utils/format'
+import thumbnail from '../../components/thumbnail.vue'
 
 export default {
-  components: { Eheader, Stage, Dbutton, Dtab, Dswitch, LeftBottom },
+  components: {
+    Eheader,
+    Stage,
+    Dbutton,
+    Dtab,
+    Dswitch,
+    LeftBottom,
+    Dtree,
+    thumbnail
+  },
   data() {
     return {
       maintit: '春风隧道(V1.0)',
       showMmore: true,
-      treenode:'',
+      treenode: [],
       toptools: [
         {
           name: '发布',
@@ -164,9 +171,11 @@ export default {
       console.log('开关', val)
     },
     nodechange(val) {
-      let nodetree = [...val.nodeList]
-      this.treenode=nodeListToTree(nodetree)
-      console.log('画布变化', nodeListToTree(nodetree))
+      let nodetree = [...val].map(n =>
+        Object.assign(n, { label: `${n.type}-${n.zindex}` })
+      )
+      this.treenode = nodeListToTree(nodetree)
+      // console.log('画布变化', nodeListToTree(nodetree))
     },
     hide() {
       console.log('隐藏图层')
@@ -193,6 +202,129 @@ export default {
     },
     quit() {
       console.log('退出')
+    },
+    renderContent(h, { node, data, store }) {
+      console.log('tag', node)
+      if (data.type === 'element') {
+        return h(
+          'span',
+          {
+            style: {
+              display: 'inline-block',
+              width: '100%',
+              height: '100%',
+              position: 'relative'
+            }
+          },
+          [
+            h('thumbnail', {
+              props: {
+                nodeEltype: data.elType
+              },
+              style: {
+                margin: '0.06rem 0.1rem',
+                float: 'left'
+              }
+            }),
+            h(
+              'span',
+              {
+                style: {
+                  float: 'left',
+                  color: data.active ? 'red' : '',
+                  fontSize: '0.12rem',
+                  lineHeight: '0.36rem',
+                  width: '50%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                }
+              },
+
+              data.name
+            ),
+            h(
+              'div',
+              {
+                style: {
+                  position: 'absolute',
+                  right: '0',
+                  width: '0.5rem',
+
+                  height: '0.36rem',
+                  color: data.active ? 'red' : '',
+                  fontSize: '0.12rem',
+                  lineHeight: '0.36rem'
+                }
+              },
+              [
+                h('i', {
+                  class: data.hide ? ['iconfont', 'icon-ico_db_visiable'] : [],
+                  style: {
+                    float: 'left',
+                    fontSize: '0.16rem',
+                    lineHeight: '0.36rem'
+                  }
+                }),
+                h('i', {
+                  class: data.disable ? ['iconfont', 'icon-ico_db_lock'] : [],
+                  style: {
+                    float: 'left',
+                    fontSize: '0.16rem',
+                    lineHeight: '0.36rem'
+                  },
+                  on: {
+                    click: () => {
+                      console.log('中华解锁王', '')
+                    }
+                  }
+                })
+              ]
+            )
+          ]
+        )
+      }
+
+      if (data.type === 'group') {
+        return h(
+          'div',
+          {
+            style: {
+              overflow: 'hidden',
+              float: 'left'
+            }
+          },
+
+          [
+            h('i', {
+              class: node.expanded
+                ? ['icon-ico_db_laytreef_open ', 'iconfont']
+                : ['icon-ico_db_laytreef_close ', 'iconfont'],
+              style: {
+                display: 'inline-block',                
+                float: 'left',
+                margin: '0.08rem',
+                fontSize: '0.2rem',
+                color: '#d4e1ee'
+              }
+            }),
+            h(
+              'span',
+              {
+                style: {
+                  display: 'inline-block',
+                  float: 'left',
+                  
+                  fontSize: '0.12rem',
+                  lineHeight: '0.36rem',
+                  color: data.active ? 'red' : '#d4e1ee'
+                }
+              },
+              data.name
+            )
+          ]
+        )
+      }
     }
   }
 }
@@ -221,12 +353,15 @@ export default {
       width: 2rem;
       background: @bg_Data_left;
       border-right: @border_Data_sub;
+      position: relative;
+      overflow: hidden;
 
       .laysetbar {
         height: 0.3rem;
         background: @bg_Data_left;
         border-bottom: @border_Data_main;
         border-top: @border_Data_main;
+        overflow: hidden;
         b {
           font-size: 0.16rem;
           display: block;

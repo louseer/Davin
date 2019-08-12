@@ -31,6 +31,10 @@ function timeFormat(timestamp, fmt) {
   return fmt
 }
 //转换树形结构
+function ordlistToTree(list){
+ const newlist= list.map(n=>Object.assign(n,{label:n.id}))
+ nodeListToTree(newlist)
+}
 function nodeListToTree(list) {
   let DOList = list.sort((a, b) => b.zindex - a.zindex)
   for (let i = 0; i < DOList.length; i++) {
@@ -47,4 +51,4 @@ function nodeListToTree(list) {
   return DOList.filter(n => n.pid === null)
 }
 
-export { timeFormat, nodeListToTree }
+export { timeFormat, nodeListToTree,ordlistToTree }
