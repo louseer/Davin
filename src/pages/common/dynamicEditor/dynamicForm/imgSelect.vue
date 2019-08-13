@@ -1,9 +1,16 @@
 <!--  -->
 <template>
-  <div>
+  <div ref='d-root'>
     <div class='img-select' @click='handleClick'>
       <img v-if="imgsrc" :src='imgsrc' height="100%" />
     </div>
+    <el-dialog title="请选择系统图片" :visible.sync="dialogVisible">
+      <div class="slideimg">
+        <li v-for="(item,index) in list" :key="index" @click="imgClick(item,index)" :class="{'selected':selected === index}">
+            <img :src="item.url" width="100%" height="100%" />
+          </li>
+      </div>
+    </el-dialog>
   </div>
   
 </template>
@@ -11,44 +18,40 @@
 <script>
 //import {组件名称} from '组件路径';
 
+
 export default {
   name:'d-img-select',
-  components: {},
-  data() {
-    return {
-      imgsrc:''
-    };
-  },
-  computed: {},
-  watch: {},
-  methods: {
-    handleClick () {
-      this.$alert('这是一段内容', '选择系统图片', {
-        confirmButtonText: '确定',
-        callback: action => {
-          this.$message({
-            type: 'info',
-            message: `action: ${ action }`
-          });
-        }
-      });
+  components:{},
+  props:{
+    list:{
+      type:Array,
+      default:()=>{
+        return [{url:'/mock/bgImages/bgimg1.png'}]
+      }
     }
   },
-  //生命周期 - 创建完成（可以访问当前this实例）
-  created() {
-  
+  data() {
+    return {
+      dialogVisible:false,
+      selected:'',
+      imgsrc:this.value
+    };
   },
-  //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {
-  
-  },
-  beforeCreate() {}, //生命周期 - 创建之前
-  beforeMount() {}, //生命周期 - 挂载之前
-  beforeUpdate() {}, //生命周期 - 更新之前
-  updated() {}, //生命周期 - 更新之后
-  beforeDestroy() {}, //生命周期 - 销毁之前
-  destroyed() {}, //生命周期 - 销毁完成
-  activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
+  methods: {
+    imgClick(item,index){
+      if(this.imgsrc === item.url){
+        return;
+      }
+      console.log(item,index)
+      this.selected = index
+      this.imgsrc = item.url
+      this.dialogVisible = false
+      this.$emit('input',this.imgsrc)
+    },
+    handleClick () {
+      this.dialogVisible = true
+    }
+  }
 }
 </script>
 <style lang='less' scoped>
@@ -62,5 +65,24 @@ export default {
     margin:0 auto;
   }
 }
-
+.slideimg {
+  margin-top: 0.2rem;
+  display: flex;
+  justify-content: space-between;
+  flex-flow: row nowrap;
+  align-items: center;
+  li {   
+    list-style: none;
+    width: 1rem;
+    height: 0.8rem;
+    border: 1px #eeeeee solid;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.5;
+    }
+    &.selected{
+      border:2px solid #DB7093
+    }
+  }
+}
 </style>

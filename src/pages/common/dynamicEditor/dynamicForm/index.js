@@ -74,9 +74,6 @@ export const generateOptions = (configurer,callback,setting = null) => {
       options[k] = new Option(configurer[k],callback)
     }
   }
-  if(setting){
-    assignValue(options,setting);
-  }
   return options;
 }
 
@@ -160,17 +157,17 @@ export const snapshot = (target,source) => {
  * @param {Option / Group 对象组合的对象} options form表单项
  * @param {Object} setting 设置值。普通对象
  */
-export const assignValue = (options,setting) => {
-  for(var k in setting){
-    if("[object Object]" === Object.prototype.toString.call(setting[k])){
-      assignValue(options[k].children,setting[k])
-    }else{
-      if(options[k]){
-        options[k]._value =  Array.isArray(setting[k]) ? [...setting[k]]:setting[k]
-      }
-    }
-  }
-}
+// export const assignValue = (options,setting) => {
+//   for(var k in setting){
+//     if("[object Object]" === Object.prototype.toString.call(setting[k])){
+//       assignValue(options[k].children,setting[k])
+//     }else{
+//       if(options[k]){
+//         options[k]._value =  Array.isArray(setting[k]) ? [...setting[k]]:setting[k]
+//       }
+//     }
+//   }
+// }
 
 
 export class DynamicForm {
@@ -178,6 +175,9 @@ export class DynamicForm {
     this.originSetting = setting; //用户打开页面时的初始设置。（即从数据库获取到的）
     this.handlers = handlers; //表单项独立回调
     this.options = generateOptions(configurer,this,setting);
+    if(setting){
+      this.assignValue(this.options,setting);
+    }
     this.step = -1;
     this.recording = true;
     this.snapshot = []; //快照，历史
@@ -220,27 +220,28 @@ export class DynamicForm {
    * @param {Object} setting 设置值。普通对象
    */
   assignValue (setting) {
-    this.recording = false;
     for(var k in setting){
-      if("[object Object]" === Object.prototype.toString.call(setting[k])){
-        this.assignValue(this.options[k].children,setting[k])
-      }else{
-        if(this.options[k]){
-          this.options[k].value =  Array.isArray(setting[k]) ? [...setting[k]]:setting[k]
+      if(this.options[k]){
+        if("[object Object]" === Object.prototype.toString.call(setting[k])){
+          this.assignValue(setting[k])
+        }else{
+          this.options[k]._value =  Array.isArray(setting[k]) ? [...setting[k]]:setting[k]
+          this.execHandler(this.options[k])
         }
       }
     }
-    this.recording = true;
+  }
+  
+  execHandler(option){
+    if(option.handle && 'function' === typeof(this.handlers[option.handle])){
+      const {value,oldvalue} = option;
+      this.handlers[option.handle].call(this.options,value,oldvalue)
+    }
   }
 
   update(option) {
     this.step++ ;
-    if(option.handle && 'function' === typeof(this.handlers[option.handle])){
-      const {value,oldvalue} = option;
-      //const value = option.value;
-      //const oldvalue = option.oldvalue;
-      this.handlers[option.handle].call(this.options,value,oldvalue)
-    }
+    this.execHandler(option)
     let newSetting = getValues(this.options);
     this.setHistory(newSetting)
     console.log("updated:",newSetting)
