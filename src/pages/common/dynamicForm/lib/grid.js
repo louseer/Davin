@@ -1,5 +1,5 @@
+import { OPTIONTYPE } from '../core/constants.js'
 import { 
-  OPTIONTYPE,
   GRID_DEF_W,
   GRID_DEF_H,
   REFRESH_INTERVAL,

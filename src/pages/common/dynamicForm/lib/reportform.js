@@ -1,5 +1,5 @@
+import {OPTIONTYPE} from '../core/constants.js'
 import { 
-  OPTIONTYPE,
   REFRESH_INTERVAL,
   IMG_SOURCE_TYPE,
   IMG_SCALE_TYPE,
