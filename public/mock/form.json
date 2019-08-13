@@ -3,36 +3,18 @@
   "msg": "",
   "data": {
     "id":"adcsfer8ewq56r54415dsa",
-    "title":"",
-    "des":"",
+    "title":"我的第一张表",
+    "brief":"",
+    "isPublic":false,
+    "autoRefresh":false,
+    "refreshInterval":30,
+    "them":0,
     "background":{
-      "custom":false,
-      "setType":0,
-      "bgImgSrc":"",
-      "bgImgScaleType":3,
-      "bgImgBlur":0,
-      "bgImgOpacity":0.8,
-      "bgColor":"",
-      "titleColor":"",
-      "radio":8,
-      "borderWidth":0,
-      "borderStyle":0,
-      "borderColor":"",
-      "shadowWidht":10,
-      "shadowOffset":3,
-      "shadowColor":"",
-      "showWatermark":false
-    },
-    "watermark":{
-      "show":false,
-      "contentType":0,
-      "content":"",
-      "color":"",
-      "opacity":0.8,
-      "fontSize":18,
-      "width":250,
-      "xSpacing":100,
-      "ySpacing":50
+      "imgSouce":0,
+      "systemImg":"",
+      "uploadImg":"",
+      "imgRepeat":0,
+      "imgBlur":5
     },
     "layout":[
       {

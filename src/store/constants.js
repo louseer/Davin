@@ -1,6 +1,6 @@
 //constants
 
-export const ELEMENT_RFORM = 'rform'; //编辑对象元素--报表
+export const ELEMENT_RFORM = 'reportform'; //编辑对象元素--报表
 export const ELEMENT_GRID = 'grid'; //编辑对象元素--grid
 export const ELEMENT_SCREEN = 'screen'; //编辑对象元素--大屏
 export const ELEMENT_GROUP = 'group'; //编辑对象元素--大屏-组
