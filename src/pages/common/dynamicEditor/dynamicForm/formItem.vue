@@ -74,6 +74,7 @@
         </el-upload>
         <d-img-select
           v-if="item.type === itemType.IMGSELECT"
+          :title='item.name'
           v-model="item.value"
         ></d-img-select>
       </el-form-item>

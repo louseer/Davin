@@ -4,7 +4,7 @@
     <div class='img-select' @click='handleClick'>
       <img v-if="imgsrc" :src='imgsrc' height="100%" />
     </div>
-    <el-dialog title="请选择系统图片" :visible.sync="dialogVisible">
+    <el-dialog :title="title" :visible.sync="dialogVisible">
       <div class="slideimg">
         <li v-for="(item,index) in list" :key="index" @click="imgClick(item,index)" :class="{'selected':selected === index}">
             <img :src="item.url" width="100%" height="100%" />
@@ -23,6 +23,10 @@ export default {
   name:'d-img-select',
   components:{},
   props:{
+    title:{
+      type:String,
+      default:"选择图片"
+    },
     list:{
       type:Array,
       default:()=>{
