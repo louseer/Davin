@@ -56,6 +56,7 @@ export default {
         .tabtop {
           display: flex;
           flex-flow: row nowrap;
+           border-bottom: @border_Data_main;
           .tabbtn {
             width: calc(100% - 0.08rem);
             height: 0.36rem;
@@ -88,6 +89,7 @@ export default {
           background: @bg_Data_left;
           height: calc(100% - 0.36rem);
           width: 100%;
+          overflow-y: auto;
         }
       }
 </style>

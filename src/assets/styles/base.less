@@ -40,12 +40,14 @@
 @border_Data_sub: 1px #272a2e solid;
 @border_Data_bottom: 1px #2b313a solid;
 @border_Data_thumbnail: 1px #8a929b solid;
-
+@border_Data_red50:1px rgba(246,6,6 ,0.5) solid;
+@border_Data_redPoint:3px #f60606 solid;
 //Bgcolor Frame
 @bg_Data_left: #313438;
 @bg_Data_leftbottom: #212326;
 @bg_Data_thumbnail: #232124;
 @bg_Data_lefthover: #3e4348;
+@bg_Data_red20:rgba(246,6,6 ,0.2);
 
 @header_tb_bg: linear-gradient(to bottom, #122955, #04152a);
 @wbk_header_bg: -webkit-linear-gradient(#122955, #04152a);
@@ -177,27 +179,30 @@
 //scroll
 
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
-// ::-webkit-scrollbar {
-//   width: 4px;
-//   height: 0.1rem;
-//   background-color: @bg_bgClr_darklest;
-//   position: absolute;
-//   right: 0;
-// }
+::-webkit-scrollbar {
+  width: 4px;
+  height: 0.1rem;
+  background-color: @icon_DataC_dark;
+  position: absolute;
+  right: 0;
+}
 
-// /*定义滚动条轨道 内阴影+圆角*/
-// ::-webkit-scrollbar-track {
-//   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-//   border-radius: 2px;
-//   background-color: @bg_bgClr_darklest;
-// }
 
-// /*定义滑块 内阴影+圆角*/
-// ::-webkit-scrollbar-thumb {
-//   border-radius: 2px;
-//   //-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-//   background-color: #2d5280;
-// }
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+  background-color: @icon_DataC_dark;
+}
+
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  //-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  background-color: @icon_DataC_red;
+}
+
+
 // //vue动画
 // .fade-enter-active {
 //   animation: fadeout .5s;

@@ -33,6 +33,7 @@
             <li>h:{{node.h}}</li>
             <li>x:{{node.x}}</li>
             <li>y:{{node.y}}</li>
+            <li>{{node.disable ? 'lock' :''}}</li>
           </ul>     
     </div>
   </div>
@@ -158,14 +159,15 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@import '../../assets/styles/base.less';
 .node-room {
   position: absolute;
-  color: #616161;
+  color: #179f10;
   font: 30px/100%;
 }
 .node {
   position: absolute;
-  background: #7d7d7d;
+  background: #15191c;
   border: 1px darkgray solid;
   cursor: pointer;
 }
@@ -179,13 +181,13 @@ export default {
   width: 100%;
   height: 100%;
  cursor: move;
-  background: rgba(77, 211, 248, 0.2);
+  background: @bg_Data_red20;
   position: absolute;
-  border: 1px #41acca dotted;
+  border: @border_Data_red50;
   i {
     width: 10px;
     height: 10px;
-    border: 3px #4dd3f8 solid;
+    border: @border_Data_redPoint;
     display: block;
     position: absolute;
   }

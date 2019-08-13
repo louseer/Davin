@@ -21,10 +21,11 @@
               @unhideNode="unhideNode"
               @unlockNode="unlockNode"
             />
+            <LeftBottom :leftBottomtools="leftBottomtools"></LeftBottom>
           </div>
           <div slot="tab2">组件的组件</div>
         </Dtab>
-        <LeftBottom :leftBottomtools="leftBottomtools"></LeftBottom>
+        
       </div>
       <div class="rightbar">
         <Stage @nodelistChange="nodechange" ref="stage"></Stage>
@@ -247,7 +248,7 @@ export default {
     .leftbar {
       width: 2rem;
       background: @bg_Data_left;
-      border-right: @border_Data_sub;
+      border-right: @border_Data_main;
       position: relative;
       overflow: hidden;
 
@@ -255,8 +256,9 @@ export default {
         height: 0.3rem;
         background: @bg_Data_left;
         border-bottom: @border_Data_main;
-        border-top: @border_Data_main;
+       
         overflow: hidden;
+      
         b {
           font-size: 0.16rem;
           display: block;

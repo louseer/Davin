@@ -24,6 +24,9 @@ import Dbutton from '../../components/button.vue'
 .leftbottombar {
         height: 0.3rem;
         background: @bg_Data_leftbottom;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
         b {
           font-size: 0.16rem;
           display: block;

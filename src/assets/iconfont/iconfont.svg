@@ -95,6 +95,12 @@ Created by iconfont
     <glyph glyph-name="ico_db_laycom_normal" unicode="&#58956;" d="M512 416.581818L121.018182 621.381818 512 826.181818l390.981818-204.8z m-46.545455-474.763636l-372.363636 232.727273v372.363636l372.363636-232.727273v-372.363636z m93.09091 0l372.363636 232.727273v372.363636l-372.363636-232.727273v-372.363636z"  horiz-adv-x="1024" />
 
     
+    <glyph glyph-name="ico_db_reduce" unicode="&#58957;" d="M864 32h-704v704h704v-704z m-640 64h576v576h-576v-576z m448 256h-320v64h320v-64z"  horiz-adv-x="1024" />
+
+    
+    <glyph glyph-name="ico_db_plus" unicode="&#58958;" d="M864 32h-704v704h704v-704z m-640 64h576v576h-576v-576z m448 256h-320v64h320v-64z m-128-128h-64v320h64v-320z"  horiz-adv-x="1024" />
+
+    
 
 
   </font>

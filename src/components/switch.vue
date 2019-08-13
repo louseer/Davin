@@ -1,6 +1,6 @@
 <template>
   <div class="switch_btn">
-        <i @click="changeHandler" :class="state ? '' :'off' "></i>
+        <i @click="changeHandler" :class="state ? '' :'off' " :title="titText"></i>
   </div>
 </template>
 
@@ -11,6 +11,10 @@
         type: Boolean,
         default: true
       },
+      titText:{
+        type:String,
+        default:'点击切换'
+      }
     },
     data() {
       return {

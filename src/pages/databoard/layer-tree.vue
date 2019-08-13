@@ -1,15 +1,24 @@
 <template>
-  <div>
-    <Dtree :data="treenode" :renderContent="renderContent" style="margin-top:0.1rem" />
+  <div class="edtree">
+   
+    <div style="width:100%; padding:0.1rem; box-sizing: border-box;"><Dinput  placeholder="搜索图层"  v-model="filterText"></Dinput></div>
+    <Dtree
+      :data="treenode"
+      :filterText="filterText"
+      :renderContent="renderContent"
+      style="margin-top:0.1rem"
+    />
   </div>
 </template>
 
 <script>
+import Dinput from '../../components/edit-input'
 import Dtree from '../../components/edit-tree.vue'
 import { deflate } from 'zlib'
 export default {
   components: {
-    Dtree
+    Dtree,
+    Dinput
   },
   props: {
     listType: {
@@ -21,7 +30,13 @@ export default {
       default: () => []
     }
   },
+  data() {
+    return {
+      filterText: ''
+    }
+  },
   methods: {
+   
     treeNodeClick(nodeId) {
       this.$emit('treeNodeClick', nodeId)
     },
@@ -241,20 +256,16 @@ export default {
               }
             },
             [
-              h(
-                'span',
-                {
-                  class: ['iconfont',`icon-ico_db_laycom_${data.elType}`],
-                  style: {
-                    float: 'left',
-                    marginRight:'0.08rem',
-                    fontSize: '0.16rem',
-                    lineHeight: '0.3rem',
-                    color: data.active ? '#f60606' : ''
-                  }
-                },
-               
-              ),
+              h('span', {
+                class: ['iconfont', `icon-ico_db_laycom_${data.elType}`],
+                style: {
+                  float: 'left',
+                  marginRight: '0.08rem',
+                  fontSize: '0.16rem',
+                  lineHeight: '0.3rem',
+                  color: data.active ? '#f60606' : ''
+                }
+              }),
               h(
                 'span',
                 {
@@ -426,4 +437,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
 </style>

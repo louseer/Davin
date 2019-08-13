@@ -34,7 +34,7 @@ export default class Stage {
     this._offset = val
     this.canvas.offset = val
   }
-
+ 
   createCanvas(config) {
     const _this = this
     const obj = {
@@ -79,7 +79,7 @@ export default class Stage {
     this.nodeList.forEach(n=>{
       n.active=false
       if(n.id === id){
-        if(n.disable) return
+        if(n.disable || n.hide) return
         if(n.type === 'group'){
          this.selectNodes=  [n,...this.nodeList.filter(node=>n.cid.includes(node.id))].map(en=>Object.assign(en,{active:true}))
         
@@ -128,7 +128,7 @@ export default class Stage {
       n.cid &&
         this.nodeList.forEach(node => {
           if (n.cid.includes(node.id)) node.hide = true
-          node.active = false
+         // node.active = false 隐藏不可选中
         })
     })
     this.selectNodes = []
