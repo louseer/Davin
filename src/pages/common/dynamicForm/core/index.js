@@ -1,4 +1,4 @@
-import { OPTIONTYPE } from './lib/constants.js'
+import { OPTIONTYPE } from './constants.js'
 /**
  * 生成各项控件的基础配置项
  * TODO:考虑值为数组的状态

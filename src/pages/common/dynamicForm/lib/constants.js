@@ -45,7 +45,8 @@ export const BGIMG_OPACITY_MAX = 100;
 export const BGIMG_OPACITY_STEP = 1;
 export const WHITE = "rgba(255, 255, 255, 1)";
 export const CHBK = "rgba(75, 75, 75, 1)";
-
+export const GRID_DEF_W = 6;
+export const GRID_DEF_H = 9;
 
 export const IMG_SOURCE_TYPE = [
   {"label":"无","value":0},

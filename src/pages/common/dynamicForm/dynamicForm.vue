@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div class='side-bar-right'>
+  <div class='dynamic-form'>
     <el-form ref="editForm"  label-width="1rem" v-if='form' >
       <form-item :options='form.options'></form-item>
     </el-form>
@@ -11,8 +11,8 @@
 //import {组件名称} from '组件路径';
 import { mapGetters } from 'vuex'
 
-import { DynamicForm } from './dynamicForm/index.js'
-import  formItem from './dynamicForm/formItem.vue'
+import { DynamicForm } from './core/index.js'
+import  formItem from './core/formItem.vue'
 export default {
   components: {
     formItem
@@ -56,12 +56,12 @@ export default {
         return;
       }
       // type = type || this.type;
-      import(`./dynamicForm/lib/${this.type}.js`).then((module) => {
+      import(`./lib/${this.type}.js`).then((module) => {
         let editor = module.default;
         this.form = new DynamicForm(editor.options,editor.handlers,this.setting);
         console.log(this.form)
       }).catch(e=>{
-        console.log(`动态表单加载./dynamicForm/lib/${this.type}.js失败`)
+        console.log(`动态表单加载./lib/${this.type}.js失败`)
         console.log(e)
       })
     }

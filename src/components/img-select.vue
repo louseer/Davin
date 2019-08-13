@@ -18,7 +18,6 @@
 <script>
 //import {组件名称} from '组件路径';
 
-
 export default {
   name:'d-img-select',
   components:{},
