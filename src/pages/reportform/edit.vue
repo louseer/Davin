@@ -10,17 +10,16 @@
         <grid-layout :layout='layout' :editing='isEditing'></grid-layout>
       </div>
       <div class='page-right'>
-        <Editor :target='modifyTarget'/>
+        <Editor :type='type' :setting='setting'/>
       </div>
     </div>
-    
   </div>
 </template>
 
 <script>
 //import {组件名称} from '组件路径';
 import GridLayout from './components/gridlayout.vue'
-import Editor from '../common/editor/editor.vue'
+import Editor from '../common/dynamicEditor/dynamicEditor.vue'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
 
@@ -34,13 +33,19 @@ export default {
     };
   },
   computed: {
-    ...mapState({
-      'layout':state => state.form.layout,
+    ...mapState('form',{
+      'layout':state => state.layout,
     }),
     ...mapGetters ('form',[
       'isEditing',
       'modifyTarget'
-    ])
+    ]),
+    type() {
+      return this.modifyTarget.type
+    },
+    setting () {
+      return this.modifyTarget.setting
+    }
   },
   watch: {},
   methods: {
@@ -58,8 +63,9 @@ export default {
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
     this.openEditMode()
-    this.queryFormData()
     this.setRFormID(this.$route.params.id)
+    this.queryFormData()
+    
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {

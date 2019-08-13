@@ -7,19 +7,20 @@ export default {
     formID:'',
     form:null,
     activeGrid:null,
-    layout:[]
+    layout:[],
+    editType:ELEMENT_RFORM
   },
   getters: {
     modifyTarget (state) {
-      if(state.activeGrid){
+      if(state.editType === ELEMENT_GRID){
         return {
-          type:ELEMENT_GRID,
-          target: state.activeGrid
+          type:state.editType,
+          setting: state.activeGrid
         }
       }else{
         return {
-          type:ELEMENT_RFORM,
-          target: state.form
+          type:state.editType,
+          setting: state.form
         }
       }
     },
@@ -37,7 +38,8 @@ export default {
       state.formID = id
     },
     //记录当前报表完整数据
-    setRForm (state,fromData) {
+    setRFormConfig (state,fromData) {
+      console.log("接口请求完毕")
       state.form = fromData
     },
     //记录当前grid list
@@ -47,17 +49,20 @@ export default {
     //记录当前激活grid/chart
     setActiveGrid (state,grid) {
       state.activeGrid = grid
+      state.editType = ELEMENT_GRID
     },
     //取消激活grid/chart
     cancelActiveGrid (state) {
       state.activeGrid = null
+      state.editType = ELEMENT_RFORM
     },
   },
   actions: {
     queryFormData({state,commit}){
       getFormData(state.formID).then(rsp => {
-        commit('setRForm',rsp.data)
-        commit('setLayout',rsp.data.layout)
+        const {layout,...form} = rsp.data;
+        commit('setRFormConfig',form)
+        commit('setLayout',layout)
       })
     },
     updateLayout({commit},newLayout){
