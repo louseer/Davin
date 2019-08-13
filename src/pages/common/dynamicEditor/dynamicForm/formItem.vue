@@ -90,7 +90,7 @@
 <script>
 //import {组件名称} from '组件路径';
 import { OPTIONTYPE } from "./lib/constants.js"
-import DImgSelect from "./imgSelect.vue"
+import DImgSelect from "components/img-select.vue"
 export default {
   name:"form-item",
   components:{
