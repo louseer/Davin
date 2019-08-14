@@ -602,7 +602,9 @@ export default class Stage {
           }
         })
       },
-
+      reNameNode(node,newname){
+        node.name=newname
+      },
       selectNodes(callback) {
         let startX = 0
         let startY = 0

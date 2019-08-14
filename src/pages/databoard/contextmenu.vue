@@ -6,7 +6,7 @@
         v-for="(list,lindex) in Menu"
         @mouseover="listMouseover(list)"
         @mouseleave="listMouseleave(list)"
-        @click="list.event"
+        @click="listClick(list)"
       >
         <span>{{list.name}}</span>
         <i v-if="list.hasOwnProperty('children')" class="iconfont icon-ico_db_arrow arrow"></i>
@@ -39,12 +39,21 @@ export default {
       Menu: ''
     }
   },
+  watch: {
+    rightMenu(val){
+this.Menu=val
+    }
+  },
   computed: {
     pstyle() {
       return `left:${this.position.x}px;top:${this.position.y}px`
     }
   },
   methods: {
+    listClick(list){
+        list.event()
+        this.$emit('hide')
+    },
     listMouseover(item) {
       item.active = true
     },
