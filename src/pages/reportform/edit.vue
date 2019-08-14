@@ -10,7 +10,7 @@
         <grid-layout :layout='layout' :editing='isEditing'></grid-layout>
       </div>
       <div class='page-right'>
-        <Editor :type='type' :setting='setting'/>
+        <DForm :type='type' :setting='setting'/>
       </div>
     </div>
   </div>
@@ -19,14 +19,14 @@
 <script>
 //import {组件名称} from '组件路径';
 import GridLayout from './components/gridlayout.vue'
-import Editor from '../common/dynamicEditor/dynamicEditor.vue'
+import DForm from '../common/dynamicForm/dynamicForm.vue'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
 
 export default {
   components: {
     GridLayout,
-    Editor
+    DForm
   },
   data() {
     return {

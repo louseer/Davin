@@ -1,21 +1,4 @@
-/**
- * 控件类型
- */
-export const OPTIONTYPE = {
-  GROUP:"group", //组。以折叠框展示其children
-  NOVIEW:"noview", //无视图（即不渲染控件）。仅为字段用来存数据。
-  INPUT:'input',
-  SWITCH:'switch',
-  INPUTNUMBER:"inputNumber",
-  SELECT:"select",
-  RADIO:"radio",
-  SLIDER:"slider",
-  COLORPICKER:"colorPicker",
-  IMGSELECT:"ImgSelect", 
-  IMGUPLOAD:"ImgUpload", 
-  FILEUPLOAD:"fileUpload", 
-  TEXTAREA:'textarea'
-}
+
 
 export const GROUP = "group"; //组。以折叠框展示其children
 export const NOVIEW = "noview"; //无视图（即不渲染控件）。仅为字段用来存数据。
@@ -45,7 +28,8 @@ export const BGIMG_OPACITY_MAX = 100;
 export const BGIMG_OPACITY_STEP = 1;
 export const WHITE = "rgba(255, 255, 255, 1)";
 export const CHBK = "rgba(75, 75, 75, 1)";
-
+export const GRID_DEF_W = 6;
+export const GRID_DEF_H = 9;
 
 export const IMG_SOURCE_TYPE = [
   {"label":"无","value":0},

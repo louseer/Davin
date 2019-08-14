@@ -1,5 +1,7 @@
+import { OPTIONTYPE } from '../core/constants.js'
 import { 
-  OPTIONTYPE,
+  GRID_DEF_W,
+  GRID_DEF_H,
   REFRESH_INTERVAL,
   IMG_SOURCE_TYPE,
   IMG_SCALE_TYPE,
@@ -29,6 +31,11 @@ const SHADOW_OFFSET = 11;
 const SHADOW_BLUR = 3;
 
 
+const GRID_W_MIN = 1;
+const GRID_W_MAX = 12;
+const GRID_W_STEP = 1;
+
+
 /**
  * 报表编辑form 表单项配置器
  */
@@ -37,15 +44,23 @@ const options = {
     "type":OPTIONTYPE.NOVIEW, 
     "defaultVal":""
   },
-  "title":{
-    "name":"报表名称",
-    "type":OPTIONTYPE.INPUT, //文字输入框
-    "defaultVal":"我的报表"
+  "x":{
+    "type":OPTIONTYPE.NOVIEW
   },
-  "brief":{
-    "name":"简介",
-    "type":OPTIONTYPE.TEXTAREA,
-    "defaultVal":""
+  "y":{
+    "type":OPTIONTYPE.NOVIEW
+  },
+  "w":{
+    "name":"宽度",
+    "type":OPTIONTYPE.INPUTNUMBER,
+    "defaultVal":GRID_DEF_W,
+    "min":GRID_W_MIN,
+    "max":GRID_W_MAX
+  },
+  "h":{
+    "name":"高度",
+    "type":OPTIONTYPE.INPUTNUMBER,
+    "defaultVal":GRID_DEF_H
   },
   "isPublic":{
     "name":"是否公开",
@@ -82,13 +97,13 @@ const options = {
         "options":IMG_SOURCE_TYPE
       },
       "systemImg":{
-        "name":"选择图片",
+        "name":"",
         "type":OPTIONTYPE.IMGSELECT,
         "hide":true,
         "defaultVal":''
       },
       "uploadImg":{
-        "name":"上传图片",
+        "name":"",
         "type":OPTIONTYPE.IMGUPLOAD,
         "hide":true,
         "defaultVal":''

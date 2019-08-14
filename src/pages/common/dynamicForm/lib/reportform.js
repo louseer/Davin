@@ -1,5 +1,5 @@
+import {OPTIONTYPE} from '../core/constants.js'
 import { 
-  OPTIONTYPE,
   REFRESH_INTERVAL,
   IMG_SOURCE_TYPE,
   IMG_SCALE_TYPE,
@@ -37,7 +37,7 @@ const options = {
     "type":OPTIONTYPE.NOVIEW, 
     "defaultVal":""
   },
-  "x":{
+  "title":{
     "name":"报表名称",
     "type":OPTIONTYPE.INPUT, //文字输入框
     "defaultVal":"我的报表"
@@ -82,13 +82,13 @@ const options = {
         "options":IMG_SOURCE_TYPE
       },
       "systemImg":{
-        "name":"",
+        "name":"选择图片",
         "type":OPTIONTYPE.IMGSELECT,
         "hide":true,
         "defaultVal":''
       },
       "uploadImg":{
-        "name":"",
+        "name":"上传图片",
         "type":OPTIONTYPE.IMGUPLOAD,
         "hide":true,
         "defaultVal":''
