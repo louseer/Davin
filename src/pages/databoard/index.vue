@@ -1,10 +1,6 @@
 <template>
   <div style="overflow: hidden;position: relative; height:100% ">
-    <div
-      v-if="rightClick"
-      class="rightmenu"
-      style="width:200px; height:200px; background:red; z-index:999999;position: absolute;"
-    ></div>
+    <Contextmenu :position="rightMenuPosition" v-if="rightClick" class="rightmenu" :rightMenu="rightMenu"/>
     <div class="ex">
       <input type="text" v-model="domCavase.canvas.width" placeholder="请输入宽度" />
       <input type="text" v-model="domCavase.canvas.height" />
@@ -82,10 +78,12 @@
 import Dcanvas from './dcanvas/dcanvas'
 import Cav from './canvas.vue'
 import Node from './layer-node.vue'
+import Contextmenu from './contextmenu.vue'
 export default {
   components: {
     Node,
-    Cav
+    Cav,
+    Contextmenu
   },
   data() {
     return {
@@ -97,6 +95,7 @@ export default {
       startY: 0,
       dx: 0,
       dy: 0,
+      rightMenuPosition:{},
       dnode: '',
       nodelist: [],
       aglinList: [
@@ -106,6 +105,70 @@ export default {
         { type: 'left', name: '左对齐' },
         { type: 'VCenter', name: '垂直居中' },
         { type: 'HCenter', name: '水平居中' }
+      ],
+     rightMenu: [
+        {
+          name: '置顶',
+          event: () => {},
+       },
+        {
+          name: '置底',
+          event: () => {}
+        },
+        {
+          name: '上移一层',
+          event: () => {}
+        },
+        {
+          name: '下移一层',
+          event: () => {}
+        },
+        {
+          name: '组合',
+          event: () => {}
+        },
+        {
+          name: '取消组合',
+          event: () => {}
+        },
+        {
+          name: '锁定',
+          event: () => {}
+        },
+        {
+          name: '隐藏',
+          event: () => {}
+        },
+        {
+          name: '重命名',
+          event: () => {}
+        },
+        {
+          name: '复制',
+          event: () => {},
+             children: [
+            {
+              name: '置顶',
+              event: () => {}
+            },
+            {
+              name: '置底',
+              event: () => {}
+            },
+            {
+              name: '上移一层',
+              event: () => {}
+            },
+            {
+              name: '下移一层',
+              event: () => {}
+            }
+          ]
+        },
+        {
+          name: '删除',
+          event: () => {}
+        }
       ]
     }
   },
@@ -130,13 +193,19 @@ export default {
       //this.$emit('nodelistChange', this.domCavase.nodeList)
     })
     handler.mouseWheelZoom()
-    handler.rightclickHandler(e => {
+    handler.rightclickHandler((e,x,y) => {
+      const obj={
+        x: x,
+        y: y
+      }
+      console.log(obj)
+      this.rightMenuPosition=obj
       this.rightClick = true
     })
   },
   methods: {
-    choiceNodeById(id){
-     this.domCavase.choiceNodeById(id)
+    choiceNodeById(id) {
+      this.domCavase.choiceNodeById(id)
       this.$emit('nodelistChange', this.domCavase.nodeList)
     },
     hideNode() {
@@ -298,16 +367,15 @@ export default {
         })
       }
     },
-     toggleGrop(){
-      const rootLIst=this.domCavase.selectNodes.filter(n=>n.pid === null )
-      if(rootLIst.length === 1  ){
-       this.domCavase.outGroup()
-      }
-      else{
-       this.domCavase.toGroup()
+    toggleGrop() {
+      const rootLIst = this.domCavase.selectNodes.filter(n => n.pid === null)
+      if (rootLIst.length === 1) {
+        this.domCavase.outGroup()
+      } else {
+        this.domCavase.toGroup()
       }
       this.$emit('nodelistChange', this.domCavase.nodeList)
-     },
+    },
 
     fillNode() {
       const nodes = [
