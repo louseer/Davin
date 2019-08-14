@@ -23,9 +23,10 @@
             />
             <LeftBottom :leftBottomtools="leftBottomtools"></LeftBottom>
           </div>
-          <div slot="tab2">组件的组件</div>
+          <div slot="tab2" slot-scope="tab">
+            <TypeTab :height="tab.height" :listType="listType" :typetree="typetree" @changeClick="changeClick" @contentClick="contentClick" />
+          </div>
         </Dtab>
-        
       </div>
       <div class="rightbar">
         <Stage @nodelistChange="nodechange" ref="stage"></Stage>
@@ -44,6 +45,7 @@ import LeftBottom from './leftbottom.vue'
 import { nodeListToTree, ordlistToTree } from '../../utils/format'
 import thumbnail from '../../components/thumbnail.vue'
 import LayerTree from './layer-tree.vue'
+import TypeTab from './type-tab'
 export default {
   components: {
     Eheader,
@@ -53,7 +55,8 @@ export default {
     Dswitch,
     LeftBottom,
     thumbnail,
-    LayerTree
+    LayerTree,
+    TypeTab
   },
   data() {
     return {
@@ -150,12 +153,177 @@ export default {
           id: 2,
           active: false
         }
+      ],
+      typetree: [
+        {
+          name: 'charts',
+          title: '图表',
+          active: true,
+          id: '1',
+          children: [
+            {
+              type: 'bar',
+              title: '基础柱状图',
+              id: '1-1'
+            },
+            {
+              type: 'pie',
+              title: '基础饼状图',
+              id: '1-2'
+            },
+            {
+              type: 'Line',
+              title: '基础折线图',
+              id: '1-3'
+            },
+            {
+              type: 'Doughnut',
+              title: '基础环图',
+              id: '1-4'
+            },
+            {
+              type: 'line and bar',
+              title: '混合-线柱混搭',
+              id: '1-5'
+            },
+            {
+              type: 'Scatter',
+              title: '基础散点图',
+              id: '1-6'
+            },
+            {
+              type: 'Funnel',
+              title: '基础漏斗图',
+              id: '1-7'
+            },
+            {
+              type: 'Character cloud',
+              title: '基础字符云',
+              id: '1-8'
+            },
+            {
+              type: 'Radar',
+              title: '基础雷达图',
+              id: '1-9'
+            }
+          ]
+        },
+        {
+          name: 'table',
+          title: '表格',
+          active: false,
+          id: '2',
+          children: [
+            {
+              type: ' basetable',
+              title: '基础表格',
+              id: '2-1'
+            }
+          ]
+        },
+        {
+          name: 'media',
+          title: '媒体',
+          active: false,
+          id: '3',
+          children: [
+            {
+              type: ' vedio',
+              title: '视频',
+              id: '3-1'
+            },
+            {
+              type: ' image',
+              title: '图片',
+              id: '3-2'
+            }
+          ]
+        },
+        {
+          name: 'text',
+          title: '文本',
+          active: false,
+          id: '4',
+          children: [
+            {
+              type: ' text',
+              title: '文本',
+              id: '4-1'
+            }
+          ]
+        },
+         {
+          name: 'relationship',
+          title: '关系网络',
+          active: false,
+          id: '5',
+          children: [
+            {
+              type: ' relationship',
+              title: '关系网络',
+              id: '5-1'
+            }
+          ]
+        },
+         {
+          name: 'material',
+          title: '素材',
+          active: false,
+          id: '6',
+          children: [
+            {
+              type: ' relationship',
+              title: '装饰',
+              id: '6-1'
+            }
+          ]
+        },
+        {
+          name: 'other',
+          title: '其他',
+          active: false,
+          id: '7',
+          children: [
+            {
+              type: 'time',
+              title: '时间选择器',
+              id: '7-1'
+            }
+          ]
+        },
+        {
+          name: 'UE',
+          title: '交互',
+          active: false,
+          id: '8',
+          children: [
+            {
+              type: 'slide',
+              title: '轮播页面',
+              id: '8-1'
+            }
+          ]
+        }
       ]
     }
   },
   computed: {},
   watch: {},
   methods: {
+    contentClick(item){
+      const obj={
+        w:200,
+        h:200,
+        x:50,
+        y:50,
+        elType:item.type,
+        name:item.title,
+      }
+      this.$refs.stage.addNode(obj)
+    },
+    changeClick(items){
+     this.typetree=items
+    },
     layUp() {
       console.log('上一层')
       this.$refs.stage.upLayer()
@@ -198,7 +366,7 @@ export default {
     },
     toggleGrop() {
       console.log('编组')
-      
+
       this.$refs.stage.toggleGrop()
     },
     public() {
@@ -256,9 +424,9 @@ export default {
         height: 0.3rem;
         background: @bg_Data_left;
         border-bottom: @border_Data_main;
-       
+
         overflow: hidden;
-      
+
         b {
           font-size: 0.16rem;
           display: block;
