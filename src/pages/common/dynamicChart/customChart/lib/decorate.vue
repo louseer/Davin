@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div class=''>装饰</div>
+  <div class='decorate'>装饰</div>
 </template>
 
 <script>
@@ -36,6 +36,12 @@ export default {
 }
 </script>
 <style lang='less' scoped>
-//@import url(); 引入公共css类
+
+.decorate{
+  // width: 100%;
+  // height:100% ;
+  background: red;
+  border: 3px #f60606 solid;
+}
 
 </style>

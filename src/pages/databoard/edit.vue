@@ -351,7 +351,7 @@ export default {
           id: '6',
           children: [
             {
-              type: 'decorate',
+              type: 'normal',
               title: '装饰',
               version: 1,
               id: '6-1'
