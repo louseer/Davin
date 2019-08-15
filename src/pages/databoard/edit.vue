@@ -176,53 +176,71 @@ export default {
               type: 'bar',
               title: '基础柱状图',
               version: 1,
+              w:430,
+              h:320,
               id: '1-1'
             },
             {
               type: 'horizontalbar',
               title: '横向柱状图',
               version: 1,
+              w:430,
+              h:320,
               id: '1-10'
             },
             {
               type: 'pie',
               title: '基础饼状图',
               version: 1,
+              w:430,
+              h:320,
               id: '1-2'
             },
             {
               type: 'line',
               title: '基础折线图',
               version: 1,
+              w:430,
+              h:320,
               id: '1-3'
             },
             {
               type: 'line2y',
               title: '双Y轴折线图',
               version: 1,
+              w:430,
+              h:320,
               id: '1-11'
             },
             {
               type: 'doughnut',
               title: '基础环图',
               version: 1,
+              w:430,
+              h:320,
               id: '1-4'
             },
             {
               type: 'linebar',
               title: '混合-线柱混搭',
               version: 1,
+              w:430,
+              h:320,
               id: '1-5'
             },
             {
               type: 'scatter',
               title: '基础散点图',
+              w:430,
+              h:320,
               version: 1,
               id: '1-6'
             },
             {
               type: 'funnel',
               title: '基础漏斗图',
+              w:430,
+              h:320,
               version: 1,
               id: '1-7'
             },
@@ -235,51 +253,61 @@ export default {
             {
               type: 'polar',
               title: '极坐标双数值轴',
+              w:430,
+              h:320,
               version: 1,
               id: '1-12'
             },
             {
               type: 'radar',
               title: '基础雷达图',
+              w:430,
+              h:320,
               version: 1,
               id: '1-9'
             }
           ]
         },
-        {
-          name: 'table',
-          title: '表格',
-          active: false,
-          id: '2',
-          children: [
-            {
-              type: ' basetable',
-              title: '基础表格',
-              version: 1,
-              id: '2-1'
-            }
-          ]
-        },
-        {
-          name: 'media',
-          title: '媒体',
-          active: false,
-          id: '3',
-          children: [
-            {
-              type: ' vedio',
-              title: '视频',
-              version: 1,
-              id: '3-1'
-            },
-            {
-              type: ' image',
-              title: '图片',
-              version: 1,
-              id: '3-2'
-            }
-          ]
-        },
+        // {
+        //   name: 'table',
+        //   title: '表格',
+        //   active: false,
+        //   id: '2',
+        //   children: [
+        //     {
+        //       type: 'basetable',
+        //       title: '基础表格',
+        //       w:530,
+        //       h:320,
+        //       version: 1,
+        //       id: '2-1'
+        //     }
+        //   ]
+        // },
+        // {
+        //   name: 'media',
+        //   title: '媒体',
+        //   active: false,
+        //   id: '3',
+        //   children: [
+        //     {
+        //       type: 'vedio',
+        //       title: '视频',
+        //       version: 1,
+        //       w:430,
+        //       h:320,
+        //       id: '3-1'
+        //     },
+        //     {
+        //       type: 'image',
+        //       title: '图片',
+        //       w:430,
+        //       h:320,
+        //       version: 1,
+        //       id: '3-2'
+        //     }
+        //   ]
+        // },
         {
           name: 'text',
           title: '文本',
@@ -287,69 +315,77 @@ export default {
           id: '4',
           children: [
             {
-              type: ' text',
-              title: '文本',
+              type: 'title',
+              title: '标题',
+              w:200,
+              h:40,
               version: 1,
               id: '4-1'
-            }
+            },
+            // {
+            //   type: 'text',
+            //   title: '文本',
+            //   version: 1,
+            //   id: '4-2'
+            // }
           ]
         },
-        {
-          name: 'relationship',
-          title: '关系网络',
-          active: false,
-          id: '5',
-          children: [
-            {
-              type: ' relationship',
-              title: '关系网络',
-              version: 1,
-              id: '5-1'
-            }
-          ]
-        },
-        {
+        // {
+        //   name: 'relationship',
+        //   title: '关系网络',
+        //   active: false,
+        //   id: '5',
+        //   children: [
+        //     {
+        //       type: 'relationship',
+        //       title: '关系网络',
+        //       version: 1,
+        //       id: '5-1'
+        //     }
+        //   ]
+        // },
+         {
           name: 'material',
           title: '素材',
           active: false,
           id: '6',
           children: [
             {
-              type: ' relationship',
+              type: 'decorate',
               title: '装饰',
               version: 1,
               id: '6-1'
             }
           ]
         },
-        {
-          name: 'other',
-          title: '其他',
-          active: false,
-          id: '7',
-          children: [
-            {
-              type: 'time',
-              title: '时间选择器',
-              version: 1,
-              id: '7-1'
-            }
-          ]
-        },
-        {
-          name: 'UE',
-          title: '交互',
-          active: false,
-          id: '8',
-          children: [
-            {
-              type: 'slide',
-              title: '轮播页面',
-              version: 1,
-              id: '8-1'
-            }
-          ]
-        }
+        // {
+        //   name: 'other',
+        //   title: '其他',
+        //   active: false,
+        //   id: '7',
+        //   children: [
+        //     {
+        //       type: 'time',
+        //       title: '时间选择器',
+        //       version: 1,
+        //       id: '7-1'
+        //     }
+        //   ]
+        // },
+        // {
+        //   name: 'UE',
+        //   title: '交互',
+        //   active: false,
+        //   id: '8',
+        //   children: [
+        //     {
+        //       type: 'slide',
+        //       title: '轮播页面',
+        //       version: 1,
+        //       id: '8-1'
+        //     }
+        //   ]
+        // }
       ]
     }
   },
@@ -372,8 +408,8 @@ export default {
         version: item.version
       }
       const obj={
-        w:200,
-        h:200,
+        w:item.w || 200,
+        h:item.h || 200,
         x:50,
         y:50,
         elType:item.type,

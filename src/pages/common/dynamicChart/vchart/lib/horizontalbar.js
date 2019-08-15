@@ -90,11 +90,7 @@ export default class Line extends Echart{
   }
 
   setSample () {
-    this.options = Object.assign(defaultOption,{
-      title: {
-          text: '世界人口总量',
-          subtext: '数据来自网络'
-      },
+    this.options = {
       tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -130,7 +126,7 @@ export default class Line extends Echart{
               data: [19325, 23438, 31000, 121594, 134141, 681807]
           }
       ]
-  });
+    };
   }
 
   combineConfig() {

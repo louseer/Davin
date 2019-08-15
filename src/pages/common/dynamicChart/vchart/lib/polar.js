@@ -71,7 +71,7 @@ export default class Polar extends Echart{
           showSymbol: false
         }
       ],
-      animationDuration: 2000
+      animationDuration: 0
     }
   }
 

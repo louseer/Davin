@@ -99,7 +99,7 @@ export default class Line extends Echart{
   }
 
   setSample () {
-    this.options = Object.assign(defaultOption,{
+    this.options = {
       legend: {
         right: 10,
         data: ['1990', '2015']
@@ -180,7 +180,7 @@ export default class Line extends Echart{
             }
         }
     }]
-    });
+    };
   }
 
   combineConfig() {

@@ -84,26 +84,9 @@ export default class Line extends Echart{
 
   setSample () {
     this.options = {
-      grid: {
-        show: false,
-        left: 50,
-        right: 10,
-        bottom: 30
-      },
-      title: {
-          text: '漏斗图',
-          subtext: '纯属虚构'
-      },
       tooltip: {
           trigger: 'item',
           formatter: "{a} <br/>{b} : {c}%"
-      },
-      toolbox: {
-          feature: {
-              dataView: {readOnly: false},
-              restore: {},
-              saveAsImage: {}
-          }
       },
       legend: {
           data: ['展现','点击','访问','咨询','订单']
