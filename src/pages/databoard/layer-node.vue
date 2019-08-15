@@ -33,6 +33,7 @@
             <li>h:{{node.h}}</li>
             <li>x:{{node.x}}</li>
             <li>y:{{node.y}}</li>
+            <li>id:{{node.id}}</li>
              <li>type:{{node.elType}}</li>
             <li>{{node.disable ? 'lock' :''}}</li>
           </ul>     
