@@ -3,7 +3,7 @@
   <div class="edit-page">
     <Eheader :maintit="maintit" :toptools="toptools" />
     <div class="content">
-      <div class="setbar"></div>
+      <!-- <div class="setbar"></div> -->
       <div class="leftbar">
         <Dtab :tabs="leftTab">
           <Dswitch slot="tabsloat" :state="showMmore" @switchChange="switchChange" />
@@ -29,13 +29,15 @@
         </Dtab>
       </div>
       <div class="rightbar">
-        <Stage @nodelistChange="nodechange" ref="stage"></Stage>
+        <Stage @nodelistChange="nodechange" @zoomChange="zoomChange" ref="stage"></Stage>
+        <ZoomSetter :zoomSize="zoom"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import ZoomSetter from './zoom-setter.vue'
 import Dswitch from '../../components/switch.vue'
 import Dbutton from '../../components/button.vue'
 import Dtab from '../../components/tabmenu.vue'
@@ -49,6 +51,7 @@ import TypeTab from './type-tab'
 import { getuuid } from '@/utils/index'
 export default {
   components: {
+    ZoomSetter,
     Eheader,
     Stage,
     Dbutton,
@@ -63,6 +66,7 @@ export default {
     return {
       maintit: '春风隧道(V1.0)',
       showMmore: true,
+      zoom:0.5,
       treenode: [],
       toptools: [
         {
@@ -343,9 +347,13 @@ export default {
       ]
     }
   },
+  
   computed: {},
   watch: {},
   methods: {
+    zoomChange(config){
+    this.zoom=config.zoomSize
+    },
     contentClick(item){
       const id = getuuid()
       const chart = {

@@ -121,41 +121,41 @@ export default {
       rightAllMenu: [
         {
           name: '置顶',
-          event:()=>{this.toTopLayer()}
+          event:this.toTopLayer
         },
         {
           name: '置底',
-          event:()=>{this.toBottomLayer()}
+          event:this.toBottomLayer
         },
         
         {
           name: '上移一层',
-          event: () => {this.upLayer()}
+          event: this.upLayer
         },
         {
           name: '下移一层',
-          event: () => {this.upLayer()}
+          event: this.upLayer
         },
         
         {
           name: '锁定',
-          event: () => {this.lockNode()}
+          event: this.lockNode
         },
         {
           name: '隐藏',
-          event: () => {this.hideNode()}
+          event: this.hideNode
         },
         {
           name: '重命名',
-          event: () => {this.reNameNode()}
+          event: this.reNameNode
         },
         {
           name: '复制',
-          event: () => {this.copyNode()}
+          event: this.copyNode
         },
         {
           name: '删除',
-          event: () => {this.deleteNode()}
+          event: this.deleteNode
         },
         {
           name: '图层操作',
@@ -257,7 +257,17 @@ export default {
       console.log('##@@@sdfsdfsfdsdf')
       //this.$emit('nodelistChange', this.domCavase.nodeList)
     })
-    handler.mouseWheelZoom()
+    handler.onmousewheelHandler(e=>{
+    
+      let startZoom = this.domCavase.zoomSize
+        if (e.wheelDelta == 120) {
+            startZoom += 0.01
+            this.setZoom(startZoom)
+          } else {
+            startZoom -= 0.01
+            this.setZoom(startZoom)
+          }
+    })
     handler.rightclickHandler((e, x, y) => {
       const obj = {
         x: x,
@@ -282,6 +292,10 @@ export default {
     })
   },
   methods: {
+    setZoom(val){
+      this.domCavase.zoomSize=val
+      this.$emit('zoomChange',this.domCavase)
+    },
     contextmenuHide(){
       this.rightClick=false
     },

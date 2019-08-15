@@ -594,12 +594,8 @@ export default class Stage {
       },
       mouseWheelZoom(callback) {
         this.onmousewheelHandler(e => {
-          console.log('tag', e.wheelDelta)
-          if (e.wheelDelta == 120) {
-            _this.zoomSize += 0.01
-          } else {
-            _this.zoomSize -= 0.01
-          }
+          callback && callback.type === 'function' && callback(e)
+        
         })
       },
       reNameNode(node,newname){
