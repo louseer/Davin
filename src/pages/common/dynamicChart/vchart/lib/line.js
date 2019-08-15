@@ -1,14 +1,6 @@
 import Echart from './echart.js';
 import 'echarts/lib/chart/line'
-const defaultOption = {
-  grid: {
-    show: false,
-    left: 50,
-    right: 10,
-    bottom: 30,
-    top:30
-  }
-}
+
 
 export default class Line extends Echart{
   constructor(config) {

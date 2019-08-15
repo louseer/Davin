@@ -1,5 +1,5 @@
 {
-  "color": ["#4ea397", "#22c3aa", "#7bd9a5"],
+  "color": ["#2CA2CD", "#8AB7CB", "#7FD6F3","#8BB1D2","#8B97A6"],
   "backgroundColor": "rgba(0,0,0,0)",
   "textStyle": {},
   "title": {
@@ -163,7 +163,7 @@
     "symbolSize": "10",
     "symbol": "emptyCircle",
     "smooth": true,
-    "color": ["#4ea397", "#22c3aa", "#7bd9a5"],
+    "color": ["#2CA2CD", "#8AB7CB", "#7FD6F3","#8BB1D2","#8B97A6"],
     "label": {
       "normal": {
         "textStyle": {
@@ -438,5 +438,6 @@
         }
       }
     }
-  }
+  },
+  "animationDuration":0
 }
