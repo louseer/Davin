@@ -46,6 +46,7 @@ import { nodeListToTree, ordlistToTree } from '../../utils/format'
 import thumbnail from '../../components/thumbnail.vue'
 import LayerTree from './layer-tree.vue'
 import TypeTab from './type-tab'
+import { getuuid } from '@/utils/index'
 export default {
   components: {
     Eheader,
@@ -164,46 +165,73 @@ export default {
             {
               type: 'bar',
               title: '基础柱状图',
+              version: 1,
               id: '1-1'
+            },
+            {
+              type: 'horizontalbar',
+              title: '横向柱状图',
+              version: 1,
+              id: '1-10'
             },
             {
               type: 'pie',
               title: '基础饼状图',
+              version: 1,
               id: '1-2'
             },
             {
-              type: 'Line',
+              type: 'line',
               title: '基础折线图',
+              version: 1,
               id: '1-3'
             },
             {
-              type: 'Doughnut',
+              type: 'line2y',
+              title: '双Y轴折线图',
+              version: 1,
+              id: '1-11'
+            },
+            {
+              type: 'doughnut',
               title: '基础环图',
+              version: 1,
               id: '1-4'
             },
             {
-              type: 'line and bar',
+              type: 'linebar',
               title: '混合-线柱混搭',
+              version: 1,
               id: '1-5'
             },
             {
-              type: 'Scatter',
+              type: 'scatter',
               title: '基础散点图',
+              version: 1,
               id: '1-6'
             },
             {
-              type: 'Funnel',
+              type: 'funnel',
               title: '基础漏斗图',
+              version: 1,
               id: '1-7'
             },
+            // {
+            //   type: 'characters',
+            //   title: '基础字符云',
+            //   version: 1,
+            //   id: '1-8'
+            // },
             {
-              type: 'Character cloud',
-              title: '基础字符云',
-              id: '1-8'
+              type: 'polar',
+              title: '极坐标双数值轴',
+              version: 1,
+              id: '1-12'
             },
             {
-              type: 'Radar',
+              type: 'radar',
               title: '基础雷达图',
+              version: 1,
               id: '1-9'
             }
           ]
@@ -217,6 +245,7 @@ export default {
             {
               type: ' basetable',
               title: '基础表格',
+              version: 1,
               id: '2-1'
             }
           ]
@@ -230,11 +259,13 @@ export default {
             {
               type: ' vedio',
               title: '视频',
+              version: 1,
               id: '3-1'
             },
             {
               type: ' image',
               title: '图片',
+              version: 1,
               id: '3-2'
             }
           ]
@@ -248,6 +279,7 @@ export default {
             {
               type: ' text',
               title: '文本',
+              version: 1,
               id: '4-1'
             }
           ]
@@ -261,6 +293,7 @@ export default {
             {
               type: ' relationship',
               title: '关系网络',
+              version: 1,
               id: '5-1'
             }
           ]
@@ -274,6 +307,7 @@ export default {
             {
               type: ' relationship',
               title: '装饰',
+              version: 1,
               id: '6-1'
             }
           ]
@@ -287,6 +321,7 @@ export default {
             {
               type: 'time',
               title: '时间选择器',
+              version: 1,
               id: '7-1'
             }
           ]
@@ -300,6 +335,7 @@ export default {
             {
               type: 'slide',
               title: '轮播页面',
+              version: 1,
               id: '8-1'
             }
           ]
@@ -311,13 +347,22 @@ export default {
   watch: {},
   methods: {
     contentClick(item){
+      const id = getuuid()
+      const chart = {
+        id,
+        type:item.type,
+        name:item.title,
+        version:item.version
+      }
       const obj={
+        id,
         w:200,
         h:200,
         x:50,
         y:50,
         elType:item.type,
         name:item.title,
+        chart
       }
       this.$refs.stage.addNode(obj)
     },

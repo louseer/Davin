@@ -1,8 +1,8 @@
 <!-- chart -->
 <template>
-  <div class='chart-wrapper' ref='chartwrapper'>
-    <div class='chart-header'>
-      {{title}}
+  <div class='chart-wrapper' >
+    <div class='chart-header' v-if='showName'>
+      {{name}}
     </div>
     <div class='chart-body'>
       <component :is="chart" :config='config'></component>
@@ -25,6 +25,10 @@ export default {
     "config":{
       type:Object,
       defalut: () => {}
+    },
+    "showName":{
+      type:Boolean,
+      defalut: false
     }
   },
   components: {
@@ -42,8 +46,8 @@ export default {
     type () {
       return this.config.type;
     },
-    title () {
-      return this.config.title;
+    name () {
+      return this.config.name;
     },
     chart () {
       if(echartsTypes.includes(this.type)){
@@ -67,7 +71,7 @@ export default {
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    //this.isMounted = true
+    console.log('chart mounted',this.config)
   },
 
   beforeCreate() {}, //生命周期 - 创建之前

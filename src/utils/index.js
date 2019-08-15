@@ -67,10 +67,27 @@ function getFixedLengthArray (originArr, length, ele) {
   return getFixedLengthArray(originArr, length, ele)
 }
 
+/**
+ * 深度合并对象
+ * @param {Object} target 目标（基础）对象。
+ * @param {Object} source  源（定制）对象
+ */
+function objDeepMerge(target, source) {
+  for (var key in source) {
+    if(target[key] && target[key].toString() === "[object Object]"){
+      deepObjectMerge(target[key], source[key])
+    }else{
+      target[key] = source[key];
+    }
+  }
+  return target;
+}
+
 export {
   getuuid,
   getComplementArr,
   getAverage,
   getSubArrayByIndex,
-  getFixedLengthArray
+  getFixedLengthArray,
+  objDeepMerge
 }

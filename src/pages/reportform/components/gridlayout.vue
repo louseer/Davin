@@ -26,6 +26,7 @@
           <d-chart 
             v-if='item.chart && isMounted' 
             :config='item.chart'
+            :showName = 'true'
           />
       </grid-item>
     </grid-layout>

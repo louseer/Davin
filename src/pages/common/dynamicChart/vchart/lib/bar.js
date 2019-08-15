@@ -89,7 +89,13 @@ export default class Line extends Echart{
   }
 
   setSample () {
-    this.options = Object.assign(defaultOption,{
+    this.options = {
+      grid: {
+        show: false,
+        left: 50,
+        right: 10,
+        bottom
+      },
       color: ['#3398DB'],
       tooltip : {
           trigger: 'axis',
@@ -125,7 +131,7 @@ export default class Line extends Echart{
               data:[10, 52, 200, 334, 390, 330, 220]
           }
       ]
-    });
+    }
   }
 
   combineConfig() {

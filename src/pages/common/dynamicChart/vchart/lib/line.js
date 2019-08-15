@@ -6,7 +6,7 @@ const defaultOption = {
     left: 50,
     right: 10,
     bottom: 30,
-    top:20
+    top:30
   }
 }
 
@@ -93,14 +93,13 @@ export default class Line extends Echart{
   }
 
   setData(data) {
-    this.mapFields(data);
+    // this.mapFields(data);
     this.setLegend(data);
-    this.setSeries(data);
-    
+    this.setSeries(data);   
   }
 
   setSample () {
-    this.options = Object.assign(defaultOption,{
+    this.options = {
         xAxis: {
             type: 'category',
             data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
@@ -112,7 +111,7 @@ export default class Line extends Echart{
             data: [820, 932, 901, 934, 1290, 1330, 1320],
             type: 'line'
         }]
-    });
+    };
   }
 
   combineConfig() {

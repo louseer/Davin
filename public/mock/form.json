@@ -3,7 +3,7 @@
   "msg": "",
   "data": {
     "id":"adcsfer8ewq56r54415dsa",
-    "title":"我的第一张表",
+    "name":"我的第一张表",
     "brief":"",
     "isPublic":false,
     "autoRefresh":false,
@@ -20,7 +20,7 @@
       {
         "x":0,"y":0,"w":5,"h":10,"i":"0",
         "chart":{
-          "title":"极坐标双数值轴",
+          "name":"极坐标双数值轴",
           "type":"polar",
           "id":"c_sdewqag34wqr5t3gt6",
           "data":{
@@ -63,7 +63,7 @@
       },
       {"x":2,"y":0,"w":2,"h":4,"i":"1",
         "chart":{
-          "title":"基本折线图",
+          "name":"基本折线图",
           "type":"line",
           "id":"c_sde56rdfrrwqret3gt",
           "data":{
@@ -94,7 +94,7 @@
       },
       {"x":4,"y":0,"w":2,"h":5,"i":"2",
         "chart":{
-          "title":"基本饼状图",
+          "name":"基本饼状图",
           "type":"pie",
           "id":"c_sde56rdrdfrqrdet3gt",
           "data":{
@@ -112,7 +112,7 @@
       },
       {"x":6,"y":0,"w":2,"h":3,"i":"3",
         "chart":{
-          "title":"基本柱状图",
+          "name":"基本柱状图",
           "type":"bar",
           "id":"c_sde5sdfqrerdddet3gt",
           "data":{
@@ -129,7 +129,7 @@
         }},
       {"x":8,"y":0,"w":2,"h":3,"i":"4",
         "chart":{
-          "title":"横向柱状图",
+          "name":"横向柱状图",
           "type":"horizontalbar",
           "id":"c_sde5sdf45rsdredet3gt",
           "data":{
@@ -146,12 +146,12 @@
         }},
       {"x":10,"y":0,"w":2,"h":3,"i":"5",
         "chart":{
-          "title":"环形饼状图",
-          "type":"ringpie",
+          "name":"环形饼状图",
+          "type":"doughnut",
           "id":"c_sde56rdrdfrqrdet3gt",
           "data":{
             "type":"1",
-            "apiUrl":"/sampledata/ringpie.json",
+            "apiUrl":"/sampledata/doughnut.json",
             "fieldMap":{
               "x":"x",
               "y":"y",
@@ -163,7 +163,7 @@
         }},
       {"x":0,"y":5,"w":2,"h":5,"i":"6",
         "chart":{
-          "title":"双Y轴折线图",
+          "name":"双Y轴折线图",
           "type":"line2y",
           "id":"c_sde5ddfsrrq65rddet3gt",
           "data":{
@@ -180,7 +180,7 @@
         }},
       {"x":2,"y":5,"w":2,"h":5,"i":"7",
       "chart":{
-        "title":"线柱混搭图",
+        "name":"线柱混搭图",
         "type":"linebar",
         "id":"c_sde5ddfsrrq65rddet3gt",
         "data":{

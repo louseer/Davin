@@ -1,12 +1,10 @@
 import Echart from './echart.js';
-import { POLARCENTER } from "../optionsMap/index.js"; 
 
 //V-chart极坐标依赖
 import 'echarts/lib/chart/pie'
 export default class Polar extends Echart{
   constructor(config) {
     super(config);
-    this.editItems = [POLARCENTER];
     this.initOpitions();
   }
 

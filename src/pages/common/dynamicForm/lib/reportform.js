@@ -37,7 +37,7 @@ const options = {
     "type":OPTIONTYPE.NOVIEW, 
     "defaultVal":""
   },
-  "title":{
+  "name":{
     "name":"报表名称",
     "type":OPTIONTYPE.INPUT, //文字输入框
     "defaultVal":"我的报表"

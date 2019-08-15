@@ -188,7 +188,6 @@ export default class Line extends Echart{
   }
 
   initOpitions() {
-    this.setSample();
     this.combineConfig();
   }
 
