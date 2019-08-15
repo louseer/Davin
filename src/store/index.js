@@ -3,6 +3,7 @@ import Vue from 'vue'
 import getters from './getters'
 import user from './modules/user'
 import form from './modules/form'
+import databoard from './modules/databoard'
 import transform from './modules/transform'
 
 Vue.use(Vuex)
@@ -10,6 +11,7 @@ const myStore = new Vuex.Store({
   modules: {
     user,
     form,
+    databoard,
     // transform
   },
   state:{

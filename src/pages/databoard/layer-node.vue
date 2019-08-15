@@ -159,7 +159,7 @@ export default {
      !this.rnode.disable &&  this.$emit('nodeMousedown', this.rnode)
     },
     nodeClick(e) {
-      this.$emit('nodeClick', this.rnode)
+      this.$emit('nodeClick')
     }
   }
 }
@@ -169,7 +169,7 @@ export default {
 @import '../../assets/styles/base.less';
 .node-room {
   position: absolute;
-  color: #179f10;
+  //color: #179f10;
   font: 30px/100%;
 }
 .node {

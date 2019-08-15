@@ -45,6 +45,7 @@ export default {
   watch:{
     config:{
       handler:function(v){
+        console.log('dchart监听到config变化',v)
         this.theconfig = v
       },
       deep:true

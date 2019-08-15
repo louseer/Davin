@@ -1,3 +1,4 @@
+import { OPTIONTYPE } from '../core/constants.js'
 const options = {
   "id":{
     "type":OPTIONTYPE.NOVIEW, 
@@ -16,14 +17,15 @@ const options = {
   "w":{
     "name":"宽度",
     "type":OPTIONTYPE.INPUTNUMBER,
-    "defaultVal":GRID_DEF_W,
-    "min":GRID_W_MIN,
-    "max":GRID_W_MAX
+    "defaultVal":50,
+    "min":50,
+    "max":50
   },
   "h":{
     "name":"高度",
     "type":OPTIONTYPE.INPUTNUMBER,
-    "defaultVal":GRID_DEF_H,
-    "min":GRID_H_MIN,
+    "defaultVal":50,
+    "min":50,
   }
 }
+export default {options}

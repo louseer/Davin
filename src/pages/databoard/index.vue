@@ -7,18 +7,18 @@
       :rightMenu="rightMenu"
       @hide="contextmenuHide"
     />
-    <div class="ex">
+    <!-- <div class="ex">
       <input type="text" v-model="domCavase.canvas.width" placeholder="请输入宽度" />
       <input type="text" v-model="domCavase.canvas.height" />
       <input type="text" v-model="domCavase.zoomSize" placeholder="请输入放大值" />
-      <!-- <input type="text"  placeholder="请输入透明度" />
+      <input type="text"  placeholder="请输入透明度" />
     <input type="select" placeholder="请输入背景色" />
     <select>
       <option value="black">黑色</option>
       <option value="red">红色</option>
       <option value="yellow">黄色</option>
       <option value="blue">蓝色</option>
-      </select>-->
+      </select>
 
       <div style="clear:both;padding:10px">
         <div style="margin:0 auto; width:100%">
@@ -37,10 +37,10 @@
           <button @click="selectAll">全选</button>
           <button @click="lockNode">锁定</button>
           <button @click="hideNode">隐藏</button>
-          <!-- 
+          
         <button @click="downLayer">下移一层</button>
         
-          -->
+         
           <button @click="upLayer">上移一层</button>
           <button @click="toBottomLayer">置于底层</button>
           <button @click="toTopLayer">置于顶层</button>
@@ -58,7 +58,7 @@
           <button style="float:left" v-if="multiple.length>=2" @click="nodeAlign('Vline')">垂直联排</button>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="stage" ref="stage">
       <Cav :canvasConfig="domCavase.canvas">
         <Node
@@ -69,7 +69,7 @@
           @nodeDragStart="nodeDragStart"
           @nodeDrag="nodeDrag"
           @resizeNode="resizeNode"
-          @nodeClick
+          @nodeClick="nodeClick"
           @nodeDrop="nodeDrop"
           @nodeMousedown="nodeMousedown"
           @nodeResizeMousedown="nodeResizeMousedown"
@@ -85,6 +85,8 @@ import Dcanvas from './dcanvas/dcanvas'
 import Cav from './canvas.vue'
 import Node from './layer-node.vue'
 import Contextmenu from './contextmenu.vue'
+import { mapMutations } from 'vuex';
+import { ELEMENT_SCREEN,ELEMENT_MULTI,ELEMENT_ALIGN,ELEMENT_NODE } from "@/store/constants.js"
 
 export default {
   components: {
@@ -282,6 +284,9 @@ export default {
   // },
   mounted() {
     const handler = this.domCavase.Handler(this.$refs.stage)
+    handler.clickHandler(e => {
+      this.setEditType(ELEMENT_SCREEN)
+    })
     handler.selectNodes(e => {
       this.rightClick = false
       console.log('##@@@sdfsdfsfdsdf')
@@ -325,6 +330,14 @@ export default {
     })
   },
   methods: {
+    ...mapMutations('databoard',[
+      "setDataboard",
+      "setEditType"
+    ]),
+    getCanvasConfig(){
+      console.log(this.domCavase.canvas)
+      return this.domCavase.canvas
+    },
     setZoom(val) {
       this.domCavase.zoomSize = val
       this.$emit('zoomChange', this.domCavase.zoomSize)
@@ -448,6 +461,9 @@ export default {
     nodeDrop(node) {
       this.domCavase.refreshNodes()
     },
+    nodeClick(){
+      this.$emit('nodeClick', this.domCavase.selectNodes)
+    },
     nodeMousedown(node) {
       this.rightClick=false
       if (this.domCavase.selectNodes.map(n => n.id).includes(node.id)) return
@@ -549,6 +565,7 @@ export default {
   created() {
     this.domCavase = new Dcanvas.Stage()
     this.domCavase.createCanvas()
+    this.setDataboard(this.domCavase.canvas)
     console.log('@@@@@@@@', this.domCavase.canvas)
     this.nodelist = this.domCavase.nodeList
   }
