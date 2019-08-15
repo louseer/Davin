@@ -1,4 +1,4 @@
-import {objDeepMerge} from '@/utils/index'
+import {objDeepMerge} from '@/utils'
 
 const importFile = function (fileName) {
   return new Promise(function (resolve, reject) {
