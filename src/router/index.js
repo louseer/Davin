@@ -26,7 +26,7 @@ const routes = [
   {
     path:'/',
     name:'home',
-    redirect: { path:'/login' }
+    redirect: { path:'/edie' }
   },
   {
     path:'/login',

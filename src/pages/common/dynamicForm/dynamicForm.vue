@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <div class='dynamic-form'>
-    <el-form ref="editForm"  label-width="1rem" v-if='form' >
+    <el-form label-width="1rem" v-if='form' >
       <form-item :options='form.options'></form-item>
     </el-form>
   </div> 
@@ -44,12 +44,16 @@ export default {
     },
     setting:{
       handler:function(){
+        console.log('dform获得更新setting',this.setting)
         this.form && this.form.setOriginSetting(this.setting)
       },
       deep:true
     }
   },
   methods: {
+    commitUpdate(newSetting){
+      this.$emit('update',newSetting)
+    },
     //载入各项表单的配置
     importConfig () {
       if(!this.type){
@@ -58,8 +62,8 @@ export default {
       // type = type || this.type;
       import(`./lib/${this.type}.js`).then((module) => {
         let editor = module.default;
-        this.form = new DynamicForm(editor.options,editor.handlers,this.setting);
-        console.log(this.form)
+        this.form = new DynamicForm(editor.options,editor.handlers,this.setting,this.commitUpdate);
+        console.log('载入配置项获得from实例',this.form)
       }).catch(e=>{
         console.log(`动态表单加载./lib/${this.type}.js失败`)
         console.log(e)
@@ -78,7 +82,7 @@ export default {
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
   updated() {
-    console.log("update",this.type,this.setting)
+    console.log("切换为",this.type,this.setting)
   }, //生命周期 - 更新之后
   beforeDestroy() {}, //生命周期 - 销毁之前
   destroyed() {}, //生命周期 - 销毁完成

@@ -586,7 +586,9 @@ export default class Stage {
           this.mouseOn = false
           clearEventBubble(e)
           const event = e || window.event
-          callback && typeof callback === 'function' && callback(event)
+          const  startX = e.clientX - GetPosition(ele).left + ele.scrollLeft
+          const  startY = e.clientY - GetPosition(ele).top + ele.scrollTop
+          callback && typeof callback === 'function' && callback(event,startX,startY)
           console.log('画布右击')
         }
       },
@@ -600,7 +602,9 @@ export default class Stage {
           }
         })
       },
-
+      reNameNode(node,newname){
+        node.name=newname
+      },
       selectNodes(callback) {
         let startX = 0
         let startY = 0

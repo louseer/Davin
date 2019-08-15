@@ -5,7 +5,8 @@ const defaultOption = {
     show: false,
     left: 50,
     right: 10,
-    bottom: 30
+    bottom: 30,
+    top:20
   }
 }
 

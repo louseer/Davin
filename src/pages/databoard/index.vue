@@ -1,10 +1,12 @@
 <template>
   <div style="overflow: hidden;position: relative; height:100% ">
-    <div
+    <Contextmenu
+      :position="rightMenuPosition"
       v-if="rightClick"
       class="rightmenu"
-      style="width:200px; height:200px; background:red; z-index:999999;position: absolute;"
-    ></div>
+      :rightMenu="rightMenu"
+      @hide="contextmenuHide"
+    />
     <div class="ex">
       <input type="text" v-model="domCavase.canvas.width" placeholder="请输入宽度" />
       <input type="text" v-model="domCavase.canvas.height" />
@@ -82,10 +84,12 @@
 import Dcanvas from './dcanvas/dcanvas'
 import Cav from './canvas.vue'
 import Node from './layer-node.vue'
+import Contextmenu from './contextmenu.vue'
 export default {
   components: {
     Node,
-    Cav
+    Cav,
+    Contextmenu
   },
   data() {
     return {
@@ -97,6 +101,7 @@ export default {
       startY: 0,
       dx: 0,
       dy: 0,
+      rightMenuPosition: {},
       dnode: '',
       nodelist: [],
       aglinList: [
@@ -106,6 +111,127 @@ export default {
         { type: 'left', name: '左对齐' },
         { type: 'VCenter', name: '垂直居中' },
         { type: 'HCenter', name: '水平居中' }
+      ],
+      rightMenu:[],
+      canvasRightEvent:[14,15,16,17,18],
+      nodeRightEvent:[0,1,2,3,4,5,6,7,8],
+      nodesRightEvent:[7,8,9,10,11,12,13],
+      rightAllMenu: [
+        {
+          name: '置顶',
+          event:()=>{this.toTopLayer()}
+        },
+        {
+          name: '置底',
+          event:()=>{this.toBottomLayer()}
+        },
+        
+        {
+          name: '上移一层',
+          event: () => {this.upLayer()}
+        },
+        {
+          name: '下移一层',
+          event: () => {this.upLayer()}
+        },
+        
+        {
+          name: '锁定',
+          event: () => {this.lockNode()}
+        },
+        {
+          name: '隐藏',
+          event: () => {this.hideNode()}
+        },
+        {
+          name: '重命名',
+          event: () => {this.reNameNode()}
+        },
+        {
+          name: '复制',
+          event: () => {this.copyNode()}
+        },
+        {
+          name: '删除',
+          event: () => {this.deleteNode()}
+        },
+        {
+          name: '图层操作',
+          event: () => {},
+          children: [
+            {
+              name: '组合',
+              event: () => {this.toGroup()}
+            },
+            {
+              name: '取消组合',
+              event: () => {this.outGroup()}
+            },
+            {
+              name: '锁定',
+              event: () => {this.lockNode()}
+            },
+            {
+              name: '隐藏',
+              event: () => {this.hideNode()}
+            },
+            
+          ]
+        },
+        {
+          name: '顺序',
+         
+          children: [
+            {
+              name: '置顶',
+              event: () => {this.toTopLayer()}
+            },
+            {
+              name: '置底',
+              event: () => {this.toBottomLayer()}
+            },
+            {
+              name: '上移一层',
+              event: () => {this.upLayer()}
+            },
+            {
+              name: '下移一层',
+              event: () => {this.downLayer()}
+            }
+          ]
+        },
+        {
+          name: '保存为wighet',
+          event: () => {this.toWighet()}
+        },
+        {
+          name: '导出数据为CSV',
+          event: () => {this.toCSV()}
+        },
+        {
+          name: '导出数据为Excel',
+          event: () => {this.toExcel()}
+        },
+        {
+          name: '粘贴',
+          event: () => {this.paste()}
+        },
+        {
+          name: '全选',
+          event: () => {this.selectAll()}
+        },
+        {
+          name: '清空画布',
+          event: () => {this.clear()}
+        },
+        {
+          name: '画布设置',
+          event: () => {this.stageSet()}
+        },
+        {
+          name: '恢复默认',
+          event: () => {this.toDefault()}
+        }
       ]
     }
   },
@@ -130,13 +256,35 @@ export default {
       //this.$emit('nodelistChange', this.domCavase.nodeList)
     })
     handler.mouseWheelZoom()
-    handler.rightclickHandler(e => {
+    handler.rightclickHandler((e, x, y) => {
+      const obj = {
+        x: x,
+        y: y
+      }
+    
+    if(e.target.className === 'select-mask'){
+      if(this.domCavase.selectNodes.length===1){
+         this.rightMenu = this.rightAllMenu.filter((n,index)=>this.nodeRightEvent.includes(index))
+      }
+      else{
+         this.rightMenu = this.rightAllMenu.filter((n,index)=>this.nodesRightEvent.includes(index))
+      }
+       
+    }
+    else{
+      this.rightMenu= this.rightMenu = this.rightAllMenu.filter((n,index)=>this.canvasRightEvent.includes(index))
+    }
+
+      this.rightMenuPosition = obj
       this.rightClick = true
     })
   },
   methods: {
-    choiceNodeById(id){
-     this.domCavase.choiceNodeById(id)
+    contextmenuHide(){
+      this.rightClick=false
+    },
+    choiceNodeById(id) {
+      this.domCavase.choiceNodeById(id)
       this.$emit('nodelistChange', this.domCavase.nodeList)
     },
     hideNode() {
@@ -298,16 +446,15 @@ export default {
         })
       }
     },
-     toggleGrop(){
-      const rootLIst=this.domCavase.selectNodes.filter(n=>n.pid === null )
-      if(rootLIst.length === 1  ){
-       this.domCavase.outGroup()
-      }
-      else{
-       this.domCavase.toGroup()
+    toggleGrop() {
+      const rootLIst = this.domCavase.selectNodes.filter(n => n.pid === null)
+      if (rootLIst.length === 1) {
+        this.domCavase.outGroup()
+      } else {
+        this.domCavase.toGroup()
       }
       this.$emit('nodelistChange', this.domCavase.nodeList)
-     },
+    },
 
     fillNode() {
       const nodes = [

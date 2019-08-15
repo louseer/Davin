@@ -47,7 +47,7 @@ export default {
   },
   props:{
     layout:{
-      tpye:Object,
+      tpye:Array,
       default:null
     },
     editing: {
@@ -60,13 +60,16 @@ export default {
       isMounted:false,
       marginTB:15,
       marginLR:15,
-      activeGridID: ''
+      activeGridID: '',
+      slayout:this.layout
     };
   },
   computed: {
 
   },
-  watch: {},
+  watch: {
+
+  },
   methods: {
     // layoutCreatedEvent(newLayout){
     //   console.log("Created layout: ", newLayout)
@@ -88,7 +91,7 @@ export default {
         return;
       }
       this.activeGridID =  "";
-      this.cancelActiveGrid();
+      this.clickRForm();
     },
 
     clickGridItem(item,event) {
@@ -102,15 +105,15 @@ export default {
           event.cancelBubble = true;
       }
       this.activeGridID = item.i
-      this.setActiveGrid(item)
+      this.clickGrid(item)
     },
     
     moveEvent(i, newX, newY) {
-      this.setActiveGrid(i)
+      this.clickGrid(i)
         console.log("MOVE i=" + i + ", X=" + newX + ", Y=" + newY);
     },
     resizeEvent(i, newH, newW, newHPx, newWPx) {
-      this.setActiveGrid(i)
+      this.clickGrid(i)
         console.log("RESIZE i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx);
     },
     movedEvent(i, newX, newY) {
@@ -119,11 +122,9 @@ export default {
     resizedEvent(i, newH, newW, newHPx, newWPx) {
         console.log("RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx);
     },
-    ...mapMutations('form',[
-      'setActiveGrid',
-      'cancelActiveGrid'
-    ]),
     ...mapActions('form',[
+      'clickGrid',
+      'clickRForm',
       'updateLayout'
     ])
   },

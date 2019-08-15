@@ -2,6 +2,7 @@ import { OPTIONTYPE } from '../core/constants.js'
 import { 
   GRID_DEF_W,
   GRID_DEF_H,
+
   REFRESH_INTERVAL,
   IMG_SOURCE_TYPE,
   IMG_SCALE_TYPE,
@@ -33,14 +34,14 @@ const SHADOW_BLUR = 3;
 
 const GRID_W_MIN = 1;
 const GRID_W_MAX = 12;
-const GRID_W_STEP = 1;
+const GRID_H_MIN = 1;
 
 
 /**
  * 报表编辑form 表单项配置器
  */
 const options = {
-  "id":{
+  "i":{
     "type":OPTIONTYPE.NOVIEW, 
     "defaultVal":""
   },
@@ -60,132 +61,9 @@ const options = {
   "h":{
     "name":"高度",
     "type":OPTIONTYPE.INPUTNUMBER,
-    "defaultVal":GRID_DEF_H
-  },
-  "isPublic":{
-    "name":"是否公开",
-    "type":OPTIONTYPE.SWITCH,  //切换开关
-    "defaultVal":false
-  },
-  "autoRefresh":{
-    "name":"自动刷新",
-    "type":OPTIONTYPE.SWITCH,
-    "defaultVal":false,
-    "handle":"autoRefresh"
-  },
-  "refreshInterval":{
-    "name":"刷新间隔",
-    "type":OPTIONTYPE.INPUTNUMBER, //数字翻牌器输入框
-    "defaultVal":REFRESH_INTERVAL,
-    "hide":true
-  },
-  "them":{
-    "name":"颜色主题",
-    "type":OPTIONTYPE.SELECT,
-    "options":THEM_TYPE,
-    "defaultVal":0
-  },
-  "background":{
-    "name":"报表背景",
-    "type":OPTIONTYPE.GROUP,
-    "children":{
-      "imgSouce":{
-        "name":"背景图",
-        "type":OPTIONTYPE.RADIO,  //radio单选
-        "defaultVal":0,
-        "handle":"rfBgimgSwitch",
-        "options":IMG_SOURCE_TYPE
-      },
-      "systemImg":{
-        "name":"",
-        "type":OPTIONTYPE.IMGSELECT,
-        "hide":true,
-        "defaultVal":''
-      },
-      "uploadImg":{
-        "name":"",
-        "type":OPTIONTYPE.IMGUPLOAD,
-        "hide":true,
-        "defaultVal":''
-      },
-      "imgRepeat":{
-        "name":"布局",
-        "type":OPTIONTYPE.SELECT,
-        "defaultVal":0,
-        "hide":true,
-        "options":IMG_SCALE_TYPE
-      },
-      "imgBlur":{
-        "name":"模糊度",
-        "type":OPTIONTYPE.SLIDER,
-        "hide":true,
-        "defaultVal":BGIMG_BLUR,
-        "min":BGIMG_BLUR_MIN,
-        "max":BGIMG_BLUR_MAX,
-        "step":BGIMG_BLUR_STEP
-      },
-      "imgOpacity":{
-        "name":"透明度",
-        "type":OPTIONTYPE.SLIDER,
-        "hide":true,
-        "defaultVal":BGIMG_OPACITY,
-        "min":BGIMG_OPACITY_MIN,
-        "max":BGIMG_OPACITY_MAX,
-        "step":BGIMG_OPACITY_STEP
-      },
-      "bgcolor":{
-        "name":"背景色",
-        "type":OPTIONTYPE.COLORPICKER,
-        "predefine":COLOR_PREDEFINE,
-        "defaultVal":WHITE
-      } 
-    }
-  },
-  "grid":{
-    "name":"Widget",
-    "type":OPTIONTYPE.GROUP,
-    "children":{
-      "titleColor":{
-        "name":"标题颜色",
-        "type":OPTIONTYPE.COLORPICKER,
-        "predefine":COLOR_PREDEFINE,
-        "defaultVal":CHBK
-      },
-      "bgcolor":{
-        "name":"背景色",
-        "type":OPTIONTYPE.COLORPICKER,
-        "predefine":COLOR_PREDEFINE,
-        "defaultVal":WHITE
-      } ,
-      "borderRadius":{
-        "name":"边框圆角",
-        "type":OPTIONTYPE.INPUTNUMBER,
-        "defaultVal":BORDER_R_GRID
-      },
-      "borderWdith":{
-        "name":"边框宽度",
-        "type":OPTIONTYPE.INPUTNUMBER,
-        "defaultVal":BORDER_W_GRID
-      },
-      "borderType":{
-        "name":"边框式样",
-        "type":OPTIONTYPE.SELECT,
-        "defaultVal":BORDER_GRID,
-        "options":BORER_TYPE
-      },
-      "shadowOffset":{
-        "name":"阴影偏移量",
-        "type":OPTIONTYPE.INPUTNUMBER,
-        "defaultVal":SHADOW_OFFSET
-      },
-      "shadowBlur":{
-        "name":"阴影宽度",
-        "type":OPTIONTYPE.INPUTNUMBER,
-        "defaultVal":SHADOW_BLUR
-      }
-    }
+    "defaultVal":GRID_DEF_H,
+    "min":GRID_H_MIN,
   }
-  
 }
 
 /**

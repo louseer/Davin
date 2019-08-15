@@ -1,4 +1,4 @@
-import {OPTIONTYPE} from '../core/constants.js'
+import { OPTIONTYPE } from '../core/constants.js'
 import { 
   REFRESH_INTERVAL,
   IMG_SOURCE_TYPE,
