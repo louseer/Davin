@@ -46,6 +46,8 @@ export default {
     config:{
       handler:function(v){
         this.theconfig = v
+      
+      
       },
       deep:true
     }

@@ -29,7 +29,7 @@
           ></el-input> 
         </el-form-item>
         <el-form-item class="login-btn-item">
-          <el-button class="login-btn" >Login</el-button>
+          <el-button class="login-btn" @click="$router.push('/platform')" >Login</el-button>
         </el-form-item>
       </el-form>
       </div>
@@ -164,7 +164,7 @@ export default {
     h6 {
       margin-top: 0.3rem;
       font: 20px/1 arial;
-      color: #092b72;
+      color: #ffffff;
       text-align: center;
     }
     .login_form{

@@ -325,6 +325,9 @@ export default {
     })
   },
   methods: {
+    getNodeLlist(callback){
+      callback && typeof callback === 'function' && callback(this.domCavase.nodeList)
+    },
     setZoom(val) {
       this.domCavase.zoomSize = val
       this.$emit('zoomChange', this.domCavase.zoomSize)
@@ -551,6 +554,11 @@ export default {
     this.domCavase.createCanvas()
     console.log('@@@@@@@@', this.domCavase.canvas)
     this.nodelist = this.domCavase.nodeList
+    if(JSON.parse(window.localStorage.getItem('saveNode'))){
+      JSON.parse(window.localStorage.getItem('saveNode')).sort((a,b)=>a.zindex - b.zindex).forEach(n=>{
+        this.addNode(n)
+      })
+    }
   }
 }
 </script>

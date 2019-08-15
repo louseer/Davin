@@ -25,19 +25,18 @@ export default {
   //color: @icon_DataC_sub;
   text-align: center;
   cursor: pointer;
-   line-height: 0.28rem;
-   font-size: 0.22rem;
-  i{  
+  line-height: 0.28rem;
+  font-size: 0.22rem;
+  i {
     line-height: 0.28rem;
     font-size: 0.22rem;
     color: @icon_DataC_main;
-    &:hover{
- color:@Font_mainC_white;
+    &:hover {
+      color: @Font_mainC_white;
     }
   }
   &:hover {
     border: @border_Data_thumbnail;
-   
   }
 }
 </style>

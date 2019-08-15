@@ -12,14 +12,14 @@
       @click.stop="nodeClick($event)"
       @drop.stop="nodeDrop"
       @dragenter="dragenter"
-      v-show='!rnode.hide'
-      :key='rnode.id'
+      v-show="!rnode.hide"
+      :key="rnode.id"
     >
       <div class="select-mask" v-if="rnode.active && !rnode.disable">
         <i
           v-for="(p,pindex) in Control"
           :class="p.name"
-           @click.stop
+          @click.stop
           draggable
           @dragover.prevent
           @drop.prevent
@@ -29,7 +29,7 @@
           :style="p.type==='circle'? ' border-radius: 50% 50%;':''"
         ></i>
       </div>
-          <!-- <ul>
+      <!-- <ul>
             {{node.type === 'group' ? `Group index-${node.zindex}`: `Node index-${node.zindex}`}}
             <li>w:{{node.w}}</li>
             <li>h:{{node.h}}</li>
@@ -38,8 +38,8 @@
             <li>id:{{node.id}}</li>
              <li>type:{{node.elType}}</li>
             <li>{{node.disable ? 'lock' :''}}</li>
-          </ul>      -->
-        <d-chart :config='rnode.chart' v-if='rnode.chart'/>
+      </ul>-->
+      <d-chart :config="rnode.chart" v-if="rnode.chart" />
     </div>
   </div>
 </template>
@@ -48,24 +48,28 @@
 import DChart from 'pages/common/dynamicChart/dynamicChart.vue'
 export default {
   name: 'Node',
-  components:{
+  components: {
     DChart
+  },
+  provide() {
+    return {
+      nodePro: this.rnode
+    }
   },
   props: {
     node: {
       type: Object,
       default: () => {}
-    },
+    }
   },
   watch: {
-    node:{
-      handler:function (val) {       
-        this.rnode=val;
+    node: {
+      handler: function(val) {
+        this.rnode = val
         console.log(val)
       },
-      deep:true
-    },
-  
+      deep: true
+    }
   },
   data() {
     return {
@@ -139,11 +143,11 @@ export default {
       this.$emit('nodeDragStart', e)
     },
     resizeMousedown(e) {
-      this.candrage = false      
-     this.$emit('nodeResizeMousedown', e, this.rnode)
+      this.candrage = false
+      this.$emit('nodeResizeMousedown', e, this.rnode)
     },
     resizeNode(type, e) {
-      this.$emit('nodeResizeNode',type, e, this.rnode)
+      this.$emit('nodeResizeNode', type, e, this.rnode)
     },
     nodeDrop(e) {
       this.candrage = false
@@ -155,8 +159,8 @@ export default {
       this.$emit('nodeDrag', e, this.node)
     },
     nodeMousedown(e) {
-     this.rnode.disable? this.candrage = false :this.candrage=true
-     !this.rnode.disable &&  this.$emit('nodeMousedown', this.rnode)
+      this.rnode.disable ? (this.candrage = false) : (this.candrage = true)
+      !this.rnode.disable && this.$emit('nodeMousedown', this.rnode)
     },
     nodeClick(e) {
       this.$emit('nodeClick', this.rnode)
@@ -174,8 +178,7 @@ export default {
 }
 .node {
   position: absolute;
-  
-  
+
   cursor: pointer;
 }
 .group {
@@ -187,7 +190,7 @@ export default {
 .select-mask {
   width: 100%;
   height: 100%;
- cursor: move;
+  cursor: move;
   background: @bg_Data_red20;
   position: absolute;
   z-index: 999;
@@ -208,41 +211,41 @@ export default {
     left: 50%;
     margin-left: -5px;
     top: -5px;
-     cursor: n-resize;
+    cursor: n-resize;
   }
   .rt {
     right: -5px;
     top: -5px;
-     cursor: ne-resize;
+    cursor: ne-resize;
   }
   .ml {
     top: 50%;
     margin-top: -5px;
 
     left: -5px;
-     cursor: w-resize;
+    cursor: w-resize;
   }
   .mr {
     top: 50%;
     margin-top: -5px;
     right: -5px;
-     cursor: e-resize;
+    cursor: e-resize;
   }
   .lb {
     bottom: -5px;
     left: -5px;
-     cursor: sw-resize;
+    cursor: sw-resize;
   }
   .mb {
     left: 50%;
     margin-left: -5px;
     bottom: -5px;
-     cursor: s-resize;
+    cursor: s-resize;
   }
   .rb {
     right: -5px;
     bottom: -5px;
-     cursor: se-resize;
+    cursor: se-resize;
   }
 }
 </style>

@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div class='decorate'>装饰</div>
+  <div class='decorate' ></div>
 </template>
 
 <script>
@@ -8,9 +8,11 @@
 
 export default {
   components: {},
+  inject: ["nodePro"],
+ 
   data() {
     return {
-    
+     proWith:{}
     };
   },
   computed: {},
@@ -19,8 +21,9 @@ export default {
   
   },
   //生命周期 - 创建完成（可以访问当前this实例）
-  created() {
-  
+ created () {
+   //this.proWith=this.nodePro
+  // console.log('tag', this.nodePro)
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
@@ -38,10 +41,11 @@ export default {
 <style lang='less' scoped>
 
 .decorate{
-  // width: 100%;
-  // height:100% ;
-  background: red;
-  border: 3px #f60606 solid;
+  width: 100%;
+  background: linear-gradient(#272b2d, #15191c);
+  height: 100%;
+  border: 1px #3e4245 solid;
+  box-sizing: border-box;
 }
 
 </style>

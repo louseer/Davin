@@ -9,7 +9,7 @@
         <h5>{{item.name}}</h5>
         <p>{{item.time}}</p>
         <ul class="btn_group">
-          <li v-for="(item,index) in btnGroup" :key="index" :class="item.type">
+          <li v-for="(item,index) in btnGroup" :key="index" :class="item.type" >
 
           </li>
         </ul>
@@ -40,7 +40,7 @@
     },
     methods: {
       createScreen() {
-        console.log('+++')
+    this.$router.push('/edie')
       }
     },
   }

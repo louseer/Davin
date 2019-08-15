@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <div class='cutomize-chart'>
-    <component :is="chart" :config='theconfig'></component>
+    <component :is="chart" :config='theconfig' ></component>
   </div>
 </template>
 
@@ -15,7 +15,8 @@ export default {
     config:{
       type:Object,
       defalut: () => {}
-    }
+    },
+    
   },
   components: {
     customTitle
@@ -61,5 +62,7 @@ export default {
 </script>
 <style lang='less' scoped>
 //@import url(); 引入公共css类
-
+.cutomize-chart{
+  height: 100%;
+}
 </style>

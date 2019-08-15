@@ -351,7 +351,7 @@ export default {
           id: '6',
           children: [
             {
-              type: 'normal',
+              type: 'decorate',
               title: '装饰',
               version: 1,
               id: '6-1'
@@ -474,9 +474,14 @@ export default {
     },
     save() {
       console.log('保存')
+      this.$refs.stage.getNodeLlist(list=>{
+          window.localStorage.setItem('saveNode',JSON.stringify(list))
+      })
+     
     },
     quit() {
       console.log('退出')
+      this.$router.push('/platform')
     },
     treeNodeClick(nodeId) {
       this.$refs.stage.choiceNodeById(nodeId)

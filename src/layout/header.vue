@@ -45,7 +45,7 @@ header{
     font:bolder 0.24rem/0.65rem "微软雅黑";
     float: left;
     margin-left: 0.15rem;
-    color: #272a37;
+    color: #ffffff;
 
   }
   .photo{
