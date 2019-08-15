@@ -36,12 +36,16 @@ export default {
   },
   data() {
     return {
+      //isMounted:false,
       theconfig:this.config
     };
   },
-  watch: {
-    config(newValue, oldValue) {
-      this.theconfig=newValue
+  watch:{
+    config:{
+      handler:function(v){
+        this.theconfig = v
+      },
+      deep:true
     }
   },
   computed: {

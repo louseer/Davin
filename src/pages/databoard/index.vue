@@ -74,8 +74,7 @@
           @nodeMousedown="nodeMousedown"
           @nodeResizeMousedown="nodeResizeMousedown"
           @nodeResizeNode="nodeResizeNode"
-        >
-        </Node>
+        ></Node>
       </Cav>
     </div>
   </div>
@@ -114,20 +113,20 @@ export default {
         { type: 'VCenter', name: '垂直居中' },
         { type: 'HCenter', name: '水平居中' }
       ],
-      rightMenu:[],
-      canvasRightEvent:[14,15,16,17,18],
-      nodeRightEvent:[0,1,2,3,4,5,6,7,8],
-      nodesRightEvent:[7,8,9,10,11,12,13],
+      rightMenu: [],
+      canvasRightEvent: [14, 15, 16, 17, 18],
+      nodeRightEvent: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+      nodesRightEvent: [7, 8, 9, 10, 11, 12, 13],
       rightAllMenu: [
         {
           name: '置顶',
-          event:this.toTopLayer
+          event: this.toTopLayer
         },
         {
           name: '置底',
-          event:this.toBottomLayer
+          event: this.toBottomLayer
         },
-        
+
         {
           name: '上移一层',
           event: this.upLayer
@@ -136,7 +135,7 @@ export default {
           name: '下移一层',
           event: this.upLayer
         },
-        
+
         {
           name: '锁定',
           event: this.lockNode
@@ -163,76 +162,107 @@ export default {
           children: [
             {
               name: '组合',
-              event: () => {this.toGroup()}
+              event: () => {
+                this.toGroup()
+              }
             },
             {
               name: '取消组合',
-              event: () => {this.outGroup()}
+              event: () => {
+                this.outGroup()
+              }
             },
             {
               name: '锁定',
-              event: () => {this.lockNode()}
+              event: () => {
+                this.lockNode()
+              }
             },
             {
               name: '隐藏',
-              event: () => {this.hideNode()}
-            },
-            
+              event: () => {
+                this.hideNode()
+              }
+            }
           ]
         },
         {
           name: '顺序',
-         
+
           children: [
             {
               name: '置顶',
-              event: () => {this.toTopLayer()}
+              event: () => {
+                this.toTopLayer()
+              }
             },
             {
               name: '置底',
-              event: () => {this.toBottomLayer()}
+              event: () => {
+                this.toBottomLayer()
+              }
             },
             {
               name: '上移一层',
-              event: () => {this.upLayer()}
+              event: () => {
+                this.upLayer()
+              }
             },
             {
               name: '下移一层',
-              event: () => {this.downLayer()}
+              event: () => {
+                this.downLayer()
+              }
             }
           ]
         },
         {
           name: '保存为wighet',
-          event: () => {this.toWighet()}
+          event: () => {
+            this.toWighet()
+          }
         },
         {
           name: '导出数据为CSV',
-          event: () => {this.toCSV()}
+          event: () => {
+            this.toCSV()
+          }
         },
         {
           name: '导出数据为Excel',
-          event: () => {this.toExcel()}
+          event: () => {
+            this.toExcel()
+          }
         },
         {
           name: '粘贴',
-          event: () => {this.paste()}
+          event: () => {
+            this.paste()
+          }
         },
         {
           name: '全选',
-          event: () => {this.selectAll()}
+          event: () => {
+            this.selectAll()
+          }
         },
         {
           name: '清空画布',
-          event: () => {this.clear()}
+          event: () => {
+            this.clear()
+          }
         },
         {
           name: '画布设置',
-          event: () => {this.stageSet()}
+          event: () => {
+            this.stageSet()
+          }
         },
         {
           name: '恢复默认',
-          event: () => {this.toDefault()}
+          event: () => {
+            this.toDefault()
+          }
         }
       ]
     }
@@ -245,7 +275,7 @@ export default {
   // watch: {
   //   domCavase: {
   //     handler: function(val) {
-  //       this.$emit('nodelistChange', val)
+  //     window.localStorage.setItem('nodelist',JSON.stringify(this.domCavase.nodeList))
   //     },
   //     deep: true
   //   }
@@ -257,47 +287,49 @@ export default {
       console.log('##@@@sdfsdfsfdsdf')
       //this.$emit('nodelistChange', this.domCavase.nodeList)
     })
-    handler.onmousewheelHandler(e=>{
-    
+    handler.onmousewheelHandler(e => {
       let startZoom = this.domCavase.zoomSize
-        if (e.wheelDelta == 120) {
-            startZoom += 0.05
-            this.setZoom(startZoom)
-          } else {
-            startZoom -= 0.05
-            this.setZoom(startZoom)
-          }
+      if (e.wheelDelta == 120) {
+        startZoom += 0.05
+        this.setZoom(startZoom)
+      } else {
+        startZoom -= 0.05
+        this.setZoom(startZoom)
+      }
     })
     handler.rightclickHandler((e, x, y) => {
       const obj = {
         x: x,
         y: y
       }
-    
-    if(e.target.className === 'select-mask'){
-      if(this.domCavase.selectNodes.length===1){
-         this.rightMenu = this.rightAllMenu.filter((n,index)=>this.nodeRightEvent.includes(index))
+
+      if (e.target.className === 'select-mask') {
+        if (this.domCavase.selectNodes.length === 1) {
+          this.rightMenu = this.rightAllMenu.filter((n, index) =>
+            this.nodeRightEvent.includes(index)
+          )
+        } else {
+          this.rightMenu = this.rightAllMenu.filter((n, index) =>
+            this.nodesRightEvent.includes(index)
+          )
+        }
+      } else {
+        this.rightMenu = this.rightMenu = this.rightAllMenu.filter((n, index) =>
+          this.canvasRightEvent.includes(index)
+        )
       }
-      else{
-         this.rightMenu = this.rightAllMenu.filter((n,index)=>this.nodesRightEvent.includes(index))
-      }
-       
-    }
-    else{
-      this.rightMenu= this.rightMenu = this.rightAllMenu.filter((n,index)=>this.canvasRightEvent.includes(index))
-    }
 
       this.rightMenuPosition = obj
       this.rightClick = true
     })
   },
   methods: {
-    setZoom(val){
-      this.domCavase.zoomSize=val
-      this.$emit('zoomChange',val)
+    setZoom(val) {
+      this.domCavase.zoomSize = val
+      this.$emit('zoomChange', this.domCavase.zoomSize)
     },
-    contextmenuHide(){
-      this.rightClick=false
+    contextmenuHide() {
+      this.rightClick = false
     },
     choiceNodeById(id) {
       this.domCavase.choiceNodeById(id)

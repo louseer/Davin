@@ -13,6 +13,7 @@
       @drop.stop="nodeDrop"
       @dragenter="dragenter"
       v-show='!rnode.hide'
+      :key='rnode.id'
     >
       <div class="select-mask" v-if="rnode.active && !rnode.disable">
         <i

@@ -26,8 +26,7 @@ import SlideBar from '../../components/slidbar.vue'
       }
     },
     methods: {
-      changHandler(val) {
-        
+      changHandler(val) {        
        this.$emit("changeSize",val)
       }
     },

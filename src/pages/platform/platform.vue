@@ -7,7 +7,8 @@
         <left-menu></left-menu>
       </div>
       <div class="right_bar">
-        <screen-mod></screen-mod>
+        <screen-mod ></screen-mod>
+        
       </div>
     </div>
   </div>
@@ -24,6 +25,8 @@ import screenMod from './components/screen_mod.vue';
       leftMenu,
       screenMod
     },
+   
+  
   }
 </script>
 

@@ -2,11 +2,17 @@
   <div class="slide_bar">
     <Dbutton class="btn" :btn="reduceBtn" />
     <div class="slide_bg" :style="`width:${w}px`">
-      <i :style="ps" draggable @dragstart="dragstartHandler" @drag="dragHandler" @dragend="dragendHandler"  ></i>
+      <i
+        :style="ps"
+        draggable
+        @dragstart="dragstartHandler"
+        @drag="dragHandler"
+        @dragend="dragendHandler"
+      ></i>
     </div>
     <Dbutton class="btn" :btn="plusBtn" />
   </div>
-   <!-- -->
+  <!-- -->
 </template>
 
 <script>
@@ -39,7 +45,7 @@ export default {
       return (this.max - this.min) / 10
     },
     ratio() {
-      return (this.w-6) / (this.max - this.min)
+      return (this.w - 6) / (this.max - this.min)
     },
     ps() {
       return `left:${this.ratio * (this.value - this.min)}px`
@@ -61,31 +67,35 @@ export default {
         type: 'icon'
       },
       newValue: this.value,
-      sx:0,
-      ex:0,
+      sx: 0,
+      ex: 0
     }
   },
   methods: {
-    dragstartHandler(e){
-      this.sx=e.clientX;    
+    dragstartHandler(e) {
+      this.sx = e.clientX
     },
-    dragendHandler(e){
- this.newValue += ((e.clientX-this.sx)/this.ratio)
-      this.sx=e.clientX
-       this.$emit('changHandler', this.newValue)
+    dragendHandler(e) {
+      this.newValue += (e.clientX - this.sx) / this.ratio
+      this.sx = e.clientX
+      this.$emit('changHandler', this.newValue)
     },
-    dragHandler(e){
-      console.log('eeeee', e)
-      this.newValue += ((e.clientX-this.sx)/this.ratio)
-      this.sx=e.clientX
-       this.$emit('changHandler', this.newValue)
+    dragHandler(e) {     
+     
+      this.newValue += (e.clientX - this.sx) / this.ratio
+      this.sx = e.clientX
+      this.$emit('changHandler', this.newValue)
     },
     plus() {
-      this.value < this.max ? (this.newValue = this.blockValue + this.value) : (this.newValue = this.max)
+      this.value < this.max
+        ? (this.newValue = this.blockValue + this.value)
+        : (this.newValue = this.max)
       this.$emit('changHandler', this.newValue)
     },
     reduce() {
-      this.value > this.min ? (this.newValue = this.value-this.blockValue) : (this.newValue =this.min)
+      this.value > this.min
+        ? (this.newValue = this.value - this.blockValue)
+        : (this.newValue = this.min)
       this.$emit('changHandler', this.newValue)
     }
   }

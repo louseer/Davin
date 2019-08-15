@@ -16,6 +16,8 @@ export default class Stage {
     this._offset = 30
     this.grid = 10
     this.bassIndex = 9000
+    this.maxZoom = 1
+    this.minZoom = 0.1
   }
   get indexList() {
     return this.nodeList.sort((a, b) => a.zindex - b.zindex)
@@ -24,14 +26,16 @@ export default class Stage {
     return this._zoomSize
   }
   set zoomSize(val) {
-   if(val>=0.1 && val<=1){
-    this._zoomSize = val
-    this.canvas.zoomSize = val
-   }
-   else{
-     return
-   }
-    
+    if (val <= this.minZoom) {
+      this._zoomSize = this.minZoom
+      this.canvas.zoomSize = this.minZoom
+    } else if (val >= this.maxZoom) {
+      this._zoomSize = this.maxZoom
+      this.canvas.zoomSize = this.maxZoom
+    } else {
+      this._zoomSize = val
+      this.canvas.zoomSize = val
+    }
   }
   get offset() {
     return this._offset
@@ -40,7 +44,7 @@ export default class Stage {
     this._offset = val
     this.canvas.offset = val
   }
- 
+
   createCanvas(config) {
     const _this = this
     const obj = {
@@ -80,19 +84,20 @@ export default class Stage {
       n.id === node.id && (n = Object.assign(n, obj))
     })
   }
-  choiceNodeById(id){
-    this.selectNodes=[]
-    this.nodeList.forEach(n=>{
-      n.active=false
-      if(n.id === id){
-        if(n.disable || n.hide) return
-        if(n.type === 'group'){
-         this.selectNodes=  [n,...this.nodeList.filter(node=>n.cid.includes(node.id))].map(en=>Object.assign(en,{active:true}))
-        
-        }
-        else{
-          n.active=true
-          this.selectNodes=[n]
+  choiceNodeById(id) {
+    this.selectNodes = []
+    this.nodeList.forEach(n => {
+      n.active = false
+      if (n.id === id) {
+        if (n.disable || n.hide) return
+        if (n.type === 'group') {
+          this.selectNodes = [
+            n,
+            ...this.nodeList.filter(node => n.cid.includes(node.id))
+          ].map(en => Object.assign(en, { active: true }))
+        } else {
+          n.active = true
+          this.selectNodes = [n]
         }
       }
     })
@@ -134,12 +139,12 @@ export default class Stage {
       n.cid &&
         this.nodeList.forEach(node => {
           if (n.cid.includes(node.id)) node.hide = true
-         // node.active = false 隐藏不可选中
+          // node.active = false 隐藏不可选中
         })
     })
     this.selectNodes = []
   }
-  unhideNode(id){
+  unhideNode(id) {
     this.nodeList.forEach(n => {
       if (n.id === id) {
         if (n.type === 'group') {
@@ -463,7 +468,7 @@ export default class Stage {
         n.pid = null
       }
     })
-    
+
     this.nodeList = this.nodeList.filter(n => n.id !== rootNode.id)
     this.nodeList
       .sort((a, b) => a.zindex - b.zindex)
@@ -471,10 +476,9 @@ export default class Stage {
       .forEach(n => {
         n.zindex--
       })
-   this.selectNodes.forEach(n=>{
-     n.pid ===null  &&( n.active=true)
-     
-   })
+    this.selectNodes.forEach(n => {
+      n.pid === null && (n.active = true)
+    })
   }
   toGroup() {
     const pNodes = this.selectNodes.filter(n => n.pid === null)
@@ -592,20 +596,21 @@ export default class Stage {
           this.mouseOn = false
           clearEventBubble(e)
           const event = e || window.event
-          const  startX = e.clientX - GetPosition(ele).left + ele.scrollLeft
-          const  startY = e.clientY - GetPosition(ele).top + ele.scrollTop
-          callback && typeof callback === 'function' && callback(event,startX,startY)
+          const startX = e.clientX - GetPosition(ele).left + ele.scrollLeft
+          const startY = e.clientY - GetPosition(ele).top + ele.scrollTop
+          callback &&
+            typeof callback === 'function' &&
+            callback(event, startX, startY)
           console.log('画布右击')
         }
       },
       mouseWheelZoom(callback) {
         this.onmousewheelHandler(e => {
           callback && callback.type === 'function' && callback(e)
-        
         })
       },
-      reNameNode(node,newname){
-        node.name=newname
+      reNameNode(node, newname) {
+        node.name = newname
       },
       selectNodes(callback) {
         let startX = 0

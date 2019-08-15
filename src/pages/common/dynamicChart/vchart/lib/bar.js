@@ -95,7 +95,7 @@ export default class Line extends Echart{
         left: 50,
         right: 10
       },
-      color: ['#3398DB'],
+     
       tooltip : {
           trigger: 'axis',
           axisPointer : {            // 坐标轴指示器，坐标轴触发有效

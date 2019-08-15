@@ -371,14 +371,13 @@ export default {
         name: item.title,
         version: item.version
       }
-      const obj = {
-        id,
-        w: 200,
-        h: 200,
-        x: 50,
-        y: 50,
-        elType: item.type,
-        name: item.title,
+      const obj={
+        w:200,
+        h:200,
+        x:50,
+        y:50,
+        elType:item.type,
+        name:item.title,
         chart
       }
       this.$refs.stage.addNode(obj)
