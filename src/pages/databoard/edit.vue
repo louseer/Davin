@@ -3,7 +3,15 @@
   <div class="edit-page">
     <Eheader :maintit="maintit" :toptools="toptools" />
     <div class="content">
-      <!-- <div class="setbar"></div> -->
+      <div class="setbar">
+        <!-- <div v-if='editType==="element"'>
+          <DForm type='node' :setting='editNode' @update='updateNode'/>
+          <DForm :type='editChart.type' :setting='editChart' @update='updateChart'/>
+        </div> -->
+        <div v-if='editType==="databoard"'>
+          <DForm type='databoard' :setting='databoard' @update='updateDataboard'/>
+        </div>
+      </div>
       <div class="leftbar">
         <Dtab :tabs="leftTab">
           <Dswitch slot="tabsloat" :state="showMmore" @switchChange="switchChange" />
@@ -35,7 +43,12 @@
         </Dtab>
       </div>
       <div class="rightbar">
-        <Stage @nodelistChange="nodechange" @zoomChange="zoomChange" ref="stage"></Stage>
+        <Stage 
+          @nodelistChange="nodechange" 
+          @zoomChange="zoomChange" 
+          @nodeClick='nodeClick' 
+          ref="stage" 
+        ></Stage>
         <ZoomSetter :zoomSize="zoom" @changeSize="changeSize" />
       </div>
     </div>
@@ -55,6 +68,11 @@ import thumbnail from '../../components/thumbnail.vue'
 import LayerTree from './layer-tree.vue'
 import TypeTab from './type-tab'
 import { getuuid } from '@/utils/index'
+import DForm from '../common/dynamicForm/dynamicForm.vue'
+
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import { ELEMENT_SCREEN,ELEMENT_NODE } from "@/store/constants"
+
 export default {
   components: {
     ZoomSetter,
@@ -66,7 +84,8 @@ export default {
     LeftBottom,
     thumbnail,
     LayerTree,
-    TypeTab
+    TypeTab,
+    DForm
   },
   data() {
     return {
@@ -320,6 +339,8 @@ export default {
               w:200,
               h:40,
               version: 1,
+              text:'自定义标题',
+              fontSize:12, //临时代码
               id: '4-1'
             },
             // {
@@ -390,9 +411,51 @@ export default {
     }
   },
 
-  computed: {},
-  watch: {},
+  computed: {
+    ...mapState('databoard',{
+      mode:state => state.mode,
+      databoard:state => state.databoard,
+      editNode:state => state.editNode,
+      editChart:state => state.editChart,
+      editType:state => state.editType
+    }),
+    ...mapGetters ('databoard',[
+      'isEditing'
+    ])
+    
+  },
+
   methods: {
+    ...mapMutations('databoard',[
+      'openEditMode',
+      'setEditType',
+      'setEditNode',
+      'setEditChart'
+    ]),
+    ...mapActions('databoard',[
+      'updateNode',
+      'updateChart',
+      'updateDataboard',
+      'queryDataboard'
+    ]),
+    updateCanvas(newsetting){
+      console.log("update canvas",newsetting)
+    },
+    updateNode(newsetting) {
+      console.log("update node",newsetting)
+    },
+    nodeClick(nodes) {
+      const length = nodes.length;
+      if(length === 1){
+        this.setEditType(ELEMENT_NODE)
+        this.setEditNode(nodes[0])
+        this.setEditChart(nodes[0].chart)
+      }else if(length === 2){
+        this.setEditType(ELEMENT_ALIGN)
+      }else if( 2 < length){
+        this.setEditType(ELEMENT_MULTI)
+      }
+    },
     changeSize(val) {
       this.$refs.stage.setZoom(val)
     },
@@ -405,7 +468,9 @@ export default {
         id,
         type: item.type,
         name: item.title,
-        version: item.version
+        version: item.version,
+        text: item.text, //临时代码
+        fontSize: item.fontSize //临时代码
       }
       const obj={
         w:item.w || 200,
@@ -492,6 +557,10 @@ export default {
     unlockNode(nodeId) {
       this.$refs.stage.unlockNode(nodeId)
     }
+  },
+  created(){
+    this.openEditMode()
+    this.queryDataboard()
   }
 }
 </script>

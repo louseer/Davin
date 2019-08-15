@@ -1,12 +1,17 @@
+import { OPTIONTYPE } from '../core/constants.js'
 import {
   _fontSize,
 } from './echarts.js'
 
 const options = {
   text:{
-    "name":"报表名称",
+    "name":"标题文本",
     "type":OPTIONTYPE.INPUT, //文字输入框
     "defaultVal":"标题"
   },
-  fontSize:_fontSize
+  fontSize:_fontSize()
+}
+
+export default {
+  options
 }

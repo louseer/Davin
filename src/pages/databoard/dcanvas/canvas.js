@@ -5,5 +5,6 @@ export default class Canvas {
     this.offset=config.offset
     this.zoomSize=config.zoomSize
     this.id=config.id
+    this.name=config.name
   }
 }

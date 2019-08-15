@@ -25,7 +25,7 @@
 import GridLayout from './components/gridlayout.vue'
 import DForm from '../common/dynamicForm/dynamicForm.vue'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import { ELEMENT_RFORM,ELEMENT_GRID,ELEMENT_SCREEN,ELEMENT_GROUP,ELEMENT_NODE } from "@/store/constants"
+import { ELEMENT_RFORM,ELEMENT_GRID,ELEMENT_SCREEN,ELEMENT_NODE } from "@/store/constants"
 
 export default {
   components: {
@@ -37,7 +37,6 @@ export default {
       ELEMENT_RFORM,
       ELEMENT_GRID,
       ELEMENT_SCREEN,
-      ELEMENT_GROUP,
       ELEMENT_NODE
     };
   },
