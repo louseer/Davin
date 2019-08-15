@@ -355,7 +355,6 @@ export default {
         version:item.version
       }
       const obj={
-        id,
         w:200,
         h:200,
         x:50,

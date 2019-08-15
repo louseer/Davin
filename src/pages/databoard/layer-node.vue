@@ -13,6 +13,7 @@
       @drop.stop="nodeDrop"
       @dragenter="dragenter"
       v-show='!rnode.hide'
+      :key='rnode.id'
     >
       <div class="select-mask" v-if="rnode.active && !rnode.disable">
         <i
@@ -37,7 +38,7 @@
              <li>type:{{node.elType}}</li>
             <li>{{node.disable ? 'lock' :''}}</li>
           </ul>      -->
-        <d-chart :config='node.chart' v-if='node.chart'/>
+        <d-chart :config='rnode.chart' v-if='rnode.chart' />
     </div>
   </div>
 </template>

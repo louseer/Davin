@@ -5,7 +5,7 @@
       {{name}}
     </div>
     <div class='chart-body'>
-      <component :is="chart" :config='config'></component>
+      <component :is="chart" :config='theconfig'></component>
     </div>
   </div>
 </template>
@@ -22,11 +22,11 @@ const echartsTypes = [
 ]
 export default {
   props:{
-    "config":{
+    config:{
       type:Object,
       defalut: () => {}
     },
-    "showName":{
+    showName:{
       type:Boolean,
       defalut: false
     }
@@ -37,7 +37,16 @@ export default {
   data() {
     return {
       //isMounted:false,
+      theconfig:this.config
     };
+  },
+  watch:{
+    config:{
+      handler:function(v){
+        this.theconfig = v
+      },
+      deep:true
+    }
   },
   computed: {
     id () {  
