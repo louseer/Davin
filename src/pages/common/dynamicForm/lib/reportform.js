@@ -1,4 +1,4 @@
-import {OPTIONTYPE} from '../core/constants.js'
+import { OPTIONTYPE } from '../core/constants.js'
 import { 
   REFRESH_INTERVAL,
   IMG_SOURCE_TYPE,
@@ -37,7 +37,7 @@ const options = {
     "type":OPTIONTYPE.NOVIEW, 
     "defaultVal":""
   },
-  "title":{
+  "name":{
     "name":"报表名称",
     "type":OPTIONTYPE.INPUT, //文字输入框
     "defaultVal":"我的报表"

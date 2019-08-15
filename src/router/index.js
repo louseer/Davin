@@ -18,6 +18,8 @@ import Setting from 'pages/project/setting'
 import DomCanvas from 'pages/databoard/index.vue';
 import formEditor from 'pages/reportform/edit.vue';
 import Edit from 'pages/databoard/edit.vue';
+import login from 'pages/login.vue';
+import platform from 'pages/platform/platform.vue';
 
 Vue.use(VueRouter)
 const routes = [
@@ -26,6 +28,17 @@ const routes = [
     name:'home',
     redirect: { path:'/edie' }
   },
+  {
+    path:'/login',
+    name:'login',
+    component:login
+  },
+  {
+    path:'/platform',
+    name:'platform',
+    component:platform
+  },
+
   {
     path:'/edie',
     name:'edie',
@@ -118,6 +131,7 @@ const routes = [
         name:'domcanvas',
         component:DomCanvas
       }
+      
     ]
   },
   // {

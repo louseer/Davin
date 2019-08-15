@@ -3,12 +3,14 @@ import Vue from 'vue'
 import getters from './getters'
 import user from './modules/user'
 import form from './modules/form'
+import transform from './modules/transform'
 
 Vue.use(Vuex)
 const myStore = new Vuex.Store({
   modules: {
     user,
-    form
+    form,
+    // transform
   },
   state:{
     'loading': false

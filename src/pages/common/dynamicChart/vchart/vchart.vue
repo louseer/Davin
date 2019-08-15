@@ -5,12 +5,30 @@
 
 <script>
 //import {组件名称} from '组件路径';
-import ECharts from 'vue-echarts'
+import 'echarts/lib/chart/bar'
+import 'echarts/lib/chart/line'
+import 'echarts/lib/chart/pie'
+import 'echarts/lib/chart/map'
+import 'echarts/lib/chart/radar'
+import 'echarts/lib/chart/scatter'
+import 'echarts/lib/chart/effectScatter'
+import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/polar'
+import 'echarts/lib/component/geo'
+import 'echarts/lib/component/legend'
+import 'echarts/lib/component/title'
+import 'echarts/lib/component/visualMap'
+import 'echarts/lib/component/dataset'
+import 'echarts/map/js/world'
+import 'zrender/lib/svg/svg'
 
 
 // import theme from '../theme.json' //引入主题
 // ECharts.registerTheme('ovilia-green', theme); //引入主题
 import { getChartData } from '@/api/api.js'
+import { getChartTemp } from '@/chart-templates/index.js'
+import ECharts from 'vue-echarts'
+
 
 export default {
   components: {
@@ -29,15 +47,19 @@ export default {
     return {
       instance:null,
       chartData:null,
-      options:''
+      options:'',
+      simple:null
     }
   },
   computed: {
     type () {  
       return this.config.type;
     },
+    version() {
+      return this.config.version
+    },
     apiUrl () {
-      return this.config.data.apiUrl;
+      return this.config.data && this.config.data.apiUrl || `/sampledata/${this.type}.json`;
     }
   },
   methods: {
@@ -59,15 +81,25 @@ export default {
         console.log(e)
       })
     },
+    getSimple () {
+      getChartTemp(this.type,this.version).then((val) => {
+        this.simple = val
+      })
+    },
     getData () {
       getChartData(this.apiUrl).then(rsp => {
       if(rsp.status == 0){
-          this.chartData = rsp.data;
+          this.chartData = rsp.data
           this.refreshData();
         }
       }).catch(e => {
 
       })
+    }
+  },
+  watch:{
+    options(v){
+      console.log("chart options update",v)
     }
   },
   created () {

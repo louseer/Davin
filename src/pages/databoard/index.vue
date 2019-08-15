@@ -74,7 +74,8 @@
           @nodeMousedown="nodeMousedown"
           @nodeResizeMousedown="nodeResizeMousedown"
           @nodeResizeNode="nodeResizeNode"
-        />
+        >
+        </Node>
       </Cav>
     </div>
   </div>
@@ -85,6 +86,7 @@ import Dcanvas from './dcanvas/dcanvas'
 import Cav from './canvas.vue'
 import Node from './layer-node.vue'
 import Contextmenu from './contextmenu.vue'
+
 export default {
   components: {
     Node,

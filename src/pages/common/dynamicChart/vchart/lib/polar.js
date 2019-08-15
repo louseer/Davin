@@ -68,8 +68,7 @@ export default class Polar extends Echart{
           coordinateSystem: 'polar',
           name: 'line',
           type: 'line',
-          showSymbol: false,
-          data: []
+          showSymbol: false
         }
       ],
       animationDuration: 2000

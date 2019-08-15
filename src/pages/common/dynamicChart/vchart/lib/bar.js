@@ -1,12 +1,11 @@
 import Echart from './echart.js';
-import 'echarts/lib/chart/line'
+import 'echarts/lib/chart/bar'
 const defaultOption = {
   grid: {
     show: false,
     left: 50,
     right: 10,
-    bottom: 30,
-    top:30
+    bottom: 30
   }
 }
 
@@ -18,13 +17,8 @@ export default class Line extends Echart{
 
   //设置图例
   setLegend(data){
-    let legend = [];
-    for(let i =0; i< data.length; i++){
-      if(!legend.includes(data[i].s)){
-        legend.push(data[i].s)
-      }
-    }
-    this.options.legend = {data:legend};
+    this.options.legend = this.options.legend || {};
+    this.options.legend.data = data;
   }
 
   //获取类目/时间轴，即主轴。
@@ -39,20 +33,14 @@ export default class Line extends Echart{
   //设置坐标（类目、时间）轴
   setAxis(data){
     let axis = this.getMainAxisName();
-    let categories = [];
-    for(let i =0; i< data.length; i++){
-      if(!categories.includes(data[i].x) && "" !== data[i].x && undefined !== data[i].x && null !== data[i].x){
-        categories.push(data[i].x)
-      }
-    }
-    categories.sort(); //排序TODO：后续可能要扩展主轴类目排序功能
-    this.options[axis].data = categories
+    this.options[axis].data = data
     return categories;
   }
 
   //设置系列数据
   setSeries(data){
-    let categories = this.setAxis(data);
+    let {categories}= data;
+    this.setAxis(data);
     let newSeries = [];
     let sdata = {};
     let sname = [];
@@ -66,7 +54,7 @@ export default class Line extends Echart{
     sname.forEach(n => {
       newSeries.push({
         name: n !== "__null__" ? n :"",
-        type: 'line',
+        type: 'bar',
         data: sdata[n]
       })
     })
@@ -93,25 +81,57 @@ export default class Line extends Echart{
   }
 
   setData(data) {
-    // this.mapFields(data);
-    this.setLegend(data);
-    this.setSeries(data);   
+    //this.mapFields(data);
+    const {categories} = data;
+    //this.setLegend(categories);
+    //this.setSeries(data);
+    
   }
 
   setSample () {
     this.options = {
-        xAxis: {
-            type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [{
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
-            type: 'line'
-        }]
-    };
+      grid: {
+        show: false,
+        left: 50,
+        right: 10,
+        bottom
+      },
+      color: ['#3398DB'],
+      tooltip : {
+          trigger: 'axis',
+          axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+              type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+          }
+      },
+      grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+      },
+      xAxis : [
+          {
+              type : 'category',
+              data : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+              axisTick: {
+                  alignWithLabel: true
+              }
+          }
+      ],
+      yAxis : [
+          {
+              type : 'value'
+          }
+      ],
+      series : [
+          {
+              name:'直接访问',
+              type:'bar',
+              barWidth: '60%',
+              data:[10, 52, 200, 334, 390, 330, 220]
+          }
+      ]
+    }
   }
 
   combineConfig() {

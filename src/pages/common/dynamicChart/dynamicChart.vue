@@ -1,8 +1,8 @@
 <!-- chart -->
 <template>
-  <div class='chart-wrapper' ref='chartwrapper'>
-    <div class='chart-header'>
-      {{title}}
+  <div class='chart-wrapper' >
+    <div class='chart-header' v-if='showName'>
+      {{name}}
     </div>
     <div class='chart-body'>
       <component :is="chart" :config='config'></component>
@@ -15,21 +15,24 @@
 //import NChart from "./js/nchart.js";
 import { getchartmock } from '@/api/api.js';
 import VChart from './vchart/vchart.vue'
-import EChart from './echart/echart.vue'
+
 
 const echartsTypes = [
-  'pie','polar','line'
+  'pie','polar','line','bar','horizontalbar'
 ]
 export default {
   props:{
     "config":{
       type:Object,
       defalut: () => {}
+    },
+    "showName":{
+      type:Boolean,
+      defalut: false
     }
   },
   components: {
-    VChart,
-    EChart
+    VChart
   },
   data() {
     return {
@@ -43,8 +46,8 @@ export default {
     type () {
       return this.config.type;
     },
-    title () {
-      return this.config.title;
+    name () {
+      return this.config.name;
     },
     chart () {
       if(echartsTypes.includes(this.type)){
@@ -68,7 +71,7 @@ export default {
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    //this.isMounted = true
+    console.log('chart mounted',this.config)
   },
 
   beforeCreate() {}, //生命周期 - 创建之前
@@ -76,6 +79,7 @@ export default {
   beforeUpdate() {}, //生命周期 - 更新之前
   updated() {
     console.log('chart UPDATED')
+    console.log(this.config)
   }, //生命周期 - 更新之后
   beforeDestroy() {}, //生命周期 - 销毁之前
   destroyed() {}, //生命周期 - 销毁完成

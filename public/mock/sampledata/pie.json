@@ -4,18 +4,15 @@
   "data": [
       {
           "name": "PC",
-          "value": 97,
-          "url": "http://www.baidu.com"
+          "value": 97
       },
       {
           "name": "iOS",
-          "value": 50,
-          "url": "http://www.baidu.com"
+          "value": 50
       },
       {
           "name": "Android",
-          "value": 59,
-          "url": "http://www.baidu.com"
+          "value": 59
       },
       {
           "name": "windows phone",
@@ -23,15 +20,15 @@
       },
       {
           "name": "Black berry",
-          "value": 3
+          "value": 30
       },
       {
           "name": "Nokia S60",
-          "value": 2
+          "value": 20
       },
       {
           "name": "Nokia S90",
-          "value": 1
+          "value": 10
       }
   ]
 }

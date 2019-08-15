@@ -27,8 +27,9 @@
           @drag.stop="resizeNode(p.event,$event)"
           :style="p.type==='circle'? ' border-radius: 50% 50%;':''"
         ></i>
-      </div>{{node.type === 'group' ? `Group index-${node.zindex}`: `Node index-${node.zindex}`}}
-          <ul>
+      </div>
+          <!-- <ul>
+            {{node.type === 'group' ? `Group index-${node.zindex}`: `Node index-${node.zindex}`}}
             <li>w:{{node.w}}</li>
             <li>h:{{node.h}}</li>
             <li>x:{{node.x}}</li>
@@ -36,27 +37,30 @@
             <li>id:{{node.id}}</li>
              <li>type:{{node.elType}}</li>
             <li>{{node.disable ? 'lock' :''}}</li>
-          </ul>     
+          </ul>      -->
+        <d-chart :config='node.chart' v-if='node.chart'/>
     </div>
   </div>
 </template>
 
 <script>
+import DChart from 'pages/common/dynamicChart/dynamicChart.vue'
 export default {
   name: 'Node',
+  components:{
+    DChart
+  },
   props: {
     node: {
       type: Object,
       default: () => {}
     },
-    
-
   },
   watch: {
     node:{
       handler:function (val) {       
         this.rnode=val;
-       
+        console.log(val)
       },
       deep:true
     },
@@ -169,8 +173,8 @@ export default {
 }
 .node {
   position: absolute;
-  background: #15191c;
-  border: 1px darkgray solid;
+  
+  
   cursor: pointer;
 }
 .group {
@@ -185,6 +189,7 @@ export default {
  cursor: move;
   background: @bg_Data_red20;
   position: absolute;
+  z-index: 999;
   border: @border_Data_red50;
   i {
     width: 10px;

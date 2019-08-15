@@ -1,12 +1,11 @@
 import Echart from './echart.js';
-import 'echarts/lib/chart/line'
 const defaultOption = {
   grid: {
     show: false,
-    left: 50,
-    right: 10,
+    left: 60,
+    right: 60,
     bottom: 30,
-    top:30
+    top:50
   }
 }
 
@@ -93,25 +92,95 @@ export default class Line extends Echart{
   }
 
   setData(data) {
-    // this.mapFields(data);
-    this.setLegend(data);
-    this.setSeries(data);   
+    //this.mapFields(data);
+    //this.setLegend(data);
+    //this.setSeries(data);
+    
   }
 
   setSample () {
-    this.options = {
-        xAxis: {
-            type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    this.options = Object.assign(defaultOption,{
+      legend: {
+        right: 10,
+        data: ['1990', '2015']
+    },
+    xAxis: {
+        splitLine: {
+            lineStyle: {
+                type: 'dashed'
+            }
+        }
+    },
+    yAxis: {
+        splitLine: {
+            lineStyle: {
+                type: 'dashed'
+            }
         },
-        yAxis: {
-            type: 'value'
+        scale: true
+    },
+    series: [{
+        name: '1990',
+        data: data[0],
+        type: 'scatter',
+        symbolSize: function (data) {
+            return Math.sqrt(data[2]) / 5e2;
         },
-        series: [{
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
-            type: 'line'
-        }]
-    };
+        label: {
+            emphasis: {
+                show: true,
+                formatter: function (param) {
+                    return param.data[3];
+                },
+                position: 'top'
+            }
+        },
+        itemStyle: {
+            normal: {
+                shadowBlur: 10,
+                shadowColor: 'rgba(120, 36, 50, 0.5)',
+                shadowOffsetY: 5,
+                color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+                    offset: 0,
+                    color: 'rgb(251, 118, 123)'
+                }, {
+                    offset: 1,
+                    color: 'rgb(204, 46, 72)'
+                }])
+            }
+        }
+    }, {
+        name: '2015',
+        data: data[1],
+        type: 'scatter',
+        symbolSize: function (data) {
+            return Math.sqrt(data[2]) / 5e2;
+        },
+        label: {
+            emphasis: {
+                show: true,
+                formatter: function (param) {
+                    return param.data[3];
+                },
+                position: 'top'
+            }
+        },
+        itemStyle: {
+            normal: {
+                shadowBlur: 10,
+                shadowColor: 'rgba(25, 100, 150, 0.5)',
+                shadowOffsetY: 5,
+                color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+                    offset: 0,
+                    color: 'rgb(129, 227, 238)'
+                }, {
+                    offset: 1,
+                    color: 'rgb(25, 183, 207)'
+                }])
+            }
+        }
+    }]
+    });
   }
 
   combineConfig() {
@@ -119,7 +188,6 @@ export default class Line extends Echart{
   }
 
   initOpitions() {
-    this.setSample();
     this.combineConfig();
   }
 

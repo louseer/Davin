@@ -5,8 +5,9 @@ export default {
   state: {
     mode:VIEW_MODE,
     formID:'',
-    form:null,
+    rform:null,
     activeGrid:null,
+    activeChart:null,
     layout:[],
     editType:ELEMENT_RFORM
   },
@@ -37,10 +38,10 @@ export default {
     setRFormID (state,id) {
       state.formID = id
     },
-    //记录当前报表完整数据
+    //记录当前报表设置
     setRFormConfig (state,fromData) {
       console.log("接口请求完毕")
-      state.form = fromData
+      state.rform = fromData
     },
     //记录当前grid list
     setLayout (state,layout) {
@@ -49,13 +50,32 @@ export default {
     //记录当前激活grid/chart
     setActiveGrid (state,grid) {
       state.activeGrid = grid
-      state.editType = ELEMENT_GRID
     },
-    //取消激活grid/chart
-    cancelActiveGrid (state) {
-      state.activeGrid = null
-      state.editType = ELEMENT_RFORM
+    setActiveChart (state,chart) {
+      state.activeChart = chart
     },
+    setEditType(state,type){
+      state.editType = type
+    },
+    updateGrid(state,setting){
+      const gridi = setting.i
+      const index = state.layout.findIndex(element => {
+        return element.i === gridi
+      });
+      state.layout[index] = Object.assign(state.layout[index],setting);
+      state.layout = [...state.layout]
+    },
+    updateChart(state,setting){
+      const chartid = setting.id
+      const index = state.layout.findIndex(element => {
+        return element.chart.id === chartid
+      });
+      state.layout[index].chart = setting;
+      state.layout = [...state.layout]
+    },
+    updateRForm(state,setting){
+      console.log(setting)
+    }
   },
   actions: {
     queryFormData({state,commit}){
@@ -64,6 +84,17 @@ export default {
         commit('setRFormConfig',form)
         commit('setLayout',layout)
       })
+    },
+    clickGrid({state,commit},grid){
+      const {chart,...rest} = grid
+      commit('setActiveChart',chart)
+      commit('setActiveGrid',rest)
+      commit('setEditType',ELEMENT_GRID)
+    },
+    clickRForm({state,commit}){
+      commit('setActiveChart',null)
+      commit('setActiveGrid',null)
+      commit('setEditType',ELEMENT_RFORM)
     },
     updateLayout({commit},newLayout){
       console.log("~~~updateLayout request api~~~")
