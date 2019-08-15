@@ -63,7 +63,7 @@
       },
       {"x":2,"y":0,"w":2,"h":4,"i":"1",
         "chart":{
-          "title":"折线图",
+          "title":"基本折线图",
           "type":"line",
           "id":"c_sde56rdfrrwqret3gt",
           "data":{
@@ -92,12 +92,109 @@
           }
         }
       },
-      {"x":4,"y":0,"w":2,"h":5,"i":"2"},
-      {"x":6,"y":0,"w":2,"h":3,"i":"3"},
-      {"x":8,"y":0,"w":2,"h":3,"i":"4"},
-      {"x":10,"y":0,"w":2,"h":3,"i":"5"},
-      {"x":0,"y":5,"w":2,"h":5,"i":"6"},
-      {"x":2,"y":5,"w":2,"h":5,"i":"7"},
+      {"x":4,"y":0,"w":2,"h":5,"i":"2",
+        "chart":{
+          "title":"基本饼状图",
+          "type":"pie",
+          "id":"c_sde56rdrdfrqrdet3gt",
+          "data":{
+            "type":"1",
+            "apiUrl":"/sampledata/pie.json",
+            "fieldMap":{
+              "x":"x",
+              "y":"y",
+              "s":"s"
+            },
+            "dataSource":"",
+            "staticPath":""
+          }
+        }
+      },
+      {"x":6,"y":0,"w":2,"h":3,"i":"3",
+        "chart":{
+          "title":"基本柱状图",
+          "type":"bar",
+          "id":"c_sde5sdfqrerdddet3gt",
+          "data":{
+            "type":"1",
+            "apiUrl":"/sampledata/bar.json",
+            "fieldMap":{
+              "x":"x",
+              "y":"y",
+              "s":"s"
+            },
+            "dataSource":"",
+            "staticPath":""
+          }
+        }},
+      {"x":8,"y":0,"w":2,"h":3,"i":"4",
+        "chart":{
+          "title":"横向柱状图",
+          "type":"horizontalbar",
+          "id":"c_sde5sdf45rsdredet3gt",
+          "data":{
+            "type":"1",
+            "apiUrl":"/sampledata/horizontalbar.json",
+            "fieldMap":{
+              "x":"x",
+              "y":"y",
+              "s":"s"
+            },
+            "dataSource":"",
+            "staticPath":""
+          }
+        }},
+      {"x":10,"y":0,"w":2,"h":3,"i":"5",
+        "chart":{
+          "title":"环形饼状图",
+          "type":"ringpie",
+          "id":"c_sde56rdrdfrqrdet3gt",
+          "data":{
+            "type":"1",
+            "apiUrl":"/sampledata/ringpie.json",
+            "fieldMap":{
+              "x":"x",
+              "y":"y",
+              "s":"s"
+            },
+            "dataSource":"",
+            "staticPath":""
+          }
+        }},
+      {"x":0,"y":5,"w":2,"h":5,"i":"6",
+        "chart":{
+          "title":"双Y轴折线图",
+          "type":"line2y",
+          "id":"c_sde5ddfsrrq65rddet3gt",
+          "data":{
+            "type":"1",
+            "apiUrl":"/sampledata/line2y.json",
+            "fieldMap":{
+              "x":"x",
+              "y":"y",
+              "s":"s"
+            },
+            "dataSource":"",
+            "staticPath":""
+          }
+        }},
+      {"x":2,"y":5,"w":2,"h":5,"i":"7",
+      "chart":{
+        "title":"线柱混搭图",
+        "type":"linebar",
+        "id":"c_sde5ddfsrrq65rddet3gt",
+        "data":{
+          "type":"1",
+          "apiUrl":"/sampledata/linebar.json",
+          "fieldMap":{
+            "x":"x",
+            "y":"y",
+            "s":"s"
+          },
+          "dataSource":"",
+          "staticPath":""
+        }}
+      },
       {"x":4,"y":5,"w":2,"h":5,"i":"8"},
       {"x":6,"y":3,"w":2,"h":4,"i":"9"},
       {"x":8,"y":4,"w":2,"h":4,"i":"10"},

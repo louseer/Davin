@@ -1,0 +1,34 @@
+{
+  "status": 0,
+  "msg": "",
+  "data": [
+      {
+          "name": "PC",
+          "value": 97
+      },
+      {
+          "name": "iOS",
+          "value": 50
+      },
+      {
+          "name": "Android",
+          "value": 59
+      },
+      {
+          "name": "windows phone",
+          "value": 29
+      },
+      {
+          "name": "Black berry",
+          "value": 30
+      },
+      {
+          "name": "Nokia S60",
+          "value": 20
+      },
+      {
+          "name": "Nokia S90",
+          "value": 10
+      }
+  ]
+}

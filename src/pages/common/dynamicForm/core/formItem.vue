@@ -2,7 +2,7 @@
 <template>
   <div>
     <template v-for='(item,key) in items'>
-      <el-form-item :label="item.name" v-if="item.type !== itemType.NOVIEW && item.type !== itemType.GROUP" v-show='!item.hide'>
+      <el-form-item :label="item.name" v-if="item.type !== itemType.NOVIEW && item.type !== itemType.GROUP && item.type !== itemType.LIST" v-show='!item.hide'>
         <el-input 
           v-model="item.value" 
           v-if="item.type === itemType.INPUT"
@@ -78,11 +78,17 @@
           v-model="item.value"
         ></d-img-select>
       </el-form-item>
-      <el-collapse v-if="item.type === itemType.GROUP">
+      <el-collapse v-if="item.type === itemType.GROUP && !item.noview">
         <el-collapse-item :title="item.name" >
           <form-item :options='item.children'></form-item>
         </el-collapse-item>
       </el-collapse>
+      <template v-if="item.type === itemType.GROUP  && item.noview">
+        <form-item :options='item.children'></form-item>
+      </template>
+      <template v-if="item.type === itemType.LIST  && item.children">
+        <form-item :options='item.children'></form-item>
+      </template> 
     </template>
   </div>
   
@@ -98,17 +104,16 @@ export default {
     DImgSelect
   },
   props:{
-    options:Object
+    options:[Object,Array]
   },
   data() {
-    console.log("this.options",this.options)
     return {
      items:this.options,
      itemType:OPTIONTYPE
     }
   },
   created(){
-    console.log("FormItem created")
+    
   }
 }
 </script>

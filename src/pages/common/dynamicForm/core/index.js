@@ -13,6 +13,7 @@ export class Option {
   }
 
   set value (val){
+
     if(val === this._value){
       return;
     }
@@ -29,14 +30,45 @@ export class Option {
     return this._oldvalue;
   }
 
+  //支持简单值(string,number)得格式化,数组会将每个元素都格式化
+  format(val) {
+    if(typeof(val) === 'string' || typeof(val) === 'number'){
+      return this.formatter.replace("{n}",val)
+    }else if(Array.isArray(val)){
+      let arr = []
+      val.forEach((v) => {
+        arr.push(this.format(v))
+      })
+      return arr
+    }else{
+      return val
+    }
+  }
+
+  deformation(val) {
+    //TODO:具体业务逻辑还没写
+    if(typeof(val) === 'string' || typeof(val) === 'number'){
+      return this.formatter.replace("{n}",val)
+    }else if(Array.isArray(val)){
+      let arr = []
+      val.forEach((v) => {
+        arr.push(this.format(v))
+      })
+      return arr
+    }else{
+      return val
+    }
+  }
+
   bindCallback (callback) {
     this.callback = callback
   }
 }
 
 export class Group {
-  constructor({name}){
-    this.name = name;
+  constructor(group){
+    this.name = group.name;
+    this.noview = group.noview || false;
     this.type = OPTIONTYPE.GROUP
     this.children = {}
   }
@@ -56,20 +88,50 @@ export class Group {
   }
 }
 
+export class List {
+  constructor({name}){
+    this.name = name;
+    this.type = OPTIONTYPE.LIST
+    this.children = []
+  }
+
+  setChildren (obj) {
+    this.children = obj
+  }
+
+  addChild () {
+    this.children.push(this.children[0])
+  }
+
+  bindCallback (callback) {
+    for(var child in this.children){
+      child.bindCallback(callback)
+    }
+  }
+}
+
 
 
 /**
  * 生成用于表单视图渲染的{form表单项}，这个json规定了每个控件的默认值和change回调
- * @param {Object} setting 普通对象
- * @param {Object} configurer 表单项配置器对象：普通对象或者json
+ * @param {Object/Array} configurer 表单项配置器对象：普通对象或者json
  * @param {Function} callback 所有表单项值发生改变都会触发的通用回调，一般是提交动作
+ * @param {String} nameprefix 当configurer是一个Array时，子配置组名字的统一前缀。
  */
-export const generateOptions = (configurer,callback,setting = null) => {
-  let options = {}
+export const generateOptions = (configurer,callback,nameprefix='') => {
+  let islist = Array.isArray(configurer)
+  let options = islist ? []:{}
   for(var k in configurer){
-    if(configurer[k].type === OPTIONTYPE.GROUP){
-      options[k] = new Group(configurer[k])
-      options[k].children = generateOptions(configurer[k].children,callback)
+    let name = nameprefix ? `${nameprefix}${k}`:'';
+    configurer[k].name = configurer[k].name || name;
+    if(configurer[k].children){
+      if(configurer[k].type === OPTIONTYPE.GROUP){
+        options[k] = new Group(configurer[k])
+        options[k].children = generateOptions(configurer[k].children,callback,nameprefix)
+      }else if(configurer[k].type === OPTIONTYPE.LIST){
+        options[k] = new List(configurer[k])
+        options[k].children = generateOptions(configurer[k].children,callback,configurer[k].name)
+      }
     }else{
       options[k] = new Option(configurer[k],callback)
     }
@@ -130,7 +192,8 @@ export const snapshot = (target,source) => {
   let back = null, //后退
   redo = null; //重做。记录source当前的变更
   for(var k in target){
-    if("[object Object]" === Object.prototype.toString.call(target[k])){
+    const type = Object.prototype.toString.call(target[k]);
+    if("[object Object]" === type){
       let obj = snapshot(target[k],source[k])
       if(obj.back) {
         back = back || {}
@@ -140,6 +203,8 @@ export const snapshot = (target,source) => {
         redo = redo || {}
         redo[k] = obj.forward
       }
+    }else if("[object Array]" === type){
+      
     }else{
       if(target[k] !== source[k]){
         back = back || {}
@@ -171,18 +236,16 @@ export const snapshot = (target,source) => {
 
 
 export class DynamicForm {
-  constructor(configurer,handlers,setting=null){
-    this.originSetting = setting; //用户打开页面时的初始设置。（即从数据库获取到的）
+  constructor(configurer,handlers,setting=null,callback){
     this.handlers = handlers; //表单项独立回调
     this.options = generateOptions(configurer,this,setting);
+    this.callback = callback;
     if(setting){
-      this.assignValue(this.options,setting);
+      this.setOriginSetting(setting);
     }
     this.step = -1;
     this.recording = true;
     this.snapshot = []; //快照，历史
-    this.setPrevious();
-
   }
 
   setPrevious() {
@@ -198,8 +261,10 @@ export class DynamicForm {
   }
 
   setOriginSetting(setting) {
-    this.originSetting = setting
     this.assignValue(setting)
+    setting = getValues(this.options)
+    this.originSetting = setting
+    this.previousSetting = setting
   }
 
   back(){
@@ -245,7 +310,6 @@ export class DynamicForm {
     let newSetting = getValues(this.options);
     this.setHistory(newSetting)
     console.log("updated:",newSetting)
-    //TODO:dispatch action:更新报表配置项。
-    
+    this.callback && this.callback(newSetting)
   }
 }

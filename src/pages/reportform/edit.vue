@@ -10,7 +10,11 @@
         <grid-layout :layout='layout' :editing='isEditing'></grid-layout>
       </div>
       <div class='page-right'>
-        <DForm :type='type' :setting='setting'/>
+        <DForm v-if='editType===ELEMENT_RFORM':type='ELEMENT_RFORM' :setting='rform' @update='updateRForm'/>
+        <div v-if='editType===ELEMENT_GRID'>
+          <DForm :type='ELEMENT_GRID' :setting='activeGrid' @update='updateGrid'/>
+          <DForm :type='chartType' :setting='activeChart' @update='updateChart'/>
+        </div>
       </div>
     </div>
   </div>
@@ -21,7 +25,7 @@
 import GridLayout from './components/gridlayout.vue'
 import DForm from '../common/dynamicForm/dynamicForm.vue'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-
+import { ELEMENT_RFORM,ELEMENT_GRID,ELEMENT_SCREEN,ELEMENT_GROUP,ELEMENT_NODE } from "@/store/constants"
 
 export default {
   components: {
@@ -30,28 +34,36 @@ export default {
   },
   data() {
     return {
+      ELEMENT_RFORM,
+      ELEMENT_GRID,
+      ELEMENT_SCREEN,
+      ELEMENT_GROUP,
+      ELEMENT_NODE
     };
   },
   computed: {
     ...mapState('form',{
       'layout':state => state.layout,
+      'activeChart':state => state.activeChart,
+      'activeGrid':state => state.activeGrid,
+      'rform':state => state.rform,
+      'editType':state => state.editType
     }),
     ...mapGetters ('form',[
-      'isEditing',
-      'modifyTarget'
+      'isEditing'
     ]),
-    type() {
-      return this.modifyTarget.type
-    },
-    setting () {
-      return this.modifyTarget.setting
+    chartType(){
+      return this.activeChart ? this.activeChart.type : ''
     }
   },
   watch: {},
   methods: {
     ...mapMutations('form',[
       'setRFormID',
-      'openEditMode'
+      'openEditMode',
+      'updateGrid',
+      'updateChart',
+      'updateRForm'
     ]),
     ...mapActions('form',[
       'queryFormData'

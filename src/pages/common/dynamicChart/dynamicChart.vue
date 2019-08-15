@@ -15,10 +15,10 @@
 //import NChart from "./js/nchart.js";
 import { getchartmock } from '@/api/api.js';
 import VChart from './vchart/vchart.vue'
-import EChart from './echart/echart.vue'
+
 
 const echartsTypes = [
-  'pie','polar','line'
+  'pie','polar','line','bar','horizontalbar'
 ]
 export default {
   props:{
@@ -28,8 +28,7 @@ export default {
     }
   },
   components: {
-    VChart,
-    EChart
+    VChart
   },
   data() {
     return {
@@ -76,6 +75,7 @@ export default {
   beforeUpdate() {}, //生命周期 - 更新之前
   updated() {
     console.log('chart UPDATED')
+    console.log(this.config)
   }, //生命周期 - 更新之后
   beforeDestroy() {}, //生命周期 - 销毁之前
   destroyed() {}, //生命周期 - 销毁完成
