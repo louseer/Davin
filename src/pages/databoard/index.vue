@@ -297,6 +297,7 @@ export default {
         this.setZoom(startZoom)
       }
     })
+  
     handler.rightclickHandler((e, x, y) => {
       const obj = {
         x: x,
@@ -448,6 +449,7 @@ export default {
       this.domCavase.refreshNodes()
     },
     nodeMousedown(node) {
+      this.rightClick=false
       if (this.domCavase.selectNodes.map(n => n.id).includes(node.id)) return
       if (node.type === 'element') {
         this.domCavase.selectNodes = [node]
