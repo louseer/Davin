@@ -24,8 +24,14 @@ export default class Stage {
     return this._zoomSize
   }
   set zoomSize(val) {
+   if(val>=0.1 && val<=1){
     this._zoomSize = val
     this.canvas.zoomSize = val
+   }
+   else{
+     return
+   }
+    
   }
   get offset() {
     return this._offset

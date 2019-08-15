@@ -261,10 +261,10 @@ export default {
     
       let startZoom = this.domCavase.zoomSize
         if (e.wheelDelta == 120) {
-            startZoom += 0.01
+            startZoom += 0.05
             this.setZoom(startZoom)
           } else {
-            startZoom -= 0.01
+            startZoom -= 0.05
             this.setZoom(startZoom)
           }
     })
@@ -294,7 +294,7 @@ export default {
   methods: {
     setZoom(val){
       this.domCavase.zoomSize=val
-      this.$emit('zoomChange',this.domCavase)
+      this.$emit('zoomChange',val)
     },
     contextmenuHide(){
       this.rightClick=false
@@ -555,7 +555,7 @@ select {
   position: absolute;
   width: 100%;
   height: 200px;
-  bottom: 0;
+  bottom: 30px;
   z-index: 9999;
 }
 .stage {

@@ -24,13 +24,19 @@
             <LeftBottom :leftBottomtools="leftBottomtools"></LeftBottom>
           </div>
           <div slot="tab2" slot-scope="tab">
-            <TypeTab :height="tab.height" :listType="listType" :typetree="typetree" @changeClick="changeClick" @contentClick="contentClick" />
+            <TypeTab
+              :height="tab.height"
+              :listType="listType"
+              :typetree="typetree"
+              @changeClick="changeClick"
+              @contentClick="contentClick"
+            />
           </div>
         </Dtab>
       </div>
       <div class="rightbar">
         <Stage @nodelistChange="nodechange" @zoomChange="zoomChange" ref="stage"></Stage>
-        <ZoomSetter :zoomSize="zoom"/>
+        <ZoomSetter :zoomSize="zoom" @changeSize="changeSize" />
       </div>
     </div>
   </div>
@@ -66,7 +72,7 @@ export default {
     return {
       maintit: '春风隧道(V1.0)',
       showMmore: true,
-      zoom:0.5,
+      zoom: 0.5,
       treenode: [],
       toptools: [
         {
@@ -288,7 +294,7 @@ export default {
             }
           ]
         },
-         {
+        {
           name: 'relationship',
           title: '关系网络',
           active: false,
@@ -302,7 +308,7 @@ export default {
             }
           ]
         },
-         {
+        {
           name: 'material',
           title: '素材',
           active: false,
@@ -347,35 +353,38 @@ export default {
       ]
     }
   },
-  
+
   computed: {},
   watch: {},
   methods: {
-    zoomChange(config){
-    this.zoom=config.zoomSize
+    changeSize(val) {
+      this.$refs.stage.setZoom(val)
     },
-    contentClick(item){
+    zoomChange(val) {
+      this.zoom = val
+    },
+    contentClick(item) {
       const id = getuuid()
       const chart = {
         id,
-        type:item.type,
-        name:item.title,
-        version:item.version
+        type: item.type,
+        name: item.title,
+        version: item.version
       }
-      const obj={
+      const obj = {
         id,
-        w:200,
-        h:200,
-        x:50,
-        y:50,
-        elType:item.type,
-        name:item.title,
+        w: 200,
+        h: 200,
+        x: 50,
+        y: 50,
+        elType: item.type,
+        name: item.title,
         chart
       }
       this.$refs.stage.addNode(obj)
     },
-    changeClick(items){
-     this.typetree=items
+    changeClick(items) {
+      this.typetree = items
     },
     layUp() {
       console.log('上一层')

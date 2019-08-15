@@ -38,7 +38,7 @@
              <li>type:{{node.elType}}</li>
             <li>{{node.disable ? 'lock' :''}}</li>
           </ul>      -->
-        <d-chart :config='node.chart' v-if='node.chart'/>
+        <d-chart :config='rnode.chart' v-if='rnode.chart'/>
     </div>
   </div>
 </template>
