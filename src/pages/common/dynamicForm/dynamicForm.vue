@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <div class='dynamic-form'>
-    <el-form label-width="1rem" v-if='form' >
+    <el-form label-width="0.8rem" v-if='form' >
       <form-item :options='form.options'></form-item>
     </el-form>
   </div> 
@@ -45,6 +45,7 @@ export default {
     setting:{
       handler:function(){
         console.log('dform获得更新setting',this.setting)
+        debugger
         this.form && this.form.setOriginSetting(this.setting)
       },
       deep:true
@@ -64,6 +65,7 @@ export default {
         let editor = module.default;
         this.form = new DynamicForm(editor.options,editor.handlers,this.setting,this.commitUpdate);
         console.log('载入配置项获得from实例',this.form)
+        debugger
       }).catch(e=>{
         console.log(`动态表单加载./lib/${this.type}.js失败`)
         console.log(e)

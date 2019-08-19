@@ -1,4 +1,4 @@
-import { EDIT_MODE,VIEW_MODE,ELEMENT_SCREEN,ELEMENT_MULTI,ELEMENT_ALIGN,ELEMENT_NODE } from "../constants"
+import { EDIT_MODE,VIEW_MODE,ELEMENT_SCREEN,ELEMENT_MULTI,ELEMENT_NODE } from "../constants"
 import { getFormData, updateLayoutReq } from '@/api/api.js'
 export default {
   namespaced: true,
