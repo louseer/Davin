@@ -12,6 +12,12 @@
           <DForm type='databoard' :setting='databoard' @update='updateDataboard' key='databoard'/>
         </div>
         <div v-if='editType === ELEMENT_MULTI'>
+          <button
+            v-for="(btn,index) in  aglinList"
+            :key="index"
+            style="float:left"
+            @click="nodeAlign(btn.type)"
+          >{{btn.name}}</button>
           <button 
             style="float:left" 
             v-if="multiple.length>=2" 
@@ -115,6 +121,14 @@ export default {
       ELEMENT_SCREEN,
       ELEMENT_NODE,
       ELEMENT_MULTI,
+      aglinList: [
+        { type: 'top', name: '顶对齐' },
+        { type: 'right', name: '右对齐' },
+        { type: 'bottom', name: '底对齐' },
+        { type: 'left', name: '左对齐' },
+        { type: 'VCenter', name: '垂直居中' },
+        { type: 'HCenter', name: '水平居中' }
+      ],
       maintit: '春风隧道(V1.0)',
       showMmore: true,
       zoom: 0.5,
@@ -616,7 +630,7 @@ button {
   border-radius: 4px;
   margin-right: 2px;
   cursor: pointer;
-  margin-left:10px;
+  margin:10px 0 0 10px;
   &:hover {
     background: darkgray;
     color: #ffffff;
