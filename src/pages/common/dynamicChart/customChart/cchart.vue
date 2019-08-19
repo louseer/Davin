@@ -15,8 +15,7 @@ export default {
     config:{
       type:Object,
       defalut: () => {}
-    },
-    
+    }
   },
   components: {
     customTitle

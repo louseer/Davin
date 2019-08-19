@@ -126,10 +126,11 @@ export default {
         { type: 'right', name: '右对齐' },
         { type: 'bottom', name: '底对齐' },
         { type: 'left', name: '左对齐' },
-        { type: 'VCenter', name: '垂直居中' },
-        { type: 'HCenter', name: '水平居中' }
+        { type: 'HCenter', name: '垂直居中' },
+        { type: 'VCenter', name: '水平居中' }
       ],
       maintit: '新建大屏',
+      zoom:0.5,
       showMmore: true,
       treenode: [],
       toptools: [
@@ -453,7 +454,6 @@ export default {
   computed: {
     ...mapState('databoard',{
       mode:state => state.mode,
-      zoom:state => state.zoom,
       databoard:state => state.databoard,
       editNode:state => state.editNode,
       editChart:state => state.editChart,
@@ -473,7 +473,6 @@ export default {
 
   methods: {
     ...mapMutations('databoard',[
-      'setZoom',
       'openEditMode',
       'setEditType',
       'setEditNode',
@@ -618,7 +617,6 @@ export default {
   },
   created(){
     this.openEditMode()
-    this.setZoom(0.5)
     this.queryDataboard()
   }
 }

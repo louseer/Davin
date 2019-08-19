@@ -25,31 +25,24 @@ export default {
     text(){
       return this.config.text || '自定义标题'
     },
-    // style(){
-    //   return {
-    //     fontSize:this.config.fontSize || 20,
-    //     color:this.config.color || "#8AB7CB",
-    //     fontWeight:this.config.fontWeight || '700',
-    //     fontFamliy: this.config.fontWeight || '微软雅黑',
-    //   }
-    // }
   },
   watch:{
     config:{
       handler:function (val){
         this.style = {
-          fontSize:val.fontSize+'px' || 20+'px',
+          fontSize:this.config.fontSize + 'px' || 20+'px',//parseInt(this.config.fontSize*this.zoom)+'px' || parseInt(20*this.zoom)+'px',
           color:val.color || "#8AB7CB",
           fontWeight:val.fontWeight || '700',
           fontFamliy: val.fontWeight || '微软雅黑',
         }
+        console.log(this.style)
       },
       deep:true
     }
   },
   created(){
     this.style = {
-        fontSize:this.config.fontSize || 20,
+        fontSize:this.config.fontSize + 'px' || 20+'px',//parseInt(this.config.fontSize*this.zoom)+'px' || parseInt(20*this.zoom)+'px',
         color:this.config.color || "#8AB7CB",
         fontWeight:this.config.fontWeight || '700',
         fontFamliy: this.config.fontWeight || '微软雅黑',
