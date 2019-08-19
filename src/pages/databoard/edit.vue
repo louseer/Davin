@@ -129,7 +129,7 @@ export default {
         { type: 'VCenter', name: '垂直居中' },
         { type: 'HCenter', name: '水平居中' }
       ],
-      maintit: '春风隧道(V1.0)',
+      maintit: '新建大屏',
       showMmore: true,
       zoom: 0.5,
       treenode: [],
