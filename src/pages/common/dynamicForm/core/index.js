@@ -13,12 +13,9 @@ export class Option {
   }
 
   set value (val){
-    console.log("~~options value setter~~~~~",this)
-    debugger
     if(val === this._value){
       return;
     }
-    debugger
     this._oldvalue = this._value
     this._value = val
     this._form.update(this)
@@ -243,7 +240,6 @@ export class DynamicForm {
     this.options = generateOptions(configurer,this,setting);
     this.callback = callback;
     if(setting){
-      debugger
       this.setOriginSetting(setting);
     }
     this.step = -1;
@@ -309,7 +305,6 @@ export class DynamicForm {
   }
 
   update(option) {
-    debugger
     this.step++ ;
     this.execHandler(option)
     let newSetting = getValues(this.options);
