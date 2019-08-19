@@ -131,7 +131,6 @@ export default {
       ],
       maintit: '新建大屏',
       showMmore: true,
-      zoom: 0.5,
       treenode: [],
       toptools: [
         {
@@ -380,7 +379,7 @@ export default {
               h:40,
               version: 1,
               text:'自定义标题',
-              fontSize:12, //临时代码
+              fontSize:20, //临时代码
               id: '4-1'
             },
             // {
@@ -454,6 +453,7 @@ export default {
   computed: {
     ...mapState('databoard',{
       mode:state => state.mode,
+      zoom:state => state.zoom,
       databoard:state => state.databoard,
       editNode:state => state.editNode,
       editChart:state => state.editChart,
@@ -473,6 +473,7 @@ export default {
 
   methods: {
     ...mapMutations('databoard',[
+      'setZoom',
       'openEditMode',
       'setEditType',
       'setEditNode',
@@ -485,10 +486,10 @@ export default {
       'queryDataboard'
     ]),
     multipleNodesAlign(type) {
-      this.$refs.stage.multipleNodesAlign(type)
+      this.$refs.stage.domCavase.multipleNodesAlign(type)
     },
     nodeAlign(type) {
-      this.$refs.stage.nodesAlign(type)
+      this.$refs.stage.domCavase.nodesAlign(type)
     },
     updateCanvas(newsetting){
       console.log("update canvas",newsetting)
@@ -617,6 +618,7 @@ export default {
   },
   created(){
     this.openEditMode()
+    this.setZoom(0.5)
     this.queryDataboard()
   }
 }
