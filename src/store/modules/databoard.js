@@ -1,8 +1,9 @@
-import { EDIT_MODE,VIEW_MODE,ELEMENT_SCREEN,ELEMENT_MULTI,ELEMENT_ALIGN,ELEMENT_NODE } from "../constants"
+import { EDIT_MODE,VIEW_MODE,ELEMENT_SCREEN,ELEMENT_MULTI,ELEMENT_NODE } from "../constants"
 import { getFormData, updateLayoutReq } from '@/api/api.js'
 export default {
   namespaced: true,
   state: {
+    zoom:1,
     mode:VIEW_MODE,
     databoardID:'',
     databoard:null,
@@ -16,6 +17,9 @@ export default {
     }
   },
   mutations: {
+    setZoom(state,val){
+      state.zoom = val
+    },
     //设置为编辑模式
     openEditMode (state) {
       state.mode = EDIT_MODE

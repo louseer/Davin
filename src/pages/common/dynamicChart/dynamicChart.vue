@@ -5,7 +5,7 @@
       {{name}}
     </div>
     <div class='chart-body'>
-      <component :is="chart" :config='theconfig'></component>
+      <component :is="chart" :config='theconfig' ></component>
     </div>
   </div>
 </template>

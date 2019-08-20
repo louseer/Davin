@@ -13,7 +13,6 @@ export class Option {
   }
 
   set value (val){
-
     if(val === this._value){
       return;
     }
@@ -261,6 +260,7 @@ export class DynamicForm {
   }
 
   setOriginSetting(setting) {
+    console.log("===setOriginSetting==")
     this.assignValue(setting)
     setting = getValues(this.options)
     this.originSetting = setting

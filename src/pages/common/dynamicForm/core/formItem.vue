@@ -112,6 +112,14 @@ export default {
      itemType:OPTIONTYPE
     }
   },
+  watch:{
+    options:{
+      handler:function (val) {
+        this.items = val
+      },
+      deep:true
+    }
+  },
   created(){
     
   }

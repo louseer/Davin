@@ -4,12 +4,40 @@
     <Eheader :maintit="maintit" :toptools="toptools" />
     <div class="content">
       <div class="setbar">
-        <!-- <div v-if='editType==="element"'>
-          <DForm type='node' :setting='editNode' @update='updateNode'/>
-          <DForm :type='editChart.type' :setting='editChart' @update='updateChart'/>
-        </div> -->
-        <div v-if='editType==="databoard"'>
-          <DForm type='databoard' :setting='databoard' @update='updateDataboard'/>
+        <div v-if='editType===ELEMENT_NODE'>
+          <!--<DForm type='node' :setting='editNode' @update='updateNode' key='node'/>-->
+          <DForm :type='editChart.type' :setting='editChart' @update='updateChart' key='chart'/>
+        </div>
+        <div v-if='editType===ELEMENT_SCREEN'>
+          <DForm type='databoard' :setting='databoard' @update='updateDataboard' key='databoard'/>
+        </div>
+        <div v-if='editType === ELEMENT_MULTI'>
+          <button
+            v-for="(btn,index) in  aglinList"
+            :key="index"
+            style="float:left"
+            @click="nodeAlign(btn.type)"
+          >{{btn.name}}</button>
+          <button 
+            style="float:left" 
+            v-if="multiple.length>=2" 
+            @click="$refs.stage.nodeAlign('Hline')"
+          >水平联排</button>
+          <button 
+            style="float:left" 
+            v-if="multiple.length>=2"
+            @click="$refs.stage.nodeAlign('Vline')"
+          >垂直联排</button>
+          <button
+            style="float:left"
+            v-if="multiple.length>=3"
+            @click="$refs.stage.multipleNodesAlign('VerticalAverage')"
+          >垂直均分</button>
+          <button
+            style="float:left"
+            v-if="multiple.length>=3"
+            @click="$refs.stage.multipleNodesAlign('HorizontalAverage')"
+          >水平均分</button>
         </div>
       </div>
       <div class="leftbar">
@@ -46,7 +74,8 @@
         <Stage 
           @nodelistChange="nodechange" 
           @zoomChange="zoomChange" 
-          @nodeClick='nodeClick' 
+          @nodeClick='selectOneNode'
+          @selectNodes='selectNodes' 
           ref="stage" 
         ></Stage>
         <ZoomSetter :zoomSize="zoom" @changeSize="changeSize" />
@@ -71,7 +100,7 @@ import { getuuid } from '@/utils/index'
 import DForm from '../common/dynamicForm/dynamicForm.vue'
 
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import { ELEMENT_SCREEN,ELEMENT_NODE } from "@/store/constants"
+import { ELEMENT_SCREEN,ELEMENT_NODE,ELEMENT_MULTI } from "@/store/constants"
 
 export default {
   components: {
@@ -89,9 +118,20 @@ export default {
   },
   data() {
     return {
-      maintit: '春风隧道(V1.0)',
+      ELEMENT_SCREEN,
+      ELEMENT_NODE,
+      ELEMENT_MULTI,
+      aglinList: [
+        { type: 'top', name: '顶对齐' },
+        { type: 'right', name: '右对齐' },
+        { type: 'bottom', name: '底对齐' },
+        { type: 'left', name: '左对齐' },
+        { type: 'HCenter', name: '垂直居中' },
+        { type: 'VCenter', name: '水平居中' }
+      ],
+      maintit: '新建大屏',
+      zoom:0.5,
       showMmore: true,
-      zoom: 0.5,
       treenode: [],
       toptools: [
         {
@@ -340,7 +380,7 @@ export default {
               h:40,
               version: 1,
               text:'自定义标题',
-              fontSize:12, //临时代码
+              fontSize:20, //临时代码
               id: '4-1'
             },
             // {
@@ -417,11 +457,17 @@ export default {
       databoard:state => state.databoard,
       editNode:state => state.editNode,
       editChart:state => state.editChart,
-      editType:state => state.editType
+      editType:state => state.editType,
+
     }),
     ...mapGetters ('databoard',[
       'isEditing'
-    ])
+    ]),
+    multiple(){
+      if(this.$refs.stage){
+        return this.$refs.stage.multiple
+      }
+    }
     
   },
 
@@ -438,23 +484,34 @@ export default {
       'updateDataboard',
       'queryDataboard'
     ]),
+    multipleNodesAlign(type) {
+      this.$refs.stage.domCavase.multipleNodesAlign(type)
+    },
+    nodeAlign(type) {
+      this.$refs.stage.domCavase.nodesAlign(type)
+    },
     updateCanvas(newsetting){
       console.log("update canvas",newsetting)
     },
     updateNode(newsetting) {
       console.log("update node",newsetting)
     },
-    nodeClick(nodes) {
+    selectOneNode(nodes) {
       const length = nodes.length;
       if(length === 1){
         this.setEditType(ELEMENT_NODE)
         this.setEditNode(nodes[0])
         this.setEditChart(nodes[0].chart)
-      }else if(length === 2){
-        this.setEditType(ELEMENT_ALIGN)
-      }else if( 2 < length){
+      }
+    },
+    selectNodes(nodes){
+      const length = nodes.length;
+      if( 2 <= length){
         this.setEditType(ELEMENT_MULTI)
       }
+    },
+    getEditType(){
+
     },
     changeSize(val) {
       this.$refs.stage.setZoom(val)
@@ -566,7 +623,19 @@ export default {
 </script>
 <style lang='less' scoped>
 @import '../../assets/styles/base.less';
-
+button {
+  border: 1px white solid;
+  font: 12px/1 '微软雅黑';
+  padding: 5px;
+  border-radius: 4px;
+  margin-right: 2px;
+  cursor: pointer;
+  margin:10px 0 0 10px;
+  &:hover {
+    background: darkgray;
+    color: #ffffff;
+  }
+}
 .edit-page {
   width: 100%;
   height: 100%;
@@ -621,10 +690,11 @@ export default {
     }
     .setbar {
       position: absolute;
-      width: 2rem;
+      width: 3rem;
       background: @bg_Data_left;
       right: 0;
       height: 100%;
+      padding:.2rem;
       z-index: 999999;
     }
   }

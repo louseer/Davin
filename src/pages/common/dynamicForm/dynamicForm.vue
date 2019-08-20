@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <div class='dynamic-form'>
-    <el-form label-width="1rem" v-if='form' >
+    <el-form label-width="0.8rem" v-if='form' >
       <form-item :options='form.options'></form-item>
     </el-form>
   </div> 

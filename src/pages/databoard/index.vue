@@ -22,7 +22,7 @@
 
       <div style="clear:both;padding:10px">
         <div style="margin:0 auto; width:100%">
-          <button
+         <button
             v-for="(btn,index) in  aglinList"
             :key="index"
             style="float:left"
@@ -85,14 +85,9 @@ import Dcanvas from './dcanvas/dcanvas'
 import Cav from './canvas.vue'
 import Node from './layer-node.vue'
 import Contextmenu from './contextmenu.vue'
-import { mapMutations } from 'vuex'
+import { mapMutations } from 'vuex';
+import { ELEMENT_SCREEN,ELEMENT_MULTI,ELEMENT_NODE } from "@/store/constants.js"
 import Ruler from './ruler.vue'
-import {
-  ELEMENT_SCREEN,
-  ELEMENT_MULTI,
-  ELEMENT_ALIGN,
-  ELEMENT_NODE
-} from '@/store/constants.js'
 
 export default {
   components: {
@@ -308,7 +303,8 @@ export default {
     })
     handler.selectNodes(e => {
       this.rightClick = false
-      console.log('##@@@sdfsdfsfdsdf')
+      this.$emit('selectNodes', this.domCavase.selectNodes)
+      console.log('##@@@sdfsdfsfdsdf', this.domCavase.selectNodes)
       //this.$emit('nodelistChange', this.domCavase.nodeList)
     })
     handler.onmousewheelHandler(e => {
