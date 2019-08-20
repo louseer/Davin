@@ -491,8 +491,8 @@ export default {
       this.$refs.stage.upLayer()
     },
     layDown() {
-      console.log('下一层。。。方法未写')
-      this.$refs.stage.deleteNode()
+      console.log('下一层')
+      this.$refs.stage.downLayer()
     },
     layTop() {
       console.log('顶层')

@@ -1,5 +1,5 @@
 import Dcanvas from './dcanvas'
-import { type } from 'os'
+
 import { getuuid } from '@/utils/index'
 export default class Stage {
   constructor(id) {
@@ -13,7 +13,7 @@ export default class Stage {
     this.eventCrash = false
     this.mode = 'select'
     this.canvas = {}
-    this._offset = 30
+    this._offset = 50
     this.grid = 10
     this.bassIndex = 9000
     this.maxZoom = 1
@@ -430,7 +430,36 @@ export default class Stage {
       }
     })
   }
-  LayerToDown(nodes) {}
+  LayerToDown() {
+
+    const selectPnodes = this.selectNodes.filter(n => n.pid === null)
+    selectPnodes.forEach(n => {
+      const nextPnode = this.nodeList
+        .sort((a, b) => b.zindex - a.zindex)
+        .find(node => node.zindex < n.zindex && node.pid === null)
+
+      if (nextPnode !== undefined) {
+        let pindex = nextPnode.zindex
+        n.zindex = pindex
+        if (n.cid) {
+          this.nodeList
+            .filter(cnode => n.cid.includes(cnode.id))
+            .forEach(cnode => {
+              cnode.zindex = pindex - 1
+              pindex--
+            })
+        }
+        n.cid ? (nextPnode.zindex += n.cid.length + 1) : (nextPnode.zindex += 1)
+        if (nextPnode.cid) {
+          this.nodeList
+            .filter(cnode => nextPnode.cid.includes(cnode.id))
+            .forEach(cn => {
+              n.cid ? (cn.zindex += n.cid.length + 1) : (cn.zindex += 1)
+            })
+        }
+      }
+    })
+  }
   LayerToTop() {
     let bindex = 9000
     const arry = this.nodeList

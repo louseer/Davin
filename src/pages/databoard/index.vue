@@ -7,17 +7,17 @@
       :rightMenu="rightMenu"
       @hide="contextmenuHide"
     />
-    <!-- <div class="ex">
+    <div class="ex">
       <input type="text" v-model="domCavase.canvas.width" placeholder="请输入宽度" />
       <input type="text" v-model="domCavase.canvas.height" />
       <input type="text" v-model="domCavase.zoomSize" placeholder="请输入放大值" />
-      <input type="text"  placeholder="请输入透明度" />
-    <input type="select" placeholder="请输入背景色" />
-    <select>
-      <option value="black">黑色</option>
-      <option value="red">红色</option>
-      <option value="yellow">黄色</option>
-      <option value="blue">蓝色</option>
+      <input type="text" placeholder="请输入透明度" />
+      <input type="select" placeholder="请输入背景色" />
+      <select>
+        <option value="black">黑色</option>
+        <option value="red">红色</option>
+        <option value="yellow">黄色</option>
+        <option value="blue">蓝色</option>
       </select>
 
       <div style="clear:both;padding:10px">
@@ -37,10 +37,9 @@
           <button @click="selectAll">全选</button>
           <button @click="lockNode">锁定</button>
           <button @click="hideNode">隐藏</button>
-          
-        <button @click="downLayer">下移一层</button>
-        
-         
+
+          <button @click="downLayer">下移一层</button>
+
           <button @click="upLayer">上移一层</button>
           <button @click="toBottomLayer">置于底层</button>
           <button @click="toTopLayer">置于顶层</button>
@@ -58,8 +57,9 @@
           <button style="float:left" v-if="multiple.length>=2" @click="nodeAlign('Vline')">垂直联排</button>
         </div>
       </div>
-    </div> -->
+    </div>
     <div class="stage" ref="stage">
+      <ruler :zoomSize="domCavase.zoomSize" />
       <Cav :canvasConfig="domCavase.canvas">
         <Node
           class="layernode"
@@ -85,14 +85,21 @@ import Dcanvas from './dcanvas/dcanvas'
 import Cav from './canvas.vue'
 import Node from './layer-node.vue'
 import Contextmenu from './contextmenu.vue'
-import { mapMutations } from 'vuex';
-import { ELEMENT_SCREEN,ELEMENT_MULTI,ELEMENT_ALIGN,ELEMENT_NODE } from "@/store/constants.js"
+import { mapMutations } from 'vuex'
+import Ruler from './ruler.vue'
+import {
+  ELEMENT_SCREEN,
+  ELEMENT_MULTI,
+  ELEMENT_ALIGN,
+  ELEMENT_NODE
+} from '@/store/constants.js'
 
 export default {
   components: {
     Node,
     Cav,
-    Contextmenu
+    Contextmenu,
+    Ruler
   },
   data() {
     return {
@@ -106,6 +113,7 @@ export default {
       dy: 0,
       rightMenuPosition: {},
       dnode: '',
+      ctrlDown: false,
       nodelist: [],
       aglinList: [
         { type: 'top', name: '顶对齐' },
@@ -274,15 +282,26 @@ export default {
       return this.domCavase.selectNodes.filter(n => n.pid === null)
     }
   },
-  // watch: {
-  //   domCavase: {
-  //     handler: function(val) {
-  //     window.localStorage.setItem('nodelist',JSON.stringify(this.domCavase.nodeList))
-  //     },
-  //     deep: true
-  //   }
-  // },
+
+
   mounted() {
+    let _this = this
+    window.document.onkeydown = function(e) {
+      const keynum = window.event ? e.keyCode : e.which
+
+      if (keynum === 17) {
+        if (this.ctrlDown) return
+        _this.ctrlDown = true
+        console.log(_this.ctrlDown)
+        return
+      }
+    }
+    window.document.onkeyup = function(e) {
+      const keynum = window.event ? e.keyCode : e.which
+      _this.ctrlDown = false
+      console.log(_this.ctrlDown)
+    }
+
     const handler = this.domCavase.Handler(this.$refs.stage)
     handler.clickHandler(e => {
       this.setEditType(ELEMENT_SCREEN)
@@ -302,7 +321,7 @@ export default {
         this.setZoom(startZoom)
       }
     })
-  
+
     handler.rightclickHandler((e, x, y) => {
       const obj = {
         x: x,
@@ -330,14 +349,13 @@ export default {
     })
   },
   methods: {
-     ...mapMutations('databoard',[
-      "setDataboard",
-      "setEditType"
-    ]),
-    getNodeLlist(callback){
-      callback && typeof callback === 'function' && callback(this.domCavase.nodeList)
+    ...mapMutations('databoard', ['setDataboard', 'setEditType']),
+    getNodeLlist(callback) {
+      callback &&
+        typeof callback === 'function' &&
+        callback(this.domCavase.nodeList)
     },
-    getCanvasConfig(){
+    getCanvasConfig() {
       console.log(this.domCavase.canvas)
       return this.domCavase.canvas
     },
@@ -423,6 +441,10 @@ export default {
       this.dnode = JSON.parse(JSON.stringify(node))
       console.log(this.dnode.w, '')
     },
+    downLayer(){
+      this.domCavase.LayerToDown()
+      this.$emit('nodelistChange', this.domCavase.nodeList)
+    },
     upLayer() {
       this.domCavase.LayerToUp()
       this.$emit('nodelistChange', this.domCavase.nodeList)
@@ -464,25 +486,45 @@ export default {
     nodeDrop(node) {
       this.domCavase.refreshNodes()
     },
-    nodeClick(){
+    nodeClick() {
       this.$emit('nodeClick', this.domCavase.selectNodes)
     },
     nodeMousedown(node) {
-      this.rightClick=false
+      this.rightClick = false
       if (this.domCavase.selectNodes.map(n => n.id).includes(node.id)) return
+      console.log('@@@@@@@@@@@@@@@', this.ctrlDown)
       if (node.type === 'element') {
-        this.domCavase.selectNodes = [node]
-        this.domCavase.nodeList.forEach(n => {
-          n.id === node.id ? (n.active = true) : (n.active = false)
-        })
+        if (this.ctrlDown) {
+          this.domCavase.selectNodes.push(node)
+          this.domCavase.nodeList.forEach(n => {
+            n.id === node.id && (n.active = true)
+          })
+        } else {
+          this.domCavase.selectNodes = [node]
+          this.domCavase.nodeList.forEach(n => {
+            n.id === node.id ? (n.active = true) : (n.active = false)
+          })
+        }
       }
       if (node.type === 'group') {
-        this.domCavase.selectNodes = this.domCavase.nodeList.filter(
-          n => node.cid.includes(n.id) || node.id === n.id
-        )
-        this.domCavase.nodeList.forEach(n => {
-          n.id === node.id ? (n.active = true) : (n.active = false)
-        })
+        if (this.ctrlDown) {
+          this.domCavase.selectNodes.push(...
+            this.domCavase.nodeList.filter(
+              n => node.cid.includes(n.id) || node.id === n.id
+            )
+          )
+          this.domCavase.nodeList.forEach(n => {
+            n.id === node.id && (n.active = true) 
+          })
+          
+        } else {
+          this.domCavase.selectNodes = this.domCavase.nodeList.filter(
+            n => node.cid.includes(n.id) || node.id === n.id
+          )
+          this.domCavase.nodeList.forEach(n => {
+            n.id === node.id ? (n.active = true) : (n.active = false)
+          })
+        }
       }
     },
     resizeNode(e, node) {
@@ -571,10 +613,12 @@ export default {
     this.setDataboard(this.domCavase.canvas)
     console.log('@@@@@@@@', this.domCavase.canvas)
     this.nodelist = this.domCavase.nodeList
-    if(JSON.parse(window.localStorage.getItem('saveNode'))){
-      JSON.parse(window.localStorage.getItem('saveNode')).sort((a,b)=>a.zindex - b.zindex).forEach(n=>{
-        this.addNode(n)
-      })
+    if (JSON.parse(window.localStorage.getItem('saveNode'))) {
+      JSON.parse(window.localStorage.getItem('saveNode'))
+        .sort((a, b) => a.zindex - b.zindex)
+        .forEach(n => {
+          this.addNode(n)
+        })
     }
   }
 }
