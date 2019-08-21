@@ -17,15 +17,14 @@ const options = {
   "w":{
     "name":"宽度",
     "type":OPTIONTYPE.INPUTNUMBER,
-    "defaultVal":50,
-    "min":50,
-    "max":50
+    "defaultVal":150,
+    "min":0
   },
   "h":{
     "name":"高度",
     "type":OPTIONTYPE.INPUTNUMBER,
     "defaultVal":50,
-    "min":50,
+    "min":0
   }
 }
 export default {options}

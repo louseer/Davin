@@ -1,8 +1,13 @@
 <!--  -->
 <template>
   <div>
-    <template v-for='(item,key) in items'>
-      <el-form-item :label="item.name" v-if="item.type !== itemType.NOVIEW && item.type !== itemType.GROUP && item.type !== itemType.LIST" v-show='!item.hide'>
+    <template v-for='(item,key) in items' >
+      <el-form-item 
+      :label="item.name" 
+      v-if="item.type !== itemType.NOVIEW && item.type !== itemType.GROUP && item.type !== itemType.LIST" 
+      v-show='!item.hide'
+      
+      >
         <el-input 
           v-model="item.value" 
           v-if="item.type === itemType.INPUT"
@@ -39,6 +44,7 @@
           :min="item.min" 
           :max="item.max"
           size="mini"
+          :key='key'
         ></el-input-number>
         <el-radio-group
           v-if="item.type === itemType.RADIO" 
