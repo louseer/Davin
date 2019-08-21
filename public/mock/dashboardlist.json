@@ -1,0 +1,31 @@
+{
+	"status": 0,
+	"msg": "",
+	"data": [{
+		"icon": "fa fa-apple",
+		"password": "",
+		"config": {
+			"backgroundType": 0,
+			"backgroundUrl": "/static/img-templet/background-4.png",
+			"theme": "blue",
+			"grid": 5,
+			"backgroundBlur": 0,
+			"backgroundOpacity": 10,
+			"backgroundColor": ""
+		},
+		"hash": "d_1013e-77p4jb7v-k49qg1",
+		"name": "全球销量",
+		"remark": "",
+		"width": "1940",
+		"height": "1080",
+		"token": "b742652249b097d5d93abd44029237fb",
+		"orderIndex": 1,
+		"isTemplet": false,
+		"imgUrl": "",
+		"thumbImgUrl": "",
+		"authType": 1,
+		"scaleType": 2,
+		"isPublic": false,
+		"isDev": false
+	}]
+}

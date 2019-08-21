@@ -1,0 +1,212 @@
+{
+  "status": 0,
+  "msg": "",
+  "data": {
+    "id":"adcsfer8ewq56r54415dsa",
+    "name":"我的第一张表",
+    "brief":"",
+    "isPublic":false,
+    "autoRefresh":false,
+    "refreshInterval":30,
+    "them":0,
+    "background":{
+      "imgSouce":0,
+      "systemImg":"",
+      "uploadImg":"",
+      "imgRepeat":0,
+      "imgBlur":5
+    },
+    "layout":[
+      {
+        "x":0,"y":0,"w":5,"h":10,"i":"0",
+        "chart":{
+          "name":"极坐标双数值轴",
+          "type":"polar",
+          "id":"c_sdewqag34wqr5t3gt6",
+          "data":{
+            "type":"1",
+            "apiUrl":"/sampledata/polar.json",
+            "dataSource":"",
+            "staticPath":"",
+            "fieldMap":{
+              "x":"x",
+              "y":"y",
+              "s":"s"
+            }
+          },
+          "options":{
+            "legend": {
+              "data": ["line"]
+            },
+            "tooltip": {
+              "trigger": "axis",
+              "axisPointer": {
+                "type": "cross"
+              }
+            },
+            "angleAxis": {
+              "type": "value",
+              "startAngle": 0
+            },
+            "radiusAxis": {
+              "min": 0
+            },
+            "series": [{
+              "coordinateSystem": "polar",
+              "name": "line",
+              "type": "line",
+              "showSymbol": false
+            }],
+            "animationDuration": 2000
+          }
+        }
+      },
+      {"x":2,"y":0,"w":2,"h":4,"i":"1",
+        "chart":{
+          "name":"基本折线图",
+          "type":"line",
+          "id":"c_sde56rdfrrwqret3gt",
+          "data":{
+            "type":"1",
+            "apiUrl":"/sampledata/line.json",
+            "fieldMap":{
+              "x":"x",
+              "y":"y",
+              "s":"s"
+            },
+            "dataSource":"",
+            "staticPath":""
+          },
+          "options":{
+            "xAxis": {
+                "type": "category",
+                "data": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+            },
+            "yAxis": {
+                "type": "value"
+            },
+            "series": [{
+                "data": [820, 932, 901, 934, 1290, 1330, 1320],
+                "type": "line"
+            }]
+          }
+        }
+      },
+      {"x":4,"y":0,"w":2,"h":5,"i":"2",
+        "chart":{
+          "name":"基本饼状图",
+          "type":"pie",
+          "id":"c_sde56rdrdfrqrdet3gt",
+          "data":{
+            "type":"1",
+            "apiUrl":"/sampledata/pie.json",
+            "fieldMap":{
+              "x":"x",
+              "y":"y",
+              "s":"s"
+            },
+            "dataSource":"",
+            "staticPath":""
+          }
+        }
+      },
+      {"x":6,"y":0,"w":2,"h":3,"i":"3",
+        "chart":{
+          "name":"基本柱状图",
+          "type":"bar",
+          "id":"c_sde5sdfqrerdddet3gt",
+          "data":{
+            "type":"1",
+            "apiUrl":"/sampledata/bar.json",
+            "fieldMap":{
+              "x":"x",
+              "y":"y",
+              "s":"s"
+            },
+            "dataSource":"",
+            "staticPath":""
+          }
+        }},
+      {"x":8,"y":0,"w":2,"h":3,"i":"4",
+        "chart":{
+          "name":"横向柱状图",
+          "type":"horizontalbar",
+          "id":"c_sde5sdf45rsdredet3gt",
+          "data":{
+            "type":"1",
+            "apiUrl":"/sampledata/horizontalbar.json",
+            "fieldMap":{
+              "x":"x",
+              "y":"y",
+              "s":"s"
+            },
+            "dataSource":"",
+            "staticPath":""
+          }
+        }},
+      {"x":10,"y":0,"w":2,"h":3,"i":"5",
+        "chart":{
+          "name":"环形饼状图",
+          "type":"doughnut",
+          "id":"c_sde56rdrdfrqrdet3gt",
+          "data":{
+            "type":"1",
+            "apiUrl":"/sampledata/doughnut.json",
+            "fieldMap":{
+              "x":"x",
+              "y":"y",
+              "s":"s"
+            },
+            "dataSource":"",
+            "staticPath":""
+          }
+        }},
+      {"x":0,"y":5,"w":2,"h":5,"i":"6",
+        "chart":{
+          "name":"双Y轴折线图",
+          "type":"line2y",
+          "id":"c_sde5ddfsrrq65rddet3gt",
+          "data":{
+            "type":"1",
+            "apiUrl":"/sampledata/line2y.json",
+            "fieldMap":{
+              "x":"x",
+              "y":"y",
+              "s":"s"
+            },
+            "dataSource":"",
+            "staticPath":""
+          }
+        }},
+      {"x":2,"y":5,"w":2,"h":5,"i":"7",
+      "chart":{
+        "name":"线柱混搭图",
+        "type":"linebar",
+        "id":"c_sde5ddfsrrq65rddet3gt",
+        "data":{
+          "type":"1",
+          "apiUrl":"/sampledata/linebar.json",
+          "fieldMap":{
+            "x":"x",
+            "y":"y",
+            "s":"s"
+          },
+          "dataSource":"",
+          "staticPath":""
+        }}
+      },
+      {"x":4,"y":5,"w":2,"h":5,"i":"8"},
+      {"x":6,"y":3,"w":2,"h":4,"i":"9"},
+      {"x":8,"y":4,"w":2,"h":4,"i":"10"},
+      {"x":10,"y":4,"w":2,"h":4,"i":"11"},
+      {"x":0,"y":10,"w":2,"h":5,"i":"12"},
+      {"x":2,"y":10,"w":2,"h":5,"i":"13"},
+      {"x":4,"y":8,"w":2,"h":4,"i":"14"},
+      {"x":6,"y":8,"w":2,"h":4,"i":"15"},
+      {"x":8,"y":10,"w":2,"h":5,"i":"16"},
+      {"x":10,"y":4,"w":2,"h":2,"i":"17"},
+      {"x":0,"y":9,"w":2,"h":3,"i":"18"},
+      {"x":2,"y":6,"w":2,"h":2,"i":"19"}
+    ]
+  }
+}

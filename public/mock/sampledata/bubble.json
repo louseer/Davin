@@ -1,0 +1,2028 @@
+{
+  "status": 0,
+  "msg": "",
+  "data": [ 
+      {
+          "name": "visualMap",
+          "value": 22199,
+          "cat": "v",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "continuous",
+          "value": 10288,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "contoller",
+          "value": 620,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "series",
+          "value": 274470,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "gauge",
+          "value": 12311,
+          "cat": "g",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "detail",
+          "value": 1206,
+          "cat": "d",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "piecewise",
+          "value": 4885,
+          "cat": "p",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "textStyle",
+          "value": 32294,
+          "cat": "t",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "markPoint",
+          "value": 18574,
+          "cat": "m",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "pie",
+          "value": 38929,
+          "cat": "p",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "roseType",
+          "value": 969,
+          "cat": "r",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "label",
+          "value": 37517,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "emphasis",
+          "value": 12053,
+          "cat": "e",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "yAxis",
+          "value": 57299,
+          "cat": "y",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "name",
+          "value": 15418,
+          "cat": "n",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "type",
+          "value": 22905,
+          "cat": "t",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "gridIndex",
+          "value": 5146,
+          "cat": "g",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "normal",
+          "value": 49487,
+          "cat": "n",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "itemStyle",
+          "value": 33837,
+          "cat": "i",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "min",
+          "value": 4500,
+          "cat": "m",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "silent",
+          "value": 5744,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "animation",
+          "value": 4840,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "offsetCenter",
+          "value": 232,
+          "cat": "o",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "inverse",
+          "value": 3706,
+          "cat": "i",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "borderColor",
+          "value": 4812,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "markLine",
+          "value": 16578,
+          "cat": "m",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "line",
+          "value": 76970,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "radiusAxis",
+          "value": 6704,
+          "cat": "r",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "radar",
+          "value": 15964,
+          "cat": "r",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "data",
+          "value": 60679,
+          "cat": "d",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "dataZoom",
+          "value": 24347,
+          "cat": "d",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "tooltip",
+          "value": 43420,
+          "cat": "t",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "toolbox",
+          "value": 25222,
+          "cat": "t",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "geo",
+          "value": 16904,
+          "cat": "g",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "parallelAxis",
+          "value": 4029,
+          "cat": "p",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "parallel",
+          "value": 5319,
+          "cat": "p",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "max",
+          "value": 3393,
+          "cat": "m",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "bar",
+          "value": 43066,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "heatmap",
+          "value": 3110,
+          "cat": "h",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "map",
+          "value": 20285,
+          "cat": "m",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "animationDuration",
+          "value": 3425,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "animationDelay",
+          "value": 2431,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "splitNumber",
+          "value": 5175,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "axisLine",
+          "value": 12738,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "lineStyle",
+          "value": 19601,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "splitLine",
+          "value": 7133,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "axisTick",
+          "value": 8831,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "axisLabel",
+          "value": 17516,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "pointer",
+          "value": 590,
+          "cat": "p",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "color",
+          "value": 23426,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "title",
+          "value": 38497,
+          "cat": "t",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "formatter",
+          "value": 15214,
+          "cat": "f",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "slider",
+          "value": 7236,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "legend",
+          "value": 66514,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "grid",
+          "value": 28516,
+          "cat": "g",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "smooth",
+          "value": 1295,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "smoothMonotone",
+          "value": 696,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "sampling",
+          "value": 757,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "feature",
+          "value": 12815,
+          "cat": "f",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "saveAsImage",
+          "value": 2616,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "polar",
+          "value": 6279,
+          "cat": "p",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "calculable",
+          "value": 879,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "backgroundColor",
+          "value": 9419,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "excludeComponents",
+          "value": 130,
+          "cat": "e",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "show",
+          "value": 20620,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "text",
+          "value": 2592,
+          "cat": "t",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "icon",
+          "value": 2782,
+          "cat": "i",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "dimension",
+          "value": 478,
+          "cat": "d",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "inRange",
+          "value": 1060,
+          "cat": "i",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "animationEasing",
+          "value": 2983,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "animationDurationUpdate",
+          "value": 2259,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "animationDelayUpdate",
+          "value": 2236,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "animationEasingUpdate",
+          "value": 2213,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "xAxis",
+          "value": 89459,
+          "cat": "x",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "angleAxis",
+          "value": 5469,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "showTitle",
+          "value": 484,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "dataView",
+          "value": 2754,
+          "cat": "d",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "restore",
+          "value": 932,
+          "cat": "r",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "timeline",
+          "value": 10104,
+          "cat": "t",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "range",
+          "value": 477,
+          "cat": "r",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "value",
+          "value": 5732,
+          "cat": "v",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "precision",
+          "value": 878,
+          "cat": "p",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "target",
+          "value": 1433,
+          "cat": "t",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "zlevel",
+          "value": 5361,
+          "cat": "z",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "symbol",
+          "value": 8718,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "interval",
+          "value": 7964,
+          "cat": "i",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "symbolSize",
+          "value": 5300,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "showSymbol",
+          "value": 1247,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "inside",
+          "value": 8913,
+          "cat": "i",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "xAxisIndex",
+          "value": 3843,
+          "cat": "x",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "orient",
+          "value": 4205,
+          "cat": "o",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "boundaryGap",
+          "value": 5073,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "nameGap",
+          "value": 4896,
+          "cat": "n",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "zoomLock",
+          "value": 571,
+          "cat": "z",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "hoverAnimation",
+          "value": 2307,
+          "cat": "h",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "legendHoverLink",
+          "value": 3553,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "stack",
+          "value": 2907,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "throttle",
+          "value": 466,
+          "cat": "t",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "connectNulls",
+          "value": 897,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "clipOverflow",
+          "value": 826,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "startValue",
+          "value": 551,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "minInterval",
+          "value": 3292,
+          "cat": "m",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "opacity",
+          "value": 3097,
+          "cat": "o",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "splitArea",
+          "value": 4775,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "filterMode",
+          "value": 635,
+          "cat": "f",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "end",
+          "value": 409,
+          "cat": "e",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "left",
+          "value": 6475,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "funnel",
+          "value": 2238,
+          "cat": "f",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "lines",
+          "value": 6403,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "baseline",
+          "value": 431,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "align",
+          "value": 2608,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "coord",
+          "value": 897,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "nameTextStyle",
+          "value": 7477,
+          "cat": "n",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "width",
+          "value": 4338,
+          "cat": "w",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "shadowBlur",
+          "value": 4493,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "effect",
+          "value": 929,
+          "cat": "e",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "period",
+          "value": 225,
+          "cat": "p",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "areaColor",
+          "value": 631,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "borderWidth",
+          "value": 3654,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "nameLocation",
+          "value": 4418,
+          "cat": "n",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "position",
+          "value": 11723,
+          "cat": "p",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "containLabel",
+          "value": 1701,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "scatter",
+          "value": 10718,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "areaStyle",
+          "value": 5310,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "scale",
+          "value": 3859,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "pieces",
+          "value": 414,
+          "cat": "p",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "categories",
+          "value": 1000,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "selectedMode",
+          "value": 3825,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "itemSymbol",
+          "value": 273,
+          "cat": "i",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "effectScatter",
+          "value": 7147,
+          "cat": "e",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "fontStyle",
+          "value": 3376,
+          "cat": "f",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "fontSize",
+          "value": 3386,
+          "cat": "f",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "margin",
+          "value": 1034,
+          "cat": "m",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "iconStyle",
+          "value": 2257,
+          "cat": "i",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "link",
+          "value": 1366,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "axisPointer",
+          "value": 5245,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "showDelay",
+          "value": 896,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "graph",
+          "value": 22194,
+          "cat": "g",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "subtext",
+          "value": 1442,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "selected",
+          "value": 2881,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "barCategoryGap",
+          "value": 827,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "barGap",
+          "value": 1094,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "barWidth",
+          "value": 1521,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "coordinateSystem",
+          "value": 3622,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "barBorderRadius",
+          "value": 284,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "z",
+          "value": 4014,
+          "cat": "z",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "polarIndex",
+          "value": 1456,
+          "cat": "p",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "shadowOffsetX",
+          "value": 3046,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "shadowColor",
+          "value": 3771,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "shadowOffsetY",
+          "value": 2475,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "height",
+          "value": 1988,
+          "cat": "h",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "barMinHeight",
+          "value": 575,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "lang",
+          "value": 131,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "symbolRotate",
+          "value": 2752,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "symbolOffset",
+          "value": 2549,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "showAllSymbol",
+          "value": 942,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "transitionDuration",
+          "value": 993,
+          "cat": "t",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "bottom",
+          "value": 3724,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "fillerColor",
+          "value": 229,
+          "cat": "f",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "nameMap",
+          "value": 1249,
+          "cat": "n",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "barMaxWidth",
+          "value": 747,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "radius",
+          "value": 2103,
+          "cat": "r",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "center",
+          "value": 2425,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "magicType",
+          "value": 3276,
+          "cat": "m",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "labelPrecision",
+          "value": 248,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "option",
+          "value": 654,
+          "cat": "o",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "seriesIndex",
+          "value": 935,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "controlPosition",
+          "value": 121,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "itemGap",
+          "value": 3188,
+          "cat": "i",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "padding",
+          "value": 3481,
+          "cat": "p",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "shadowStyle",
+          "value": 347,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "boxplot",
+          "value": 1394,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "labelFormatter",
+          "value": 264,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "realtime",
+          "value": 631,
+          "cat": "r",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "dataBackgroundColor",
+          "value": 239,
+          "cat": "d",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "showDetail",
+          "value": 247,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "showDataShadow",
+          "value": 217,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "x",
+          "value": 684,
+          "cat": "x",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "valueDim",
+          "value": 499,
+          "cat": "v",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "onZero",
+          "value": 931,
+          "cat": "o",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "right",
+          "value": 3255,
+          "cat": "r",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "clockwise",
+          "value": 1035,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "itemWidth",
+          "value": 1732,
+          "cat": "i",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "trigger",
+          "value": 3840,
+          "cat": "t",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "axis",
+          "value": 379,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "selectedOffset",
+          "value": 670,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "startAngle",
+          "value": 1293,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "minAngle",
+          "value": 590,
+          "cat": "m",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "top",
+          "value": 4637,
+          "cat": "t",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "avoidLabelOverlap",
+          "value": 870,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "labelLine",
+          "value": 3785,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "sankey",
+          "value": 2933,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "endAngle",
+          "value": 213,
+          "cat": "e",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "start",
+          "value": 779,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "roam",
+          "value": 1738,
+          "cat": "r",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "fontWeight",
+          "value": 2828,
+          "cat": "f",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "fontFamily",
+          "value": 2490,
+          "cat": "f",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "subtextStyle",
+          "value": 2066,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "indicator",
+          "value": 853,
+          "cat": "i",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "sublink",
+          "value": 708,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "zoom",
+          "value": 1038,
+          "cat": "z",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "subtarget",
+          "value": 659,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "length",
+          "value": 1060,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "itemSize",
+          "value": 505,
+          "cat": "i",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "controlStyle",
+          "value": 452,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "yAxisIndex",
+          "value": 2529,
+          "cat": "y",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "edgeLabel",
+          "value": 1188,
+          "cat": "e",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "radiusAxisIndex",
+          "value": 354,
+          "cat": "r",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "scaleLimit",
+          "value": 1313,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "geoIndex",
+          "value": 535,
+          "cat": "g",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "regions",
+          "value": 1892,
+          "cat": "r",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "itemHeight",
+          "value": 1290,
+          "cat": "i",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "nodes",
+          "value": 644,
+          "cat": "n",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "candlestick",
+          "value": 3166,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "crossStyle",
+          "value": 466,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "edges",
+          "value": 369,
+          "cat": "e",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "links",
+          "value": 3277,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "layout",
+          "value": 846,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "barBorderColor",
+          "value": 721,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "barBorderWidth",
+          "value": 498,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "treemap",
+          "value": 3865,
+          "cat": "t",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "y",
+          "value": 367,
+          "cat": "y",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "valueIndex",
+          "value": 704,
+          "cat": "v",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "showLegendSymbol",
+          "value": 482,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "mapValueCalculation",
+          "value": 492,
+          "cat": "m",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "optionToContent",
+          "value": 264,
+          "cat": "o",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "handleColor",
+          "value": 187,
+          "cat": "h",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "handleSize",
+          "value": 271,
+          "cat": "h",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "showContent",
+          "value": 1853,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "angleAxisIndex",
+          "value": 406,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "endValue",
+          "value": 327,
+          "cat": "e",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "triggerOn",
+          "value": 1720,
+          "cat": "t",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "contentToOption",
+          "value": 169,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "buttonColor",
+          "value": 71,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "rotate",
+          "value": 1144,
+          "cat": "r",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "hoverLink",
+          "value": 335,
+          "cat": "h",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "outOfRange",
+          "value": 491,
+          "cat": "o",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "textareaColor",
+          "value": 58,
+          "cat": "t",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "textareaBorderColor",
+          "value": 58,
+          "cat": "t",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "textColor",
+          "value": 60,
+          "cat": "t",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "buttonTextColor",
+          "value": 66,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "category",
+          "value": 336,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "hideDelay",
+          "value": 786,
+          "cat": "h",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "alwaysShowContent",
+          "value": 1267,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "extraCssText",
+          "value": 901,
+          "cat": "e",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "effectType",
+          "value": 277,
+          "cat": "e",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "force",
+          "value": 1820,
+          "cat": "f",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "rippleEffect",
+          "value": 723,
+          "cat": "r",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "edgeSymbolSize",
+          "value": 329,
+          "cat": "e",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "showEffectOn",
+          "value": 271,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "gravity",
+          "value": 199,
+          "cat": "g",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "edgeLength",
+          "value": 193,
+          "cat": "e",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "layoutAnimation",
+          "value": 152,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "length2",
+          "value": 169,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "enterable",
+          "value": 957,
+          "cat": "e",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "dim",
+          "value": 83,
+          "cat": "d",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "readOnly",
+          "value": 143,
+          "cat": "r",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "levels",
+          "value": 444,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "textGap",
+          "value": 256,
+          "cat": "t",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "pixelRatio",
+          "value": 84,
+          "cat": "p",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "nodeScaleRatio",
+          "value": 232,
+          "cat": "n",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "draggable",
+          "value": 249,
+          "cat": "d",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "brushType",
+          "value": 158,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "radarIndex",
+          "value": 152,
+          "cat": "r",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "large",
+          "value": 182,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "edgeSymbol",
+          "value": 675,
+          "cat": "e",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "largeThreshold",
+          "value": 132,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "leafDepth",
+          "value": 73,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "childrenVisibleMin",
+          "value": 73,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "minSize",
+          "value": 35,
+          "cat": "m",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "maxSize",
+          "value": 35,
+          "cat": "m",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "sort",
+          "value": 90,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "funnelAlign",
+          "value": 61,
+          "cat": "f",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "source",
+          "value": 336,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "nodeClick",
+          "value": 200,
+          "cat": "n",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "curveness",
+          "value": 350,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "areaSelectStyle",
+          "value": 104,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "parallelIndex",
+          "value": 52,
+          "cat": "p",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "initLayout",
+          "value": 359,
+          "cat": "i",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "trailLength",
+          "value": 116,
+          "cat": "t",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "boxWidth",
+          "value": 20,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "back",
+          "value": 53,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "rewind",
+          "value": 110,
+          "cat": "r",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "zoomToNodeRatio",
+          "value": 80,
+          "cat": "z",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "squareRatio",
+          "value": 60,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "parallelAxisDefault",
+          "value": 358,
+          "cat": "p",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "checkpointStyle",
+          "value": 440,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "nodeWidth",
+          "value": 49,
+          "cat": "n",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "color0",
+          "value": 62,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "layoutIterations",
+          "value": 56,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "nodeGap",
+          "value": 54,
+          "cat": "n",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "color(Array",
+          "value": 76,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "<string>)",
+          "value": 76,
+          "cat": "<",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "repulsion",
+          "value": 276,
+          "cat": "r",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "tiled",
+          "value": 105,
+          "cat": "t",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "currentIndex",
+          "value": 145,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "axisType",
+          "value": 227,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "loop",
+          "value": 97,
+          "cat": "l",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "playInterval",
+          "value": 112,
+          "cat": "p",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "borderColor0",
+          "value": 23,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "gap",
+          "value": 43,
+          "cat": "g",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "autoPlay",
+          "value": 123,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "showPlayBtn",
+          "value": 25,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "breadcrumb",
+          "value": 119,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "colorMappingBy",
+          "value": 85,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "id",
+          "value": 18,
+          "cat": "i",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "blurSize",
+          "value": 85,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "minOpacity",
+          "value": 50,
+          "cat": "m",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "maxOpacity",
+          "value": 54,
+          "cat": "m",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "prevIcon",
+          "value": 12,
+          "cat": "p",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "children",
+          "value": 21,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "shape",
+          "value": 98,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "nextIcon",
+          "value": 12,
+          "cat": "n",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "showNextBtn",
+          "value": 17,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "stopIcon",
+          "value": 21,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "visibleMin",
+          "value": 83,
+          "cat": "v",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "visualDimension",
+          "value": 97,
+          "cat": "v",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "colorSaturation",
+          "value": 56,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "colorAlpha",
+          "value": 66,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "emptyItemWidth",
+          "value": 10,
+          "cat": "e",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "inactiveOpacity",
+          "value": 4,
+          "cat": "i",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "activeOpacity",
+          "value": 4,
+          "cat": "a",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "showPrevBtn",
+          "value": 19,
+          "cat": "s",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "playIcon",
+          "value": 26,
+          "cat": "p",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "ellipsis",
+          "value": 19,
+          "cat": "e",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "gapWidth",
+          "value": 19,
+          "cat": "g",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "borderColorSaturation",
+          "value": 10,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "handleIcon",
+          "value": 2,
+          "cat": "h",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "handleStyle",
+          "value": 6,
+          "cat": "h",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "borderType",
+          "value": 1,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "constantSpeed",
+          "value": 1,
+          "cat": "c",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "polyline",
+          "value": 2,
+          "cat": "p",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "blendMode",
+          "value": 1,
+          "cat": "b",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "dataBackground",
+          "value": 1,
+          "cat": "d",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "textAlign",
+          "value": 1,
+          "cat": "t",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "textBaseline",
+          "value": 1,
+          "cat": "t",
+          "url": "www.baidu.com"
+      },
+      {
+          "name": "brush",
+          "value": 3,
+          "cat": "b",
+          "url": "www.baidu.com"
+      }
+  ]
+}

@@ -1,0 +1,51 @@
+<!--  -->
+<template>
+  <div class='decorate' ></div>
+</template>
+
+<script>
+//import {组件名称} from '组件路径';
+
+export default {
+  components: {},
+  inject: ["nodePro"],
+ 
+  data() {
+    return {
+     proWith:{}
+    };
+  },
+  computed: {},
+  watch: {},
+  methods: {
+  
+  },
+  //生命周期 - 创建完成（可以访问当前this实例）
+ created () {
+   //this.proWith=this.nodePro
+  // console.log('tag', this.nodePro)
+  },
+  //生命周期 - 挂载完成（可以访问DOM元素）
+  mounted() {
+  
+  },
+  beforeCreate() {}, //生命周期 - 创建之前
+  beforeMount() {}, //生命周期 - 挂载之前
+  beforeUpdate() {}, //生命周期 - 更新之前
+  updated() {}, //生命周期 - 更新之后
+  beforeDestroy() {}, //生命周期 - 销毁之前
+  destroyed() {}, //生命周期 - 销毁完成
+  activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
+}
+</script>
+<style lang='less' scoped>
+
+.decorate{
+  width: 100%;
+  background: linear-gradient(#272b2d, #15191c);
+  height: 100%;
+  border: 1px #3e4245 solid;
+  box-sizing: border-box;
+}
+
+</style>

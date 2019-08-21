@@ -1,0 +1,12 @@
+{
+  "status": 0,
+  "msg": "",
+  "data": {
+      "max": 100,
+      "min": 0,
+      "name": "完成率",
+      "unit": "%",
+      "value": 89.1,
+      "hideName": false
+  }
+}
