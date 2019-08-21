@@ -5,17 +5,17 @@
       :draggable="candrage"
       @dragover="dragover"
       @dragstart="dragStart($event)"
-      :class="rnode.type === 'element' ? 'node' : 'group'"
-      :id="rnode.id"
+      :class="node.type === 'element' ? 'node' : 'group'"
+      :id="node.id"
       :style="style"
       @drag.stop="nodeDrag($event)"
       @click.stop="nodeClick($event)"
       @drop.stop="nodeDrop"
       @dragenter="dragenter"
-      v-show="!rnode.hide"
-      :key="rnode.id"
+      v-show="!node.hide"
+      :key="node.id"
     >
-      <div class="select-mask" v-if="rnode.active && !rnode.disable">
+      <div class="select-mask" v-if="node.active && !node.disable">
         <i
           v-for="(p,pindex) in Control"
           :class="p.name"
@@ -65,8 +65,7 @@ export default {
   watch: {
     node: {
       handler: function(val) {
-        this.rnode = val
-        console.log(val)
+        this.rnode = val       
       },
       deep: true
     }
@@ -185,7 +184,7 @@ export default {
   position: absolute;
   //  background: rgba(255, 0, 0, 0.2);
   cursor: pointer;
-  border: 1px #ffffff dashed;
+  //border: 1px #ffffff dashed;
 }
 .select-mask {
   width: 100%;

@@ -59,7 +59,8 @@
       </div>
     </div>
     <div class="stage" ref="stage">
-      <ruler :zoomSize="domCavase.zoomSize" />
+      <guide-line :previewLine="domCavase.previewLine" :lineList="domCavase.lineList" :zoomSize="domCavase.zoomSize"/>
+      <ruler :zoomSize="domCavase.zoomSize" @previewLine="previewLine" @addLine="addLine"/>
       <Cav :canvasConfig="domCavase.canvas">
         <Node
           class="layernode"
@@ -84,6 +85,7 @@
 import Dcanvas from './dcanvas/dcanvas'
 import Cav from './canvas.vue'
 import Node from './layer-node.vue'
+import GuideLine from './guideline.vue'
 import Contextmenu from './contextmenu.vue'
 import { mapMutations } from 'vuex';
 import { ELEMENT_SCREEN,ELEMENT_MULTI,ELEMENT_NODE } from "@/store/constants.js"
@@ -94,7 +96,8 @@ export default {
     Node,
     Cav,
     Contextmenu,
-    Ruler
+    Ruler,
+    GuideLine
   },
   data() {
     return {
@@ -346,6 +349,12 @@ export default {
   },
   methods: {
     ...mapMutations('databoard', ['setDataboard', 'setEditType']),
+    addLine(pos,type){
+        this.domCavase.createGuideLine(pos,type)
+    },
+    previewLine(pos,type){
+      this.domCavase.createPreviewLine(pos,type)
+    },
     getNodeLlist(callback) {
       callback &&
         typeof callback === 'function' &&

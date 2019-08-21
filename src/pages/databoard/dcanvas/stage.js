@@ -18,6 +18,8 @@ export default class Stage {
     this.bassIndex = 9000
     this.maxZoom = 1
     this.minZoom = 0.1
+    this.previewLine=null
+    this.lineList=[]
   }
   get indexList() {
     return this.nodeList.sort((a, b) => a.zindex - b.zindex)
@@ -44,7 +46,28 @@ export default class Stage {
     this._offset = val
     this.canvas.offset = val
   }
+  createGuideLine(positon,type){
+    const obj={
+      type,
+      pos:positon,
+    }
+    const line= new Dcanvas.GuideLine(obj)
+    this.lineList.push(line)
+  }
+  createPreviewLine(positon,type){
+   if(type){
+    this.previewLine=null
+    const obj={
+      type,
+      pos:positon,
+    }
+    this.previewLine=new Dcanvas.GuideLine(obj)
+   }
+   else{
+    this.previewLine=null
+   }
 
+   }
   createCanvas(config) {
     const _this = this
     const obj = {
