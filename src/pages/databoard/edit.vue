@@ -5,7 +5,7 @@
     <div class="content">
       <div class="setbar">
         <div v-if='editType===ELEMENT_NODE'>
-          <!--<DForm type='node' :setting='editNode' @update='updateNode' key='node'/>-->
+          <DForm type='node' :setting='editNode' @update='updateNode' key='node'/>
           <DForm :type='editChart.type' :setting='editChart' @update='updateChart' key='chart'/>
         </div>
         <div v-if='editType===ELEMENT_SCREEN'>
@@ -489,12 +489,6 @@ export default {
     },
     nodeAlign(type) {
       this.$refs.stage.domCavase.nodesAlign(type)
-    },
-    updateCanvas(newsetting){
-      console.log("update canvas",newsetting)
-    },
-    updateNode(newsetting) {
-      console.log("update node",newsetting)
     },
     selectOneNode(nodes) {
       const length = nodes.length;
