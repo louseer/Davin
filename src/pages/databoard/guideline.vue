@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="previewLine" class="previewLine" :style="pstyle"></div>
-    <div v-for="(line,index) in lineList" :key="index" class="guideline" :style="lstyle(line)">
+    <div @mouseup.prevent @mouseover.prevent v-for="(line,index) in lineList" :key="index" class="guideline" :style="lstyle(line)">
       <div class="block" @dblclick="removeLine(line)">{{line.pos}}</div>
     </div>
   </div>

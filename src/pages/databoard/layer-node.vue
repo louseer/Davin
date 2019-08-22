@@ -3,8 +3,9 @@
     <div
       @mousedown.stop="nodeMousedown($event) "
       :draggable="candrage"
-      @dragover="dragover"
+      @dragover.stop="dragover"
       @dragstart="dragStart($event)"
+       @dragend.stop="dragEnd($event)"
       :class="node.type === 'element' ? 'node' : 'group'"
       :id="node.id"
       :style="style"
@@ -23,7 +24,7 @@
           draggable
           @dragover.prevent
           @drop.prevent
-          @dragend.prevent
+          @dragend.stop="dragendresizeNode(p.event,$event)"
           @mousedown="resizeMousedown"
           @drag.stop="resizeNode(p.event,$event)"
           :style="p.type==='circle'? ' border-radius: 50% 50%;':''"
@@ -141,9 +142,15 @@ export default {
       e.dataTransfer.effectAllowed = 'move'
       this.$emit('nodeDragStart', e)
     },
+    dragEnd(e){
+      this.$emit('nodeDrag', e,this.node)
+    },
     resizeMousedown(e) {
       this.candrage = false
       this.$emit('nodeResizeMousedown', e, this.rnode)
+    },
+    dragendresizeNode(type, e){
+      this.$emit('nodeResizeNode', type, e, this.rnode)
     },
     resizeNode(type, e) {
       this.$emit('nodeResizeNode', type, e, this.rnode)
