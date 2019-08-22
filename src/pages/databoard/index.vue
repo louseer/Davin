@@ -43,6 +43,7 @@
           <button @click="upLayer">上移一层</button>
           <button @click="toBottomLayer">置于底层</button>
           <button @click="toTopLayer">置于顶层</button>
+          <button @click="clearLine">清除参考线</button>
           <button
             style="float:left"
             v-if="multiple.length>=3"
@@ -59,8 +60,8 @@
       </div>
     </div>
     <div class="stage" ref="stage">
-      <guide-line :previewLine="domCavase.previewLine" :lineList="domCavase.lineList" :zoomSize="domCavase.zoomSize"/>
-      <ruler :zoomSize="domCavase.zoomSize" @previewLine="previewLine" @addLine="addLine"/>
+      <guide-line v-if="showline" :previewLine="domCavase.previewLine" :lineList="domCavase.lineList" :zoomSize="domCavase.zoomSize" @removeLine="removeLine"/>
+      <ruler-zoom :zoomSize="domCavase.zoomSize" @previewLine="previewLine" @addLine="addLine" @hideline="hideline"/>
       <Cav :canvasConfig="domCavase.canvas">
         <Node
           class="layernode"
@@ -89,18 +90,19 @@ import GuideLine from './guideline.vue'
 import Contextmenu from './contextmenu.vue'
 import { mapMutations } from 'vuex';
 import { ELEMENT_SCREEN,ELEMENT_MULTI,ELEMENT_NODE } from "@/store/constants.js"
-import Ruler from './ruler.vue'
+import RulerZoom from './rulerzoom.vue'
 
 export default {
   components: {
     Node,
     Cav,
     Contextmenu,
-    Ruler,
+    RulerZoom,
     GuideLine
   },
   data() {
     return {
+      showline:true,
       domCavase: '',
       canvasConfig: '',
       rightClick: false,
@@ -349,6 +351,15 @@ export default {
   },
   methods: {
     ...mapMutations('databoard', ['setDataboard', 'setEditType']),
+    hideline(){
+      this.showline = !this.showline
+    },
+    removeLine(id){
+        this.domCavase.removeGuideLineById(id)
+    },
+    clearLine(){
+        this.domCavase.clearGuideLine()
+    },
     addLine(pos,type){
         this.domCavase.createGuideLine(pos,type)
     },
@@ -672,6 +683,7 @@ select {
   background: url(~images/pointe.png) repeat #27272b;
   position: relative;
   overflow: hidden;
+  cursor: crosshair;
   // perspective: 1920px;
   // perspective-origin: 0% 0%;
 }

@@ -7,7 +7,7 @@ export default {
   props: {
     type: {
       type: String,
-      default: 'xRuler'
+      default: 'Ruler'
     },
     offSet: {
       type: Number,
@@ -20,10 +20,10 @@ export default {
   },
   computed: {
     cW() {
-      return this.$parent.$el.clientWidth
+      return this.$parent.$parent.$el.clientWidth
     },
     cH() {
-      return this.$parent.$el.clientHeight
+      return this.$parent.$parent.$el.clientHeight
     },
     typeStyle() {
       return this.type === 'xRuler'
@@ -52,9 +52,9 @@ export default {
        this.clearEventBubble(e)
       const event = e || window.event
       const theX =
-        event.clientX - this.GetPosition(this.$refs.ruler).left - this.offSet
+        parseInt((event.clientX - this.GetPosition(this.$refs.ruler).left - this.offSet)/this.zoomSize)
       const theY =
-        event.clientY - this.GetPosition(this.$refs.ruler).top - this.offSet
+        parseInt((event.clientY - this.GetPosition(this.$refs.ruler).top - this.offSet)/this.zoomSize)
       if (this.type === 'xRuler') {
         this.$emit('addLine', theX ,this.type)
       } else {
@@ -68,9 +68,9 @@ export default {
       this.clearEventBubble(e)
       const event = e || window.event
       const theX =
-        event.clientX - this.GetPosition(this.$refs.ruler).left - this.offSet
+        parseInt((event.clientX - this.GetPosition(this.$refs.ruler).left - this.offSet)/this.zoomSize)
       const theY =
-        event.clientY - this.GetPosition(this.$refs.ruler).top - this.offSet
+        parseInt((event.clientY - this.GetPosition(this.$refs.ruler).top - this.offSet)/this.zoomSize)
       if (this.type === 'xRuler') {
         this.$emit('previewLine', theX ,this.type)
       } else {
@@ -118,7 +118,7 @@ export default {
       if (this.type === 'xRuler') {
         ctx.fillRect(20, 0, this.cW, 20)
       } else {
-        ctx.fillRect(0, 0, 20, this.cH)
+        ctx.fillRect(0, 20, 20, this.cH)
       }
     },
     drawline(ctx) {

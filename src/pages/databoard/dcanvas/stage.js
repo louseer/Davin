@@ -46,9 +46,15 @@ export default class Stage {
     this._offset = val
     this.canvas.offset = val
   }
+  removeGuideLineById(id){
+    this.lineList=this.lineList.filter(l=>l.id !== id)
+  }
+  clearGuideLine(){
+    this.lineList=[]
+  }
   createGuideLine(positon,type){
     const obj={
-      type,
+      type:type === "xRuler" ? "yline" :"xline",
       pos:positon,
     }
     const line= new Dcanvas.GuideLine(obj)
@@ -58,7 +64,7 @@ export default class Stage {
    if(type){
     this.previewLine=null
     const obj={
-      type,
+      type:type === "xRuler" ? "yline" :"xline",
       pos:positon,
     }
     this.previewLine=new Dcanvas.GuideLine(obj)
