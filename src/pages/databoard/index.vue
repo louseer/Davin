@@ -22,7 +22,7 @@
 
       <div style="clear:both;padding:10px">
         <div style="margin:0 auto; width:100%">
-         <button
+          <button
             v-for="(btn,index) in  aglinList"
             :key="index"
             style="float:left"
@@ -60,8 +60,19 @@
       </div>
     </div>
     <div class="stage" ref="stage">
-      <guide-line v-if="showline" :previewLine="domCavase.previewLine" :lineList="domCavase.lineList" :zoomSize="domCavase.zoomSize" @removeLine="removeLine"/>
-      <ruler-zoom :zoomSize="domCavase.zoomSize" @previewLine="previewLine" @addLine="addLine" @hideline="hideline"/>
+      <guide-line
+        v-if="showline"
+        :previewLine="domCavase.previewLine"
+        :lineList="domCavase.lineList"
+        :zoomSize="domCavase.zoomSize"
+        @removeLine="removeLine"
+      />
+      <ruler-zoom
+        :zoomSize="domCavase.zoomSize"
+        @previewLine="previewLine"
+        @addLine="addLine"
+        @hideline="hideline"
+      />
       <Cav :canvasConfig="domCavase.canvas">
         <Node
           class="layernode"
@@ -88,8 +99,12 @@ import Cav from './canvas.vue'
 import Node from './layer-node.vue'
 import GuideLine from './guideline.vue'
 import Contextmenu from './contextmenu.vue'
-import { mapMutations } from 'vuex';
-import { ELEMENT_SCREEN,ELEMENT_MULTI,ELEMENT_NODE } from "@/store/constants.js"
+import { mapMutations } from 'vuex'
+import {
+  ELEMENT_SCREEN,
+  ELEMENT_MULTI,
+  ELEMENT_NODE
+} from '@/store/constants.js'
 import RulerZoom from './rulerzoom.vue'
 
 export default {
@@ -102,7 +117,8 @@ export default {
   },
   data() {
     return {
-      showline:true,
+      stop:false,
+      showline: true,
       domCavase: '',
       canvasConfig: '',
       rightClick: false,
@@ -283,7 +299,6 @@ export default {
     }
   },
 
-
   mounted() {
     let _this = this
     window.document.onkeydown = function(e) {
@@ -351,20 +366,20 @@ export default {
   },
   methods: {
     ...mapMutations('databoard', ['setDataboard', 'setEditType']),
-    hideline(){
+    hideline() {
       this.showline = !this.showline
     },
-    removeLine(id){
-        this.domCavase.removeGuideLineById(id)
+    removeLine(id) {
+      this.domCavase.removeGuideLineById(id)
     },
-    clearLine(){
-        this.domCavase.clearGuideLine()
+    clearLine() {
+      this.domCavase.clearGuideLine()
     },
-    addLine(pos,type){
-        this.domCavase.createGuideLine(pos,type)
+    addLine(pos, type) {
+      this.domCavase.createGuideLine(pos, type)
     },
-    previewLine(pos,type){
-      this.domCavase.createPreviewLine(pos,type)
+    previewLine(pos, type) {
+      this.domCavase.createPreviewLine(pos, type)
     },
     getNodeLlist(callback) {
       callback &&
@@ -414,6 +429,7 @@ export default {
       const event = e || window.event
       const _x = e.clientX - this.dx
       const _y = e.clientY - this.dy
+      this.dnode = JSON.parse(JSON.stringify(node))
       switch (type) {
         case 'mr':
           node.w = node.w + _x / this.domCavase.zoomSize
@@ -425,23 +441,56 @@ export default {
         case 'mb':
           node.h = node.h + _y / this.domCavase.zoomSize
           break
+        case 'rt':
+          node.w = node.w + _x / this.domCavase.zoomSize
+          node.h = node.h - _y / this.domCavase.zoomSize
+          node.y = node.y + _y / this.domCavase.zoomSize
+          break
+        case 'mt':
+          node.h = node.h - _y / this.domCavase.zoomSize
+          node.y = node.y + _y / this.domCavase.zoomSize
+          break
+        case 'lt':
+          node.w = node.w - _x / this.domCavase.zoomSize
+          node.h = node.h - _y / this.domCavase.zoomSize
+          node.y = node.y + _y / this.domCavase.zoomSize
+          node.x = node.x + _x / this.domCavase.zoomSize
+          break
+        case 'ml':
+          node.w = node.w - _x / this.domCavase.zoomSize
+          node.x = node.x + _x / this.domCavase.zoomSize
+          break
+        case 'lb':
+          node.w = node.w - _x / this.domCavase.zoomSize
+          node.x = node.x + _x / this.domCavase.zoomSize
+          node.h = node.h + _y / this.domCavase.zoomSize
+          break
         default:
           break
       }
       this.dx = e.clientX
       this.dy = e.clientY
-      const { zW, zH, zX, zY } = this.nodeResizeZoom(this.dnode, node)
+      const { zW, zH, zX, zY, cX, cY } = this.nodeResizeZoom(this.dnode, node)
 
       if (node.cid === null) return
       const chilrenlist = node.cid
       this.domCavase.nodeList.forEach(n => {
         if (chilrenlist.includes(n.id)) {
-          n.x = node.x + (n.x - node.x) * zW
-          n.y = node.y + (n.y - node.y) * zH
-          n.w = n.w * zW
-          n.h = n.h * zH
+          if (zX === 1 && zY === 1) {
+            n.x = node.x + (n.x - node.x) * zW
+            n.y = node.y + (n.y - node.y) * zH
+            n.w = n.w * zW
+            n.h = n.h * zH
+          } else {
+            n.w = n.w * zW
+            n.h = n.h * zH
+            n.x = node.x - (n.x - node.x) * zW
+            n.y = node.y - (n.y - node.y) * zH
+            console.log('@@@@@@@@@@@@@@@@@@@BUGBUGBUGBUGBUGBUGBUG', n.x, n.y)
+          }
         }
       })
+
       this.dnode = JSON.parse(JSON.stringify(node))
     },
     nodeResizeZoom(oldNode, newNode) {
@@ -449,7 +498,9 @@ export default {
       const zH = newNode.h / oldNode.h
       const zX = newNode.x / oldNode.x
       const zY = newNode.y / oldNode.y
-      return { zW, zH, zX, zY }
+      const cX = newNode.x - oldNode.x
+      const cY = newNode.y - oldNode.y
+      return { zW, zH, zX, zY, cX, cY }
     },
     nodeResizeMousedown(e, node) {
       this.dx = e.clientX
@@ -457,7 +508,7 @@ export default {
       this.dnode = JSON.parse(JSON.stringify(node))
       console.log(this.dnode.w, '')
     },
-    downLayer(){
+    downLayer() {
       this.domCavase.LayerToDown()
       this.$emit('nodelistChange', this.domCavase.nodeList)
     },
@@ -524,15 +575,14 @@ export default {
       }
       if (node.type === 'group') {
         if (this.ctrlDown) {
-          this.domCavase.selectNodes.push(...
-            this.domCavase.nodeList.filter(
+          this.domCavase.selectNodes.push(
+            ...this.domCavase.nodeList.filter(
               n => node.cid.includes(n.id) || node.id === n.id
             )
           )
           this.domCavase.nodeList.forEach(n => {
-            n.id === node.id && (n.active = true) 
+            n.id === node.id && (n.active = true)
           })
-          
         } else {
           this.domCavase.selectNodes = this.domCavase.nodeList.filter(
             n => node.cid.includes(n.id) || node.id === n.id
@@ -547,20 +597,58 @@ export default {
       this.domCavase.refreshNode(node)
     },
     nodeDrag(e, node) {
+      const yArray = this.domCavase.lineList
+        .filter(n => n.type === 'xline')
+        .map(n => n.pos)
+      const xArray = this.domCavase.lineList
+        .filter(n => n.type === 'yline')
+        .map(n => n.pos)
       const _x = this.domCavase.eventZoom(e).clientX
       const _y = this.domCavase.eventZoom(e).clientY
       const dx = _x - this.startX
       const dy = _y - this.startY
+      let stop = false
+
       const idList = this.domCavase.selectNodes.map(n => n.id)
       if (node.type === 'element') {
-        this.domCavase.nodeList.forEach(n => {
-          if (idList.includes(n.id)) {
-            n.x = n.x + dx
-            n.y = n.y + dy
-            this.startX = this.domCavase.eventZoom(e).clientX
-            this.startY = this.domCavase.eventZoom(e).clientY
+        this.domCavase.selectNodes.forEach(node => {
+          const l = xArray.filter(v => Math.abs(node.x + dx - v) <= 2)[0]
+          const t = yArray.filter(v => Math.abs(node.y + dy - v) <= 2)[0]
+          const r = xArray.filter(
+            v => Math.abs(node.x + node.w + dx - v) <= 2
+          )[0]
+          const b = yArray.filter(
+            v => Math.abs(node.y + node.y + dy - v) <= 2
+          )[0]
+          console.log('tag', l)
+          if (!stop) {
+            if (l !== undefined) {
+              node.x = l
+              stop = true
+             
+            } else {
+              node.x = node.x + dx
+              
+              
+            }
+            if (t) {
+              node.y = t
+            } else {
+              node.y = node.y + dy
+            }
+
+          //  l ? ((node.x = l) && (stop = true)) : ((node.x = node.x + dx) && (stop = false))
           }
         })
+        stop = false
+        //  console.log('tag', checklineX,checklineY,this.domCavase.selectNodes)
+        //  this.domCavase.selectNodes.map(n=>Object.assign(n,{
+        //    x: checklineX !== undefined ?  n.x + dx : n.x + dx,
+        //    y: checklineY !== undefined ? n.y + dy : n.y + dy,
+
+        //  }))
+        this.startX = this.domCavase.eventZoom(e).clientX
+        this.startY = this.domCavase.eventZoom(e).clientY
       }
       if (node.type === 'group') {
         this.domCavase.nodeList.forEach(n => {

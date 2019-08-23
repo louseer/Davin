@@ -143,7 +143,7 @@ export default {
       this.$emit('nodeDragStart', e)
     },
     dragEnd(e){
-      this.$emit('nodeDrag', e,this.node)
+      this.$emit('nodeDrag', e,this.rnode)
     },
     resizeMousedown(e) {
       this.candrage = false
