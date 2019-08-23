@@ -3,6 +3,7 @@ import Vue from 'vue'
 // Vue.use(ElementUI);
 import { 
   Button,
+  ButtonGroup,
   Tree,
   Switch,
   Form,
@@ -26,6 +27,7 @@ import {
 } from 'element-ui'
 
 Vue.use(Button)
+Vue.use(ButtonGroup)
 Vue.use(Tree)
 Vue.use(Switch)
 Vue.use(Form)

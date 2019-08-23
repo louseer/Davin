@@ -99,12 +99,8 @@ import Cav from './canvas.vue'
 import Node from './layer-node.vue'
 import GuideLine from './guideline.vue'
 import Contextmenu from './contextmenu.vue'
-import { mapMutations } from 'vuex'
-import {
-  ELEMENT_SCREEN,
-  ELEMENT_MULTI,
-  ELEMENT_NODE
-} from '@/store/constants.js'
+import { mapState,mapMutations } from 'vuex';
+import { ELEMENT_SCREEN,ELEMENT_MULTI,ELEMENT_NODE } from "@/store/constants.js"
 import RulerZoom from './rulerzoom.vue'
 
 export default {
@@ -120,7 +116,6 @@ export default {
       stop:false,
       showline: true,
       domCavase: '',
-      canvasConfig: '',
       rightClick: false,
       mode: 'edit',
       startX: 0,
@@ -296,7 +291,10 @@ export default {
   computed: {
     multiple() {
       return this.domCavase.selectNodes.filter(n => n.pid === null)
-    }
+    },
+    ...mapState('databoard',{
+      canvasConfig:state => state.databoard,
+    })
   },
 
   mounted() {
@@ -713,8 +711,8 @@ export default {
   },
   created() {
     this.domCavase = new Dcanvas.Stage()
-    this.domCavase.createCanvas()
-    this.setDataboard(this.domCavase.canvas)
+    this.domCavase.createCanvas(this.canvasConfig)
+    //this.setDataboard(this.domCavase.canvas)
     console.log('@@@@@@@@', this.domCavase.canvas)
     this.nodelist = this.domCavase.nodeList
     if (JSON.parse(window.localStorage.getItem('saveNode'))) {

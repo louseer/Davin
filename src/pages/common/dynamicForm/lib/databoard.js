@@ -31,17 +31,31 @@ const SHADOW_BLUR = 3;
 
 /**
  * 报表编辑form 表单项配置器
+ * type = OPTIONTYPE.NOVIEW 表示此项不展示视图
  */
 const options = {
+  // "offset":{
+  //   "type":OPTIONTYPE.NOVIEW,
+  //   "defaultVal":""
+  // },
+  // "zoomSize":{
+  //   "type":OPTIONTYPE.NOVIEW,
+  //   "defaultVal":""
+  // },
   "id":{
     "type":OPTIONTYPE.NOVIEW, 
     "defaultVal":""
   },
-  // "name":{
-  //   "name":"大屏名称",
-  //   "type":OPTIONTYPE.INPUT, //文字输入框
-  //   "defaultVal":"我的报表"
-  // },
+  "name":{
+    "name":"大屏名称",
+    "type":OPTIONTYPE.INPUT, //文字输入框
+    "defaultVal":"新建大屏"
+  },
+  "brief":{
+    "name":"简介",
+    "type":OPTIONTYPE.TEXTAREA,
+    "defaultVal":""
+  },
   "width":{
     "name":"宽度",
     "type":OPTIONTYPE.INPUTNUMBER, //文字输入框
@@ -51,91 +65,80 @@ const options = {
     "name":"高度",
     "type":OPTIONTYPE.INPUTNUMBER, //文字输入框
     "defaultVal":800
+  },
+  'adaptive':{
+    name:"屏幕适配",
+    "type":OPTIONTYPE.SELECT,
+    options:[
+      {"label":"全屏铺满","value":0},
+      {"label":"等比缩放宽度铺满","value":1},
+      {"label":"等比缩放高度铺满","value":2}
+    ]
+  },
+  "background":{
+    "name":"大屏背景",
+    "type":OPTIONTYPE.GROUP,
+    "children":{
+      "imgSouce":{
+        "name":"背景图",
+        "type":OPTIONTYPE.RADIO,  //radio单选
+        "defaultVal":0,
+        "handle":"rfBgimgSwitch",
+        "options":IMG_SOURCE_TYPE
+      },
+      "systemImg":{
+        "name":"选择图片",
+        "type":OPTIONTYPE.IMGSELECT,
+        "hide":true,
+        "defaultVal":''
+      },
+      "uploadImg":{
+        "name":"上传图片",
+        "type":OPTIONTYPE.IMGUPLOAD,
+        "hide":true,
+        "defaultVal":''
+      },
+      "imgRepeat":{
+        "name":"布局",
+        "type":OPTIONTYPE.SELECT,
+        "defaultVal":0,
+        "hide":true,
+        "options":IMG_SCALE_TYPE
+      },
+      "imgBlur":{
+        "name":"模糊度",
+        "type":OPTIONTYPE.SLIDER,
+        "hide":true,
+        "defaultVal":BGIMG_BLUR,
+        "min":BGIMG_BLUR_MIN,
+        "max":BGIMG_BLUR_MAX,
+        "step":BGIMG_BLUR_STEP,
+        attr:{
+          "show-input":true
+        }
+      },
+      "imgOpacity":{
+        "name":"透明度",
+        "type":OPTIONTYPE.SLIDER,
+        "hide":true,
+        "defaultVal":BGIMG_OPACITY,
+        "min":BGIMG_OPACITY_MIN,
+        "max":BGIMG_OPACITY_MAX,
+        "step":BGIMG_OPACITY_STEP
+      },
+      "bgcolor":{
+        "name":"背景色",
+        "type":OPTIONTYPE.COLORPICKER,
+        "predefine":COLOR_PREDEFINE,
+        "defaultVal":WHITE
+      } 
+    }
+  },
+  "thumbnail":{
+    "name":"缩略图",
+    "type":OPTIONTYPE.COVER,
+    "defaultVal":""
   }
-  // "brief":{
-  //   "name":"简介",
-  //   "type":OPTIONTYPE.TEXTAREA,
-  //   "defaultVal":""
-  // },
-  // "isPublic":{
-  //   "name":"是否公开",
-  //   "type":OPTIONTYPE.SWITCH,  //切换开关
-  //   "defaultVal":false
-  // },
-  // "autoRefresh":{
-  //   "name":"自动刷新",
-  //   "type":OPTIONTYPE.SWITCH,
-  //   "defaultVal":false,
-  //   "handle":"autoRefresh"
-  // },
-  // "refreshInterval":{
-  //   "name":"刷新间隔",
-  //   "type":OPTIONTYPE.INPUTNUMBER, //数字翻牌器输入框
-  //   "defaultVal":REFRESH_INTERVAL,
-  //   "hide":true
-  // },
-  // "them":{
-  //   "name":"颜色主题",
-  //   "type":OPTIONTYPE.SELECT,
-  //   "options":THEM_TYPE,
-  //   "defaultVal":0
-  // },
-  // "background":{
-  //   "name":"报表背景",
-  //   "type":OPTIONTYPE.GROUP,
-  //   "children":{
-  //     "imgSouce":{
-  //       "name":"背景图",
-  //       "type":OPTIONTYPE.RADIO,  //radio单选
-  //       "defaultVal":0,
-  //       "handle":"rfBgimgSwitch",
-  //       "options":IMG_SOURCE_TYPE
-  //     },
-  //     "systemImg":{
-  //       "name":"选择图片",
-  //       "type":OPTIONTYPE.IMGSELECT,
-  //       "hide":true,
-  //       "defaultVal":''
-  //     },
-  //     "uploadImg":{
-  //       "name":"上传图片",
-  //       "type":OPTIONTYPE.IMGUPLOAD,
-  //       "hide":true,
-  //       "defaultVal":''
-  //     },
-  //     "imgRepeat":{
-  //       "name":"布局",
-  //       "type":OPTIONTYPE.SELECT,
-  //       "defaultVal":0,
-  //       "hide":true,
-  //       "options":IMG_SCALE_TYPE
-  //     },
-  //     "imgBlur":{
-  //       "name":"模糊度",
-  //       "type":OPTIONTYPE.SLIDER,
-  //       "hide":true,
-  //       "defaultVal":BGIMG_BLUR,
-  //       "min":BGIMG_BLUR_MIN,
-  //       "max":BGIMG_BLUR_MAX,
-  //       "step":BGIMG_BLUR_STEP
-  //     },
-  //     "imgOpacity":{
-  //       "name":"透明度",
-  //       "type":OPTIONTYPE.SLIDER,
-  //       "hide":true,
-  //       "defaultVal":BGIMG_OPACITY,
-  //       "min":BGIMG_OPACITY_MIN,
-  //       "max":BGIMG_OPACITY_MAX,
-  //       "step":BGIMG_OPACITY_STEP
-  //     },
-  //     "bgcolor":{
-  //       "name":"背景色",
-  //       "type":OPTIONTYPE.COLORPICKER,
-  //       "predefine":COLOR_PREDEFINE,
-  //       "defaultVal":WHITE
-  //     } 
-  //   }
-  // }
 }
 
 /**
@@ -146,13 +149,8 @@ const options = {
  * 入参接收两个参数：newvalue，oldvalue
  */
 const handlers = {
-  autoRefresh(value){
-    this.refreshInterval.hide = !value;
-  },
-
   rfBgimgSwitch(value){
     var bgoptions = this.background.children;
-    console.log("rfBgimgSwitch",bgoptions)
     bgoptions.systemImg.hide = value !== 1;
     bgoptions.uploadImg.hide = value !== 2;
     bgoptions.imgRepeat.hide = value === 0;
@@ -161,4 +159,4 @@ const handlers = {
   }
 }
 
-export default {options}
+export default {options,handlers}

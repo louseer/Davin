@@ -17,6 +17,13 @@ export function getFormData (id) {
   })
 }
 
+export function getDataBoardData (id) {
+  return request({
+    url: `/databoard.json?formid=${id}`,
+    method: 'get'
+  })
+}
+
 export function updateLayoutReq (params) {
   const {layout} = params
   return request({
