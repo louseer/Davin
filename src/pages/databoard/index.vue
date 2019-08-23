@@ -99,9 +99,14 @@ import Cav from './canvas.vue'
 import Node from './layer-node.vue'
 import GuideLine from './guideline.vue'
 import Contextmenu from './contextmenu.vue'
-import { mapState,mapMutations } from 'vuex';
-import { ELEMENT_SCREEN,ELEMENT_MULTI,ELEMENT_NODE } from "@/store/constants.js"
+import { mapState, mapMutations } from 'vuex'
+import {
+  ELEMENT_SCREEN,
+  ELEMENT_MULTI,
+  ELEMENT_NODE
+} from '@/store/constants.js'
 import RulerZoom from './rulerzoom.vue'
+import { debuglog } from 'util'
 
 export default {
   components: {
@@ -113,7 +118,7 @@ export default {
   },
   data() {
     return {
-      stop:false,
+      stop: false,
       showline: true,
       domCavase: '',
       rightClick: false,
@@ -292,8 +297,8 @@ export default {
     multiple() {
       return this.domCavase.selectNodes.filter(n => n.pid === null)
     },
-    ...mapState('databoard',{
-      canvasConfig:state => state.databoard,
+    ...mapState('databoard', {
+      canvasConfig: state => state.databoard
     })
   },
 
@@ -606,58 +611,52 @@ export default {
       const dx = _x - this.startX
       const dy = _y - this.startY
       let stop = false
-
+      let offset = [0, 0, 0, 0]
       const idList = this.domCavase.selectNodes.map(n => n.id)
-      if (node.type === 'element') {
-        this.domCavase.selectNodes.forEach(node => {
-          const l = xArray.filter(v => Math.abs(node.x + dx - v) <= 2)[0]
-          const t = yArray.filter(v => Math.abs(node.y + dy - v) <= 2)[0]
-          const r = xArray.filter(
-            v => Math.abs(node.x + node.w + dx - v) <= 2
-          )[0]
-          const b = yArray.filter(
-            v => Math.abs(node.y + node.y + dy - v) <= 2
-          )[0]
-          console.log('tag', l)
-          if (!stop) {
-            if (l !== undefined) {
-              node.x = l
-              stop = true
-             
-            } else {
-              node.x = node.x + dx
-              
-              
-            }
-            if (t) {
-              node.y = t
-            } else {
-              node.y = node.y + dy
-            }
-
-          //  l ? ((node.x = l) && (stop = true)) : ((node.x = node.x + dx) && (stop = false))
-          }
-        })
+      for (let i = 0; i < this.domCavase.selectNodes.length; i++) {
+        let nd = this.domCavase.selectNodes[i]
+        const l = xArray.filter(v => Math.abs(nd.x + dx - v) < 3)[0]
+        const t = yArray.filter(v => Math.abs(nd.y + dy - v) < 3)[0]
+        const r = xArray.filter(v => Math.abs(nd.x + nd.w + dx - v) < 3)[0]
+        const b = yArray.filter(v => Math.abs(nd.y + nd.h + dy - v) < 3)[0]
+        const check = [l, t, r, b]
+        if (check.every(v => v === undefined)) {
+          stop = false
+        } else {
+          const [_l, _t, _r, _b] = [
+            nd.x + dx - l,
+            nd.y + dy - t,
+            nd.x + nd.w + dx - r,
+            nd.y + nd.h + dy - b
+          ]
+          offset = [_l, _t, _r, _b]
+          offset = offset.map(v => (v ? v : 0))
+          console.log(offset)
+          stop = true
+          break
+        }
+      }
+      const [_l, _t, _r, _b] = offset
+      if (!stop) {
+        this.domCavase.selectNodes.map(n =>
+          Object.assign(n, {
+            x: n.x + dx,
+            y: n.y + dy
+          })
+        )
         stop = false
-        //  console.log('tag', checklineX,checklineY,this.domCavase.selectNodes)
-        //  this.domCavase.selectNodes.map(n=>Object.assign(n,{
-        //    x: checklineX !== undefined ?  n.x + dx : n.x + dx,
-        //    y: checklineY !== undefined ? n.y + dy : n.y + dy,
+      } else {
+        this.domCavase.selectNodes.map(n =>
+          Object.assign(n, {
+            x: n.x - _l - _r + dx,
+            y: n.y - _t - _b + dy
+          })
+        )
+      }
+      console.log('tag', stop)
 
-        //  }))
-        this.startX = this.domCavase.eventZoom(e).clientX
-        this.startY = this.domCavase.eventZoom(e).clientY
-      }
-      if (node.type === 'group') {
-        this.domCavase.nodeList.forEach(n => {
-          if (node.cid.includes(n.id) || idList.includes(n.id)) {
-            n.x = n.x + dx
-            n.y = n.y + dy
-            this.startX = this.domCavase.eventZoom(e).clientX
-            this.startY = this.domCavase.eventZoom(e).clientY
-          }
-        })
-      }
+      this.startX = this.domCavase.eventZoom(e).clientX
+      this.startY = this.domCavase.eventZoom(e).clientY
     },
     toggleGrop() {
       const rootLIst = this.domCavase.selectNodes.filter(n => n.pid === null)

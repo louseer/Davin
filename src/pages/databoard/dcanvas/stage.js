@@ -601,13 +601,13 @@ export default class Stage {
     const maxY = Math.max.apply(null, nodes.map(n => n.y))
     const maxW = Math.max.apply(null, nodes.map(n => n.x + n.w)) - minX
     const maxH = Math.max.apply(null, nodes.map(n => n.y + n.h)) - minY
-
     return { minX, minY, maxX, maxY, maxW, maxH }
   }
-
+ 
   checkInStage(e) {
     const [x, y] = [e.target.offsetX, e.target.offsetY]
   }
+  
   Handler(ele) {
     const _this = this
     return {
@@ -746,12 +746,14 @@ function checkCrash(point, node) {
     (a > 0 && b > 0 && c > 0 && d > 0) || (a < 0 && b < 0 && c < 0 && d < 0)
   )
 }
+//阻止冒泡
 function clearEventBubble(e) {
   if (e.stopPropagation) e.stopPropagation()
   else e.cancelBubble = true
   if (e.preventDefault) e.preventDefault()
   else e.returnValue = false
 }
+//获取样式
 function getStyle(obj, styleName) {
   if (obj.currentStyle) {
     return obj.currentStyle[styleName]
@@ -759,6 +761,7 @@ function getStyle(obj, styleName) {
     return getComputedStyle(obj, null)[styleName]
   }
 }
+//顶层边距
 function GetPosition(obj) {
   let left = 0
   let top = 0

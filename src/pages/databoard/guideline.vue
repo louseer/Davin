@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="previewLine" class="previewLine" :style="pstyle"></div>
+    <div v-if="previewLine" class="previewLine" :style="pstyle"><div class="block">{{previewLine.pos}}</div></div>
     <div @mouseup.prevent @mouseover.prevent v-for="(line,index) in lineList" :key="index" class="guideline" :style="lstyle(line)">
       <div class="block" @dblclick="removeLine(line)">{{line.pos}}</div>
     </div>
@@ -82,7 +82,9 @@ export default {
   border-top: @border_Data_line;
 
   z-index: 999999;
-  .block {
+  
+}
+.block {
     position: absolute;
     display: block;
     padding: 0 0.05rem;
@@ -97,5 +99,4 @@ export default {
     border-top: 0;
     cursor: pointer;
   }
-}
 </style>
