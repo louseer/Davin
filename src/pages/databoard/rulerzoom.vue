@@ -1,7 +1,7 @@
 <template>
-  <div class="ruler-room">
+  <div class="ruler-room" >
      <div class="hidebutton"><Dbutton :btn="btn"  @click="hideline"></Dbutton></div>
-    <ruler type="xRuler" @previewLine="previewLine" @addLine="addLine" :zoomSize="zoomSize" /> 
+    <ruler type="xRuler" @previewLine="previewLine" @addLine="addLine"  :zoomSize="zoomSize" /> 
     <ruler type="yRuler" @previewLine="previewLine" @addLine="addLine" :zoomSize="zoomSize" />
   </div>
 </template>

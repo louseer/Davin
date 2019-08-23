@@ -1,5 +1,5 @@
 <template>
-  <canvas class="ruler_room" ref="ruler" :style="typeStyle" @mouseup="rulerOn($event)" @mousemove="rulerOn($event)" @mouseleave="rulerLeave" @mousedown="addline"></canvas>
+  <canvas class="ruler_room" ref="ruler" :style="typeStyle" @mouseover.stop="rulerOn($event)" @mousemove.stop="rulerOn($event)" @mouseleave.stop="rulerLeave" @mousedown="addline"></canvas>
 </template>
 
 <script>
@@ -62,7 +62,8 @@ export default {
       }
     },
     rulerLeave(){
-      this.$emit('previewLine', null ,null)
+      this.$emit('previewLine',false ,null)
+       console.log('为什么', '')
     },
     rulerOn(e) {
       this.clearEventBubble(e)

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="previewLine" class="previewLine" :style="pstyle"><div class="block">{{previewLine.pos}}</div></div>
-    <div @mouseup.prevent @mouseover.prevent v-for="(line,index) in lineList" :key="index" class="guideline" :style="lstyle(line)">
+    <div  v-for="(line,index) in lineList" :key="index" class="guideline" :style="lstyle(line)">
       <div class="block" @dblclick="removeLine(line)">{{line.pos}}</div>
     </div>
   </div>
@@ -44,17 +44,17 @@ export default {
     pstyle() {
       return this.previewLine.type === 'xline'
         ? `top:${this.previewLine.pos * this.zoomSize +
-            this.offSet}px;left:0;width:100%;height:0px; `
+            this.offSet}px;left:0.2rem;width:100%;height:0px; `
         : `left:${this.previewLine.pos * this.zoomSize +
-            this.offSet}px;top:0;height:100%;width:0px;`
+            this.offSet}px;top:0.2rem;height:100%;width:0px;`
     },
     lstyle() {
       return function(line) {
         return line.type === 'xline'
           ? `top:${line.pos * this.zoomSize +
-              this.offSet}px;left:0;width:100%;height:0px;`
+              this.offSet}px;left:0.2rem;width:100%;height:0px;`
           : `left:${line.pos * this.zoomSize +
-              this.offSet}px;top:0;height:100%;width:0px;`
+              this.offSet}px;top:0.2rem;height:100%;width:0px;`
       }
     }
   },
@@ -85,6 +85,7 @@ export default {
   
 }
 .block {
+  
     position: absolute;
     display: block;
     padding: 0 0.05rem;

@@ -383,6 +383,7 @@ export default {
     },
     previewLine(pos, type) {
       this.domCavase.createPreviewLine(pos, type)
+     
     },
     getNodeLlist(callback) {
       callback &&
