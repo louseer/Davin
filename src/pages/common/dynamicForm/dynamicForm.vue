@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <div class='dynamic-form'>
-    <el-form label-width="0.8rem" v-if='form' >
+    <el-form label-width="0.8rem" v-if='form' :label-position='labelPosition' :size='size'>
       <form-item :options='form.options'></form-item>
     </el-form>
   </div> 
@@ -24,6 +24,14 @@ export default {
     setting:{
       type:Object,
       default:null
+    },
+    size:{
+      type:String,
+      default:'mini'
+    },
+    labelPosition:{
+      type:String,
+      default:'left'
     }
   },
   data() {
@@ -77,7 +85,7 @@ export default {
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
   updated() {
-    console.log("编辑栏切换为",this.type,this.setting)
+    console.log("编辑栏切换为",this.type,JSON.stringify(this.setting))
   }, //生命周期 - 更新之后
   beforeDestroy() {}, //生命周期 - 销毁之前
   destroyed() {}, //生命周期 - 销毁完成

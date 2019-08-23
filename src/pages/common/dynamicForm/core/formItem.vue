@@ -6,12 +6,10 @@
       :label="item.name" 
       v-if="item.type !== itemType.NOVIEW && item.type !== itemType.GROUP && item.type !== itemType.LIST" 
       v-show='!item.hide'
-      
       >
         <el-input 
           v-model="item.value" 
           v-if="item.type === itemType.INPUT"
-          size="mini"
         ></el-input>
         <el-input 
           v-model="item.value" 
@@ -22,7 +20,6 @@
           v-if="item.type === itemType.SELECT" 
           v-model="item.value" 
           placeholder="请选择"
-          size="mini"
         >
           <el-option
             v-for="item in item.options"
@@ -43,7 +40,6 @@
           controls-position="right" 
           :min="item.min" 
           :max="item.max"
-          size="mini"
           :key='key'
         ></el-input-number>
         <el-radio-group
@@ -59,14 +55,12 @@
           :max='item.max' 
           :step='item.step'
           input-size='mini'
-          show-input
         ></el-slider>
         <el-color-picker
           v-if="item.type === itemType.COLORPICKER" 
           v-model="item.value"
           show-alpha
           :predefine="item.predefine"
-          size="mini"
         >
         </el-color-picker>
         <el-upload
@@ -83,6 +77,7 @@
           :title='item.name'
           v-model="item.value"
         ></d-img-select>
+        <d-cover-setting  v-if="item.type === itemType.COVER" v-model="item.value"></d-cover-setting>
       </el-form-item>
       <el-collapse v-if="item.type === itemType.GROUP && !item.noview">
         <el-collapse-item :title="item.name" >
@@ -104,10 +99,12 @@
 //import {组件名称} from '组件路径';
 import { OPTIONTYPE } from "./constants.js"
 import DImgSelect from "components/img-select.vue"
+import DCoverSetting from "components/cover-setting.vue"
 export default {
   name:"form-item",
   components:{
-    DImgSelect
+    DImgSelect,
+    DCoverSetting
   },
   props:{
     options:[Object,Array]

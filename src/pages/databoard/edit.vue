@@ -4,19 +4,14 @@
     <Eheader :maintit="maintit" :toptools="toptools" />
     <div class="content">
       <div class="setbar">
-        <div v-if='editType===ELEMENT_NODE'>
-          <DForm type='node' :setting='editNode' @update='updateNode' key='node'/>
-          <DForm :type='editChart.type' :setting='editChart' @update='updateChart' key='chart'/>
-        </div>
-        <div v-if='editType===ELEMENT_SCREEN'>
-          <DForm type='databoard' :setting='databoard' @update='updateDataboard' key='databoard'/>
-        </div>
+        <Setbar :editType='editType'></Setbar>
+        
         <div v-if='editType === ELEMENT_MULTI'>
           <button
             v-for="(btn,index) in  aglinList"
             :key="index"
             style="float:left"
-            @click="nodeAlign(btn.type)"
+            @click="$refs.stage.nodeAlign(btn.type)"
           >{{btn.name}}</button>
           <button 
             style="float:left" 
@@ -39,6 +34,7 @@
             @click="$refs.stage.multipleNodesAlign('HorizontalAverage')"
           >水平均分</button>
         </div>
+        
       </div>
       <div class="leftbar">
         <Dtab :tabs="leftTab">
@@ -98,9 +94,11 @@ import LayerTree from './layer-tree.vue'
 import TypeTab from './type-tab'
 import { getuuid } from '@/utils/index'
 import DForm from '../common/dynamicForm/dynamicForm.vue'
+import Setbar from './setbar.vue'
 
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import { ELEMENT_SCREEN,ELEMENT_NODE,ELEMENT_MULTI } from "@/store/constants"
+
 
 export default {
   components: {
@@ -114,7 +112,8 @@ export default {
     thumbnail,
     LayerTree,
     TypeTab,
-    DForm
+    DForm,
+    Setbar
   },
   data() {
     return {
@@ -129,7 +128,6 @@ export default {
         { type: 'HCenter', name: '垂直居中' },
         { type: 'VCenter', name: '水平居中' }
       ],
-      maintit: '新建大屏',
       zoom:0.5,
       showMmore: true,
       treenode: [],
@@ -467,8 +465,10 @@ export default {
       if(this.$refs.stage){
         return this.$refs.stage.multiple
       }
+    },
+    maintit(){
+      return this.databoard ? this.databoard.name : ''
     }
-    
   },
 
   methods: {
@@ -476,12 +476,10 @@ export default {
       'openEditMode',
       'setEditType',
       'setEditNode',
-      'setEditChart'
+      'setEditChart',
+      'setDBID'
     ]),
     ...mapActions('databoard',[
-      'updateNode',
-      'updateChart',
-      'updateDataboard',
       'queryDataboard'
     ]),
     multipleNodesAlign(type) {
@@ -610,13 +608,16 @@ export default {
     }
   },
   created(){
+    const id = this.$route.params.id  || getuuid();
+    //理论上都会有值。新建在进来之前已经获取到ID。可以放在前一个页面上直接设置vuex值。
+    this.setDBID(id)
     this.openEditMode()
     this.queryDataboard()
   }
 }
 </script>
 <style lang='less' scoped>
-@import '../../assets/styles/base.less';
+@import url('~@/assets/styles/base.less');
 button {
   border: 1px white solid;
   font: 12px/1 '微软雅黑';
@@ -688,8 +689,7 @@ button {
       background: @bg_Data_left;
       right: 0;
       height: 100%;
-      padding:.2rem;
-      z-index: 999999;
+      z-index: 999;
     }
   }
 }
