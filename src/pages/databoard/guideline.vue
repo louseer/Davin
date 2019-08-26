@@ -5,27 +5,19 @@
     </div>
     <div
       v-for="(line,index) in lineList"
-      :key="index"
+      :key="line.id"
       class="guideline"
-      draggable
+      :draggable="dragble"
       :style="lstyle(line)"
-      @mousedown.stop
-      @dragstart="linedragstart($event,line)"
-      @drag="linedrag($event,line)"
+      @dragstart.stop="linedragstart($event,line)"
+      @drag.stop="linedrag($event,line)"
       @dragend.stop="linedrag($event,line)"
+      @mousedown.stop="canDrag"
     >
       <div
-        class="block"
-        draggable
-        @mousedown.stop
-        @dblclick="removeLine(line)"
-        @dragstart="linedragstart($event,line)"
-        @drag="linedrag($event,line)"
-        @dragend="linedrag($event,line)"
-        @dragover.prevent
-        @drop.prevent
+        class="block"       
         :style="bstyle"
-      >{{line.pos}}</div>
+      >{{parseInt(line.pos)}}</div>
     </div>
   </div>
 </template>
@@ -51,22 +43,21 @@ export default {
       default: 0.5
     }
   },
+  // watch: {
+  //   lineList(newValue, oldValue) {
+  //     console.log(newValue.map(l=>l.id))
+  //   }
+  // },
   data() {
     return {
       theline: this.previewLine,
       startX: 0,
       startY: 0,
-      theList: this.lineList
+      theList: this.lineList,
+      dragble: false
     }
   },
-  // watch: {
-  //   lineList: {
-  //     handler: function(val) {
-  //       console.log('change', '')
-  //     },
-  //     deep: true
-  //   }
-  // },
+
   computed: {
     pstyle() {
       return this.previewLine.type === 'xline'
@@ -87,23 +78,36 @@ export default {
     }
   },
   methods: {
+    canDrag() {
+      this.dragble = true
+    },
     removeLine(line) {
       this.$emit('removeLine', line.id)
     },
     linedragstart(e, line) {
+   
       const event = e || window.event
       this.startX = event.clientX
       this.startY = event.clientY
     },
     linedrag(e, line) {
+      console.log(line.id)
+      if (e.clientX === 0) return
       const event = e || window.event
-      const _x = parseInt((event.clientX - this.startX) / this.zoomSize)
-      const _y = parseInt((event.clientY - this.startY) / this.zoomSize)
-      if (line.type === 'xline') {
-        this.$emit('moveline', line.id, line.pos + _y)
+      const _x = (event.clientX - this.startX) / this.zoomSize
+      const _y = (event.clientY - this.startY) / this.zoomSize
+      if (line.pos + _y < (-this.offSet + 20) / this.zoomSize) {
+        this.removeLine(line)
+        this.dragble = false
+        return
       } else {
-        this.$emit('moveline', line.id, line.pos + _x)
+        if (line.type === 'xline') {
+          this.$emit('moveline', line.id, line.pos + _y)
+        } else {
+          this.$emit('moveline', line.id, line.pos + _x)
+        }
       }
+
       this.startX = event.clientX
       this.startY = event.clientY
     }

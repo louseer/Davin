@@ -728,8 +728,7 @@ export default {
       })
     }
   },
-  created() {
-    
+  created() {    
     this.domCavase = new Dcanvas.Stage()  
     this.queryDataboard(); 
     this.nodelist = this.domCavase.nodeList
