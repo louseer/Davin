@@ -15,6 +15,9 @@
         @upload-caver='uploadCaver'
         />
       </div>
+      <form v-show='false' id="upload-form" action="https://jsonplaceholder.typicode.com/posts/" method="post" enctype="multipart/form-data" >
+  　　　<input type="file" id="caver-upload" name="upload" />
+      </form>
     </div>
     <div class='single-node-set' v-if='editType===ELEMENT_NODE'>
       <div class='top'>
@@ -41,7 +44,6 @@
         
       </div>
     </div>
-    
   </div>
 </template>
 
@@ -93,6 +95,8 @@ export default {
       return;
     },
     uploadCaver(){
+      var uploader = document.querySelector("#caver-upload");
+      uploader.click();
       console.log('uploadCaver')
     }
   },

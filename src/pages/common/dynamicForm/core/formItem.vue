@@ -1,14 +1,14 @@
 <!--  -->
 <template>
   <div>
-    <template v-for='(item,key) in items' >
+    <template v-for='(item,key) in items'>
       <el-form-item 
       :label="item.name" 
       v-if="item.type !== itemType.NOVIEW && item.type !== itemType.GROUP && item.type !== itemType.LIST" 
       v-show='!item.hide'
       >
         <el-button-group class='btn-wrapper' v-if="item.type === itemType.BUTTON_GROUP">
-          <el-button v-for='(btn,index) in item.list'  class='btn.className' @click="handleClick(btn.event,index)">{{btn.text}}</el-button>
+          <el-button v-for='(btn,index) in item.list'  :key='index' class='btn.className' @click="handleClick(btn.event,index)">{{btn.text}}</el-button>
         </el-button-group>
         <el-input 
           v-model="item.value" 
@@ -87,7 +87,7 @@
           @click-btn='popevent'
         ></d-cover-setting>
       </el-form-item>
-      <el-collapse v-if="item.type === itemType.GROUP && !item.noview">
+      <el-collapse v-if="item.type === itemType.GROUP && !item.noview" class='collapse'>
         <el-collapse-item :title="item.name" >
           <form-item :options='item.children'></form-item>
         </el-collapse-item>
@@ -146,5 +146,7 @@ export default {
 </script>
 <style lang='less' scoped>
 //@import url(); 引入公共css类
-
+.collapse{
+  padding-bottom:12px;
+}
 </style>

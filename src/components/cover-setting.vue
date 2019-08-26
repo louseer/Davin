@@ -2,7 +2,7 @@
 <template>
   <div class='cover-setting'>
     <el-button-group class='btn-wrapper'>
-      <el-button v-for='(btn,index) in btns'  class='btn.className' @click="handleClick(btn.event)">{{btn.text}}</el-button>
+      <el-button v-for='(btn,index) in btns' class='cover-btn' :key='index' :class='btn.className' @click="handleClick(btn.event)">{{btn.text}}</el-button>
     </el-button-group>
     <div class='img-wrapper'>
       <img :src='imgsrc' class='cover-img' v-if='imgsrc'></div>
