@@ -147,6 +147,6 @@ export default {
 <style lang='less' scoped>
 //@import url(); 引入公共css类
 .collapse{
-  padding-bottom:12px;
+  margin-bottom:18px;
 }
 </style>

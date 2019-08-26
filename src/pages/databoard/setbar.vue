@@ -107,8 +107,10 @@ export default {
     uploadCaverChange(e){
       const files = e.target.files
       if (!files) return
-      console.log(files)
-      //this.updateDataboard({"thumbnail":})
+      const file = files[0];
+      const windowURL = window.URL || window.webkitURL
+      file.url = windowURL.createObjectURL(file)
+      this.updateDataboard({"thumbnail":file.url})
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
