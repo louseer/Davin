@@ -5,7 +5,7 @@
       <el-button v-for='(btn,index) in btns'  class='btn.className' @click="handleClick(btn.event)">{{btn.text}}</el-button>
     </el-button-group>
     <div class='img-wrapper'>
-      <img :src='imgsrc' class='cover-img'></div>
+      <img :src='imgsrc' class='cover-img' v-if='imgsrc'></div>
     </div>
   </div>
 </template>
