@@ -5,7 +5,7 @@
 export default {
   name: 'App',
   mounted () {
-    window.onresize = () => { }//this.$bus.$emit('resizeChart') 
+    window.onresize = () => {this.$bus.$emit('windowResize')}//this.$bus.$emit('resizeChart') 
   }
 }
 </script>

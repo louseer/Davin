@@ -62,10 +62,12 @@
     <div class="stage" ref="stage">
       <guide-line
         v-if="showline"
+        ref="line"
         :previewLine="domCavase.previewLine"
         :lineList="domCavase.lineList"
         :zoomSize="domCavase.zoomSize"
         @removeLine="removeLine"
+        @moveline="moveline"
       />
       <ruler-zoom
         :zoomSize="domCavase.zoomSize"
@@ -326,8 +328,7 @@ export default {
     })
     handler.selectNodes(e => {
       this.rightClick = false
-      this.$emit('selectNodes', this.domCavase.selectNodes)
-      console.log('##@@@sdfsdfsfdsdf', this.domCavase.selectNodes)
+      this.$emit('selectNodes', this.domCavase.selectNodes)    
       //this.$emit('nodelistChange', this.domCavase.nodeList)
     })
     handler.onmousewheelHandler(e => {
@@ -369,6 +370,11 @@ export default {
   },
   methods: {
     ...mapMutations('databoard', ['setDataboard', 'setEditType']),
+    moveline(id,pos){      
+     this.domCavase.lineList.forEach(l=>{
+       l.id === id && (l.pos=pos) 
+     })
+    },
     hideline() {
       this.showline = !this.showline
     },
@@ -616,10 +622,10 @@ export default {
       const idList = this.domCavase.selectNodes.map(n => n.id)
       for (let i = 0; i < this.domCavase.selectNodes.length; i++) {
         let nd = this.domCavase.selectNodes[i]
-        const l = xArray.filter(v => Math.abs(nd.x + dx - v) < 3)[0]
-        const t = yArray.filter(v => Math.abs(nd.y + dy - v) < 3)[0]
-        const r = xArray.filter(v => Math.abs(nd.x + nd.w + dx - v) < 3)[0]
-        const b = yArray.filter(v => Math.abs(nd.y + nd.h + dy - v) < 3)[0]
+        const l = xArray.find(v => Math.abs(nd.x + dx - v) <3)
+        const t = yArray.find(v => Math.abs(nd.y + dy - v) < 3)
+        const r = xArray.find(v => Math.abs(nd.x + nd.w + dx - v) < 3)
+        const b = yArray.find(v => Math.abs(nd.y + nd.h + dy - v) < 3)
         const check = [l, t, r, b]
         if (check.every(v => v === undefined)) {
           stop = false

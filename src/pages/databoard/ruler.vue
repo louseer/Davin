@@ -1,5 +1,13 @@
 <template>
-  <canvas class="ruler_room" ref="ruler" :style="typeStyle" @mouseover.stop="rulerOn($event)" @mousemove.stop="rulerOn($event)" @mouseleave.stop="rulerLeave" @mousedown="addline"></canvas>
+  <canvas
+    class="ruler_room"
+    ref="ruler"
+    :style="typeStyle"
+    @mouseover.stop="rulerOn($event)"
+    @mousemove.stop="rulerOn($event)"
+    @mouseleave.stop="rulerLeave"
+    @mousedown="addline"
+  ></canvas>
 </template>
 
 <script>
@@ -19,12 +27,7 @@ export default {
     }
   },
   computed: {
-    cW() {
-      return this.$parent.$parent.$el.clientWidth
-    },
-    cH() {
-      return this.$parent.$parent.$el.clientHeight
-    },
+   
     typeStyle() {
       return this.type === 'xRuler'
         ? `width:100%; height:20px`
@@ -41,41 +44,50 @@ export default {
   },
   mounted() {
     this.drawRuler()
-    this.$nextTick(() => {
-      window.onresize = () => {
-        this.drawRuler()
-      }
+    this.$bus.$on('windowResize', () => {
+      this.drawRuler()
     })
   },
   methods: {
-    addline(e){
-       this.clearEventBubble(e)
+    addline(e) {
+      this.clearEventBubble(e)
       const event = e || window.event
-      const theX =
-        parseInt((event.clientX - this.GetPosition(this.$refs.ruler).left - this.offSet)/this.zoomSize)
-      const theY =
-        parseInt((event.clientY - this.GetPosition(this.$refs.ruler).top - this.offSet)/this.zoomSize)
+      const theX = parseInt(
+        (event.clientX -
+          this.GetPosition(this.$refs.ruler).left -
+          this.offSet) /
+          this.zoomSize
+      )
+      const theY = parseInt(
+        (event.clientY - this.GetPosition(this.$refs.ruler).top - this.offSet) /
+          this.zoomSize
+      )
       if (this.type === 'xRuler') {
-        this.$emit('addLine', theX ,this.type)
+        this.$emit('addLine', theX, this.type)
       } else {
-        this.$emit('addLine', theY,this.type)
+        this.$emit('addLine', theY, this.type)
       }
     },
-    rulerLeave(){
-      this.$emit('previewLine',false ,null)
-       console.log('为什么', '')
+    rulerLeave() {
+      this.$emit('previewLine', false, null)
     },
     rulerOn(e) {
       this.clearEventBubble(e)
       const event = e || window.event
-      const theX =
-        parseInt((event.clientX - this.GetPosition(this.$refs.ruler).left - this.offSet)/this.zoomSize)
-      const theY =
-        parseInt((event.clientY - this.GetPosition(this.$refs.ruler).top - this.offSet)/this.zoomSize)
+      const theX = parseInt(
+        (event.clientX -
+          this.GetPosition(this.$refs.ruler).left -
+          this.offSet) /
+          this.zoomSize
+      )
+      const theY = parseInt(
+        (event.clientY - this.GetPosition(this.$refs.ruler).top - this.offSet) /
+          this.zoomSize
+      )
       if (this.type === 'xRuler') {
-        this.$emit('previewLine', theX ,this.type)
+        this.$emit('previewLine', theX, this.type)
       } else {
-        this.$emit('previewLine', theY,this.type)
+        this.$emit('previewLine', theY, this.type)
       }
     },
     GetPosition(obj) {
@@ -95,38 +107,41 @@ export default {
       else e.returnValue = false
     },
     drawRuler() {
-      const canvas = this.$refs.ruler
-      if (this.type === 'xRuler') {
-        canvas.width = this.$parent.$el.clientWidth
-        canvas.height = 20
-      } else {
-        canvas.width = 20
-        canvas.height = this.$parent.$el.clientHeight
-      }
+   
+        const canvas = this.$refs.ruler
+        if (this.type === 'xRuler') {
+          canvas.width = this.$parent.$el.clientWidth
+          canvas.height = 20
+        } else {
+          canvas.width = 20
+          canvas.height = this.$parent.$el.clientHeight
+        }
 
-      const ctx = canvas.getContext('2d')
-      this.drawBg(ctx)
-      this.drawline(ctx)
-      canvas.onmousemove = e => {
-        this.drawPosition(e)
-      }
+        const ctx = canvas.getContext('2d')
+        this.drawBg(ctx)
+        this.drawline(ctx)
+        canvas.onmousemove = e => {
+          this.drawPosition(e)
+        }
+     
     },
     drawPosition(e, ctx) {
       const x = e.clientX
     },
     drawBg(ctx) {
+       console.log('tag',this.cW)
       ctx.fillStyle = '#44474b'
       if (this.type === 'xRuler') {
-        ctx.fillRect(20, 0, this.cW, 20)
+        ctx.fillRect(20, 0, this.$parent.$el.clientWidth, 20)
       } else {
-        ctx.fillRect(0, 20, 20, this.cH)
+        ctx.fillRect(0, 20, 20, this.$parent.$el.clientHeight)
       }
     },
     drawline(ctx) {
       let blocks =
-        this.cW > this.cH
-          ? (this.cW - this.offSet) / this.zoomSize
-          : (this.cH - this.offSet) / this.zoomSize
+        this.$parent.$el.clientWidth > this.$parent.$el.clientHeight
+          ? (this.$parent.$el.clientWidth - this.offSet) / this.zoomSize
+          : (this.$parent.$el.clientHeight - this.offSet) / this.zoomSize
       let zBetween = 5
 
       if (this.type === 'xRuler') {

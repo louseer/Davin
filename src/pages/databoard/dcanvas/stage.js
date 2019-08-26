@@ -20,6 +20,8 @@ export default class Stage {
     this.minZoom = 0.1
     this.previewLine=null
     this.lineList=[]
+    this.width=''
+    this.height=''
   }
   get indexList() {
     return this.nodeList.sort((a, b) => a.zindex - b.zindex)
@@ -621,7 +623,7 @@ export default class Stage {
       },
       mousedownHandler(callback) {
         ele.onmousedown = e => {
-          clearEventBubble(e)
+         // clearEventBubble(e)
           const event = e || window.event
           callback && typeof callback === 'function' && callback(event)
         }

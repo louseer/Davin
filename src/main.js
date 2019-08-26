@@ -12,7 +12,7 @@ import thumbnail from './components/thumbnail.vue'
 import '@/assets/styles/dark-element-ui.css'
 Vue.component('thumbnail', thumbnail)
 Vue.mixin(base)
-
+Vue.prototype.$bus = new Vue()
 document.oncontextmenu = () => {
   self.event.returnValue = false
 }
