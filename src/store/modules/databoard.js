@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { EDIT_MODE,VIEW_MODE,ELEMENT_SCREEN,ELEMENT_MULTI,ELEMENT_NODE } from "../constants"
 import { getDataBoardData, updateLayoutReq } from '@/api/api.js'
 import { objDeepMerge } from '@/utils/index.js'
@@ -10,7 +11,9 @@ export default {
     databoard:null,
     editNode:null,
     editChart:null,
-    editType:ELEMENT_SCREEN
+    editType:ELEMENT_SCREEN,
+    step:-1,
+    snapshot:[]
   },
   getters: {
     isEditing(state) {
@@ -29,18 +32,22 @@ export default {
     setDBID (state,id) {
       state.databoardID = id
     },
-    //记录当前大屏设置
-    setDataboard (state,data) {
+    //
+    setDbConfig(state,data){
       console.log("接口请求完毕")
       state.databoard = data
     },
+    //记录当前大屏初始设置
+    initDataboard (state,data) {
+      console.log("设置大屏对象",data)
+      Vue.set(state, 'databoard', data);
+    },
   
     //记录当前激活node
-    setEditNode (state,node) {
-      console.log("setEditNodesetEditNodesetEditNode",node)
+    initEditNode (state,node) {
       state.editNode = node
     },
-    setEditChart (state,chart) {
+    initEditChart (state,chart) {
       console.log(chart)
       state.editChart = chart
     },
@@ -49,7 +56,7 @@ export default {
     },
     _updateDB(state,setting){
       state.databoard = objDeepMerge(state.databoard,setting)
-      console.log(state.databoard)
+      console.log("更新大屏对象",state.databoard)
     },
     _updateNode(state,setting){
       state.editNode = objDeepMerge(state.editNode,setting)
@@ -61,7 +68,7 @@ export default {
   actions: {
     queryDataboard({state,commit}){
       getDataBoardData(state.setDBID).then(rsp => {
-        commit('setDataboard',rsp.data)
+        commit('setDbConfig',rsp.data)
       })
     },
     updateNode({commit},setting){

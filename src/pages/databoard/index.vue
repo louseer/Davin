@@ -7,7 +7,7 @@
       :rightMenu="rightMenu"
       @hide="contextmenuHide"
     />
-    <div class="ex">
+    <!-- <div class="ex">
       <input type="text" v-model="domCavase.canvas.width" placeholder="请输入宽度" />
       <input type="text" v-model="domCavase.canvas.height" />
       <input type="text" v-model="domCavase.zoomSize" placeholder="请输入放大值" />
@@ -58,7 +58,7 @@
           <button style="float:left" v-if="multiple.length>=2" @click="nodeAlign('Vline')">垂直联排</button>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="stage" ref="stage">
       <guide-line
         v-if="showline"
@@ -109,6 +109,7 @@ import {
 } from '@/store/constants.js'
 import RulerZoom from './rulerzoom.vue'
 import { debuglog } from 'util'
+import { getDataBoardData} from '@/api/api.js'
 
 export default {
   components: {
@@ -300,7 +301,7 @@ export default {
       return this.domCavase.selectNodes.filter(n => n.pid === null)
     },
     ...mapState('databoard', {
-      canvasConfig: state => state.databoard
+      databoardID:state => state.databoardID
     })
   },
 
@@ -369,7 +370,7 @@ export default {
     })
   },
   methods: {
-    ...mapMutations('databoard', ['setDataboard', 'setEditType']),
+    ...mapMutations('databoard', ['initDataboard', 'setEditType','_updateDB']),
     moveline(id,pos){      
      this.domCavase.lineList.forEach(l=>{
        l.id === id && (l.pos=pos) 
@@ -713,13 +714,24 @@ export default {
     },
     eventZoom(e) {
       this.domCavase.eventZoom(e)
+    },
+    queryDataboard() {
+      getDataBoardData(this.databoardID).then(rsp => {
+        console.log(rsp)
+        if(rsp.status === 0){
+          this.canvasConfig = rsp.data
+          this.domCavase.createCanvas(this.canvasConfig) 
+          this.initDataboard(this.domCavase.canvas)
+        }else{
+          console.log("接口请求失败")
+        }
+      })
     }
   },
   created() {
-    this.domCavase = new Dcanvas.Stage()
-    this.domCavase.createCanvas(this.canvasConfig)
-    //this.setDataboard(this.domCavase.canvas)
-    console.log('@@@@@@@@', this.domCavase.canvas)
+    
+    this.domCavase = new Dcanvas.Stage()  
+    this.queryDataboard(); 
     this.nodelist = this.domCavase.nodeList
     if (JSON.parse(window.localStorage.getItem('saveNode'))) {
       JSON.parse(window.localStorage.getItem('saveNode'))

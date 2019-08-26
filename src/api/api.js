@@ -19,7 +19,7 @@ export function getFormData (id) {
 
 export function getDataBoardData (id) {
   return request({
-    url: `/databoard.json?formid=${id}`,
+    url: `/databoard.json?dbid=${id}`,
     method: 'get'
   })
 }

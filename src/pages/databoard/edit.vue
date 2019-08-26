@@ -120,6 +120,8 @@ export default {
       ELEMENT_SCREEN,
       ELEMENT_NODE,
       ELEMENT_MULTI,
+      databoardConfig:null,
+     // maintit:'',
       aglinList: [
         { type: 'top', name: '顶对齐' },
         { type: 'right', name: '右对齐' },
@@ -470,17 +472,23 @@ export default {
       return this.databoard ? this.databoard.name : ''
     }
   },
+  // watch:{
+  //   databoard:{
+  //     handler:function(val){
+  //       console.log('edit监测到state databoard 更新',val)
+  //       this.maintit = this.databoard.name || ''
+  //     },
+  //     deep:true
+  //   }
+  // },
 
   methods: {
     ...mapMutations('databoard',[
       'openEditMode',
       'setEditType',
-      'setEditNode',
-      'setEditChart',
+      'initEditNode',
+      'initEditChart',
       'setDBID'
-    ]),
-    ...mapActions('databoard',[
-      'queryDataboard'
     ]),
     multipleNodesAlign(type) {
       this.$refs.stage.domCavase.multipleNodesAlign(type)
@@ -492,8 +500,8 @@ export default {
       const length = nodes.length;
       if(length === 1){
         this.setEditType(ELEMENT_NODE)
-        this.setEditNode(nodes[0])
-        this.setEditChart(nodes[0].chart)
+        this.initEditNode(nodes[0])
+        this.initEditChart(nodes[0].chart)
       }
     },
     selectNodes(nodes){
@@ -612,7 +620,6 @@ export default {
     //理论上都会有值。新建在进来之前已经获取到ID。可以放在前一个页面上直接设置vuex值。
     this.setDBID(id)
     this.openEditMode()
-    this.queryDataboard()
   }
 }
 </script>

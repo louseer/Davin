@@ -240,7 +240,7 @@ export class DynamicForm {
     this.options = generateOptions(configurer,this,setting);
     this.callback = callback;
     if(setting){
-      this.setOriginSetting(setting);
+      this.setSetting(setting);
     }
     this.step = -1;
     this.recording = true;
@@ -259,7 +259,7 @@ export class DynamicForm {
     this.snapshot.push(snapshot(this.previousSetting,newSetting))
   }
 
-  setOriginSetting(setting) {
+  setSetting(setting) {
     this.assignValue(setting)
     setting = getValues(this.options)
     this.originSetting = setting

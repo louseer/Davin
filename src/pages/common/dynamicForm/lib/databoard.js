@@ -130,13 +130,17 @@ const options = {
         "name":"背景色",
         "type":OPTIONTYPE.COLORPICKER,
         "predefine":COLOR_PREDEFINE,
-        "defaultVal":WHITE
+        "defaultVal":"#464a4e"
       } 
     }
   },
   "thumbnail":{
     "name":"缩略图",
     "type":OPTIONTYPE.COVER,
+    "btns":[
+      {text:'截取画布',className:'',event:'intercept-canvas'},
+      {text:'上传图片',className:'',event:'upload-caver'}
+    ],
     "defaultVal":""
   }
 }

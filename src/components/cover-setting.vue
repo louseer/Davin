@@ -2,50 +2,41 @@
 <template>
   <div class='cover-setting'>
     <el-button-group class='btn-wrapper'>
-      <el-button class='cover-btn' @click="interceptCavas">截取画布</el-button>
-      <el-button class='cover-btn' @click="uploadCaver">上传图片</el-button>
+      <el-button v-for='(btn,index) in btns'  class='btn.className' @click="handleClick(btn.event)">{{btn.text}}</el-button>
     </el-button-group>
     <div class='img-wrapper'>
-      <img :src='imgsrc' class='cover-img'></div>
+      <img :src='imgsrc' class='cover-img' v-if='imgsrc'></div>
     </div>
   </div>
- 
 </template>
 
 <script>
-//import {组件名称} from '组件路径';
-import { mapState, mapActions } from 'vuex'
 export default {
+  model: {
+    prop: 'imgsrc',
+    event: 'change'
+  },
+  props:{
+    btns:Array,
+    imgsrc:String
+  },
   components: {},
   data() {
-    return {
-      imgsrc:this.value 
-    };
+    return {}
   },
-  computed: {
-    ...mapState('databoard',{
-      databoard:state => state.databoard,
-    })
-  },
-  watch: {},
   methods: {
-    ...mapActions('databoard',[
-      'updateDataboard'
-    ]),
-    interceptCavas(){
-      this.$emit('interceptCavas')
-    },
-    uploadCaver(){
-      this.$emit('uploadCaver')
+    handleClick(emitTag){
+      if(emitTag){
+        this.$emit('click-btn',emitTag)
+      }
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
-  
+    console.log(this.imgsrc)
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-  
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
@@ -73,6 +64,8 @@ export default {
   box-sizing: border-box;
   .cover-img {
     margin:0 auto;
+    width: 100%;
+    height:100%;
   }
 }
 </style>
