@@ -78,13 +78,10 @@ export default class Stage {
    }
   createCanvas(config) {
     const _this = this
-    const obj = config || {
-      id: getuuid(),
-      zoomSize: _this.zoomSize,
-      width: 1920,
-      height: 1080,
+    const obj = Object.assign({
+      zoomSize: _this.zoomSize,     
       offset: _this.offset,
-    }
+    },config);
     this.canvas = new Dcanvas.Canvas(obj)
     console.log('tag', this.canvas)
   }
