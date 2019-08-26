@@ -7,6 +7,9 @@
       v-if="item.type !== itemType.NOVIEW && item.type !== itemType.GROUP && item.type !== itemType.LIST" 
       v-show='!item.hide'
       >
+        <el-button-group class='btn-wrapper' v-if="item.type === itemType.BUTTON_GROUP">
+          <el-button v-for='(btn,index) in item.list'  class='btn.className' @click="handleClick(btn.event,index)">{{btn.text}}</el-button>
+        </el-button-group>
         <el-input 
           v-model="item.value" 
           v-if="item.type === itemType.INPUT"
@@ -54,7 +57,6 @@
           :min='item.min' 
           :max='item.max' 
           :step='item.step'
-          input-size='mini'
         ></el-slider>
         <el-color-picker
           v-if="item.type === itemType.COLORPICKER" 
@@ -77,7 +79,13 @@
           :title='item.name'
           v-model="item.value"
         ></d-img-select>
-        <d-cover-setting  v-if="item.type === itemType.COVER" v-model="item.value"></d-cover-setting>
+        <d-cover-setting  
+          v-if="item.type === itemType.COVER" 
+          v-model="item.value"
+          :imgsrc ="item.value"
+          :btns='item.btns'
+          @click-btn='popevent'
+        ></d-cover-setting>
       </el-form-item>
       <el-collapse v-if="item.type === itemType.GROUP && !item.noview">
         <el-collapse-item :title="item.name" >
@@ -96,10 +104,11 @@
 </template>
 
 <script>
-//import {组件名称} from '组件路径';
+//注：该组件内的element组件均只写了少许设置。如果增加设置，可在配置文件增加elementOpt 字段，并在这边自行映射;
 import { OPTIONTYPE } from "./constants.js"
 import DImgSelect from "components/img-select.vue"
 import DCoverSetting from "components/cover-setting.vue"
+
 export default {
   name:"form-item",
   components:{
@@ -118,9 +127,16 @@ export default {
   watch:{
     options:{
       handler:function (val) {
+        console.log("FormItem 检测到新的options",this.setting)
         this.items = val
       },
       deep:true
+    }
+  },
+  methods:{
+    popevent(emitTag){
+      console.log("formItem emit TAG:",emitTag)
+      this.$emit('popevent',emitTag)
     }
   },
   created(){

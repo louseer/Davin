@@ -6,7 +6,14 @@
         大屏设置
       </div>
       <div class='form-wrapper'>
-        <DForm type='databoard' :setting='databoard' @update='updateDataboard' key='databoard' @interceptCavas='interceptCavas'/>
+        <DForm 
+        type='databoard'
+        key='databoard'  
+        :setting='databoard' 
+        @update='updateDataboard' 
+        @intercept-canvas='interceptCavas'
+        @upload-caver='uploadCaver'
+        />
       </div>
     </div>
     <div class='single-node-set' v-if='editType===ELEMENT_NODE'>
@@ -43,6 +50,7 @@
 import { ELEMENT_SCREEN,ELEMENT_NODE,ELEMENT_MULTI } from "@/store/constants"
 import { mapState, mapActions } from 'vuex'
 import DForm from '../common/dynamicForm/dynamicForm.vue'
+import html2canvas from 'html2canvas';
 
 export default {
   components: {
@@ -76,11 +84,16 @@ export default {
       'updateDataboard'
     ]),
     interceptCavas(){
-      var image = new Image();
-      // const canvas = this.databoard;
-      // image.src = canvas.toDataURL("image/png");
-      // return image;
-      console.log('abccc')
+      const canvas = document.querySelector("#canvas");
+      html2canvas(document.querySelector("#canvas")).then(canvas => {
+          document.body.appendChild(canvas)
+          var dataURL  = canvas.toDataURL('image/png');
+          this.updateDataboard({"thumbnail":dataURL})
+      });
+      return;
+    },
+    uploadCaver(){
+      console.log('uploadCaver')
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）

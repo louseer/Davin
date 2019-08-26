@@ -8,7 +8,7 @@
     "zoomSize": 0.55,
     "id": "503d7180-c4cb-11e9-bbae-371f868e3c9a",
     "brief": "",
-    "name":"我的第一块大屏",
+    "name":"新建大屏",
     "adaptive": 0,
     "background": {
       "imgSouce": 0,
@@ -17,8 +17,8 @@
       "imgRepeat": 0,
       "imgBlur": 5,
       "imgOpacity": 80,
-      "bgcolor": "rgba(255, 255, 255, 1)"
+      "bgcolor": "#464a4e"
     },
-    "thumbnail": ""
+    "thumbnail": "sd"
   }
 }
