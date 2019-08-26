@@ -100,7 +100,6 @@ methods: {
  border-radius: 8px;
  box-shadow: 0px 0px 50px rgba(0,0,0,0.2);
   background: #464a4e;
-  overflow: hidden;
   .bgImg{
     width:100%;
     height:100%;

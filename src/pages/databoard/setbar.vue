@@ -16,7 +16,12 @@
         />
       </div>
       <form v-show='false' id="upload-form" action="https://jsonplaceholder.typicode.com/posts/" method="post" enctype="multipart/form-data" >
-  　　　<input type="file" id="caver-upload" name="upload" />
+  　　　<input 
+          type="file" 
+          id="caver-upload" 
+          name="upload"
+          @change="uploadCaverChange"
+        />
       </form>
     </div>
     <div class='single-node-set' v-if='editType===ELEMENT_NODE'>
@@ -98,6 +103,12 @@ export default {
       var uploader = document.querySelector("#caver-upload");
       uploader.click();
       console.log('uploadCaver')
+    },
+    uploadCaverChange(e){
+      const files = e.target.files
+      if (!files) return
+      console.log(files)
+      //this.updateDataboard({"thumbnail":})
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
