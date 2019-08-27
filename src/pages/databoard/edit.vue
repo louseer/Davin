@@ -216,12 +216,12 @@ export default {
         {
           name: '图层',
           id: 1,
-          active: true
+          active: false
         },
         {
           name: '组件',
           id: 2,
-          active: false
+          active: true
         }
       ],
       typetree: [

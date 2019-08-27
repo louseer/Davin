@@ -82,8 +82,8 @@ computed: {
         height:${this.config.height}px;
         transform:scale(${this.config.zoomSize});
         transform-origin: 0 0; 
-        top:${this.config.offset}px;
-        left:${this.config.offset}px;
+        top:${this.config.offsety}px;
+        left:${this.config.offsetx}px;
         background:${bgcolor};
       `
   }
@@ -97,6 +97,7 @@ methods: {
 <style lang="less" scoped>
 .canvas {
   position: absolute;
+  
  border-radius: 8px;
  box-shadow: 0px 0px 50px rgba(0,0,0,0.2);
   background: #464a4e;

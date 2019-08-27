@@ -124,15 +124,15 @@ export default {
      itemType:OPTIONTYPE
     }
   },
-  watch:{
-    options:{
-      handler:function (val) {
-        console.log("FormItem 检测到新的options",this.setting)
-        this.items = val
-      },
-      deep:true
-    }
-  },
+  // watch:{
+  //   options:{
+  //     handler:function (val) {
+  //       console.log("FormItem 检测到新的options",this.setting)
+  //       this.items = val
+  //     },
+  //     deep:true
+  //   }
+  // },
   methods:{
     popevent(emitTag){
       console.log("formItem emit TAG:",emitTag)

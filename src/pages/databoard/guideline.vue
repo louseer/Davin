@@ -9,15 +9,13 @@
       class="guideline"
       :draggable="dragble"
       :style="lstyle(line)"
+      @dblclick="removeLine(line)"
       @dragstart.stop="linedragstart($event,line)"
       @drag.stop="linedrag($event,line)"
       @dragend.stop="linedrag($event,line)"
       @mousedown.stop="canDrag"
     >
-      <div
-        class="block"       
-        :style="bstyle"
-      >{{parseInt(line.pos)}}</div>
+      <div class="block">{{parseInt(line.pos)}}</div>
     </div>
   </div>
 </template>
@@ -26,7 +24,11 @@
 import { debuglog } from 'util'
 export default {
   props: {
-    offSet: {
+    offSetx: {
+      type: Number,
+      default: 50
+    },
+    offSety: {
       type: Number,
       default: 50
     },
@@ -62,18 +64,19 @@ export default {
     pstyle() {
       return this.previewLine.type === 'xline'
         ? `top:${this.previewLine.pos * this.zoomSize +
-            this.offSet}px;left:0.2rem;width:100%;height:0px; `
+            this.offSety}px;left:0.2rem;width:100%;height:0px; `
         : `left:${this.previewLine.pos * this.zoomSize +
-            this.offSet}px;top:0.2rem;height:100%;width:0px;`
+            this.offSetx}px;top:0.2rem;height:100%;width:0px;`
     },
-    bstyle() {},
+
     lstyle() {
       return function(line) {
         return line.type === 'xline'
           ? `top:${line.pos * this.zoomSize +
-              this.offSet}px;left:0.2rem;width:100%;height:0px;`
+              this
+                .offSety}px;left:0.2rem; cursor: n-resize;width:100%;height:0px;`
           : `left:${line.pos * this.zoomSize +
-              this.offSet}px;top:0.2rem;height:100%;width:0px;`
+              this.offSetx}px;top:0.2rem;height:100%;width:0px;cursor: w-resize`
       }
     }
   },
@@ -85,7 +88,6 @@ export default {
       this.$emit('removeLine', line.id)
     },
     linedragstart(e, line) {
-   
       const event = e || window.event
       this.startX = event.clientX
       this.startY = event.clientY
@@ -96,16 +98,21 @@ export default {
       const event = e || window.event
       const _x = (event.clientX - this.startX) / this.zoomSize
       const _y = (event.clientY - this.startY) / this.zoomSize
-      if (line.pos + _y < (-this.offSet + 20) / this.zoomSize) {
-        this.removeLine(line)
-        this.dragble = false
-        return
-      } else {
-        if (line.type === 'xline') {
-          this.$emit('moveline', line.id, line.pos + _y)
-        } else {
-          this.$emit('moveline', line.id, line.pos + _x)
+
+      if (line.type === 'xline') {
+        if (line.pos + _y < (-this.offSety + 20) / this.zoomSize) {
+          this.removeLine(line)
+          this.dragble = false
+          return
         }
+        this.$emit('moveline', line.id, line.pos + _y)
+      } else {
+        if (line.pos + _x < (-this.offSetx + 20) / this.zoomSize) {
+          this.removeLine(line)
+          this.dragble = false
+          return
+        }
+        this.$emit('moveline', line.id, line.pos + _x)
       }
 
       this.startX = event.clientX
@@ -122,14 +129,14 @@ export default {
 
   border-left: @border_Data_dottedline;
   border-top: @border_Data_dottedline;
-  z-index: 999999;
+  z-index: 997;
 }
 .guideline {
   position: absolute;
-  cursor: w-resize;
+  pointer-events: auto;
   border-left: @border_Data_line;
   border-top: @border_Data_line;
-  z-index: 999999;
+  z-index: 997;
 }
 .block {
   position: absolute;

@@ -2,7 +2,6 @@
   <canvas
     class="ruler_room"
     ref="ruler"
-    :style="typeStyle"
     @mouseover.stop="rulerOn($event)"
     @mousemove.stop="rulerOn($event)"
     @mouseleave.stop="rulerLeave"
@@ -17,7 +16,11 @@ export default {
       type: String,
       default: 'Ruler'
     },
-    offSet: {
+    offSetx: {
+      type: Number,
+      default: 50
+    },
+    offSety: {
       type: Number,
       default: 50
     },
@@ -27,7 +30,6 @@ export default {
     }
   },
   computed: {
-   
     typeStyle() {
       return this.type === 'xRuler'
         ? `width:100%; height:20px`
@@ -35,6 +37,12 @@ export default {
     }
   },
   watch: {
+    w(val) {
+      this.drawRuler()
+    },
+    h(val) {
+      this.drawRuler()
+    },
     zoomSize: {
       handler(val) {
         this.drawRuler()
@@ -44,9 +52,6 @@ export default {
   },
   mounted() {
     this.drawRuler()
-    this.$bus.$on('windowResize', () => {
-      this.drawRuler()
-    })
   },
   methods: {
     addline(e) {
@@ -55,11 +60,13 @@ export default {
       const theX = parseInt(
         (event.clientX -
           this.GetPosition(this.$refs.ruler).left -
-          this.offSet) /
+          this.offSetx) /
           this.zoomSize
       )
       const theY = parseInt(
-        (event.clientY - this.GetPosition(this.$refs.ruler).top - this.offSet) /
+        (event.clientY -
+          this.GetPosition(this.$refs.ruler).top -
+          this.offSety) /
           this.zoomSize
       )
       if (this.type === 'xRuler') {
@@ -77,11 +84,13 @@ export default {
       const theX = parseInt(
         (event.clientX -
           this.GetPosition(this.$refs.ruler).left -
-          this.offSet) /
+          this.offSetx) /
           this.zoomSize
       )
       const theY = parseInt(
-        (event.clientY - this.GetPosition(this.$refs.ruler).top - this.offSet) /
+        (event.clientY -
+          this.GetPosition(this.$refs.ruler).top -
+          this.offSety) /
           this.zoomSize
       )
       if (this.type === 'xRuler') {
@@ -107,29 +116,26 @@ export default {
       else e.returnValue = false
     },
     drawRuler() {
-   
-        const canvas = this.$refs.ruler
-        if (this.type === 'xRuler') {
-          canvas.width = this.$parent.$el.clientWidth
-          canvas.height = 20
-        } else {
-          canvas.width = 20
-          canvas.height = this.$parent.$el.clientHeight
-        }
+      const canvas = this.$refs.ruler
+      if (this.type === 'xRuler') {
+        canvas.width = this.$parent.$el.clientWidth
+        canvas.height = 20
+      } else {
+        canvas.width = 20
+        canvas.height = this.$parent.$el.clientHeight
+      }
 
-        const ctx = canvas.getContext('2d')
-        this.drawBg(ctx)
-        this.drawline(ctx)
-        canvas.onmousemove = e => {
-          this.drawPosition(e)
-        }
-     
+      const ctx = canvas.getContext('2d')
+      this.drawBg(ctx)
+      this.drawline(ctx)
+      canvas.onmousemove = e => {
+        this.drawPosition(e)
+      }
     },
     drawPosition(e, ctx) {
       const x = e.clientX
     },
     drawBg(ctx) {
-       console.log('tag',this.cW)
       ctx.fillStyle = '#44474b'
       if (this.type === 'xRuler') {
         ctx.fillRect(20, 0, this.$parent.$el.clientWidth, 20)
@@ -138,44 +144,45 @@ export default {
       }
     },
     drawline(ctx) {
-      let blocks =
-        this.$parent.$el.clientWidth > this.$parent.$el.clientHeight
-          ? (this.$parent.$el.clientWidth - this.offSet) / this.zoomSize
-          : (this.$parent.$el.clientHeight - this.offSet) / this.zoomSize
+      let blocksx =
+        (this.$parent.$el.clientWidth - this.offSetx) / this.zoomSize
+
+      let blocksy =
+        (this.$parent.$el.clientHeight - this.offSety) / this.zoomSize
       let zBetween = 5
 
       if (this.type === 'xRuler') {
-        for (let i = 0; i < blocks; i++) {
+        for (let i = -Math.abs(this.offSetx); i < blocksx; i++) {
           ctx.fillStyle = '#63666a'
-          ctx.fillRect(i * zBetween + this.offSet, 16, 1, 4)
+          ctx.fillRect(i * zBetween + this.offSetx, 16, 1, 4)
           //  ctx.fillRect(16, i * zBetween + this.offSet, 4, 1)
           if (i % 10 === 0) {
             ctx.fillStyle = '#63666a'
-            ctx.fillRect(i * zBetween + this.offSet, 2, 1, 18)
+            ctx.fillRect(i * zBetween + this.offSetx, 2, 1, 18)
             // ctx.fillRect(2, i * zBetween + this.offSet, 18, 1)
             ctx.fillStyle = '#b7babe'
             ctx.font = ' 12px Arial'
             ctx.fillText(
               `${parseInt((i * zBetween) / this.zoomSize)}`,
-              parseInt(i * zBetween + this.offSet + 2),
+              parseInt(i * zBetween + this.offSetx + 2),
               14
             )
           }
         }
       } else {
-        for (let i = 0; i < blocks; i++) {
+        for (let i = -Math.abs(this.offSety); i < blocksy; i++) {
           ctx.fillStyle = '#63666a'
-          ctx.fillRect(16, i * zBetween + this.offSet, 4, 1)
+          ctx.fillRect(16, i * zBetween + this.offSety, 4, 1)
 
           if (i % 10 === 0) {
             ctx.fillStyle = '#63666a'
-            ctx.fillRect(2, i * zBetween + this.offSet, 18, 1)
+            ctx.fillRect(2, i * zBetween + this.offSety, 18, 1)
             ctx.fillStyle = '#b7babe'
             ctx.font = ' 12px Arial'
             ctx.fillText(
               `${parseInt((i * zBetween) / this.zoomSize)}`,
               0,
-              parseInt(i * zBetween + this.offSet + 18)
+              parseInt(i * zBetween + this.offSety + 18)
             )
           }
         }
@@ -189,5 +196,6 @@ export default {
 .ruler_room {
   position: absolute;
   top: 0;
+  pointer-events: auto;
 }
 </style>

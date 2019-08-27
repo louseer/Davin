@@ -58,19 +58,26 @@
           <button style="float:left" v-if="multiple.length>=2" @click="nodeAlign('Vline')">垂直联排</button>
         </div>
       </div>
-    </div> -->
-    <div class="stage" ref="stage">
+    </div>-->
+    <div class="stage" ref="stage" @dragover.prevent>
+      <eagle-eye />
       <guide-line
         v-if="showline"
         ref="line"
         :previewLine="domCavase.previewLine"
         :lineList="domCavase.lineList"
         :zoomSize="domCavase.zoomSize"
+        :offSetx="domCavase.offsetx"
+        :offSety="domCavase.offsety"
         @removeLine="removeLine"
         @moveline="moveline"
       />
       <ruler-zoom
+        :w="stageW"
+        :h="stageH"
         :zoomSize="domCavase.zoomSize"
+        :offSetx="domCavase.offsetx"
+        :offSety="domCavase.offsety"
         @previewLine="previewLine"
         @addLine="addLine"
         @hideline="hideline"
@@ -101,6 +108,7 @@ import Cav from './canvas.vue'
 import Node from './layer-node.vue'
 import GuideLine from './guideline.vue'
 import Contextmenu from './contextmenu.vue'
+import EagleEye from './eagle-eye.vue'
 import { mapState, mapMutations } from 'vuex'
 import {
   ELEMENT_SCREEN,
@@ -109,7 +117,8 @@ import {
 } from '@/store/constants.js'
 import RulerZoom from './rulerzoom.vue'
 import { debuglog } from 'util'
-import { getDataBoardData} from '@/api/api.js'
+import { getDataBoardData } from '@/api/api.js'
+import { getuuid } from '@/utils/index'
 
 export default {
   components: {
@@ -117,10 +126,13 @@ export default {
     Cav,
     Contextmenu,
     RulerZoom,
-    GuideLine
+    GuideLine,
+    EagleEye
   },
   data() {
     return {
+      stageW: '',
+      stageH: '',
       stop: false,
       showline: true,
       domCavase: '',
@@ -301,11 +313,23 @@ export default {
       return this.domCavase.selectNodes.filter(n => n.pid === null)
     },
     ...mapState('databoard', {
-      databoardID:state => state.databoardID
+      databoardID: state => state.databoardID
     })
   },
 
   mounted() {
+    window.onresize = () => {
+      this.stageW = this.$refs.stage.clientWidth
+      this.stageH = this.$refs.stage.clientHeight
+      const cw = this.domCavase.canvas.width
+      const ch = this.domCavase.canvas.height
+      const [cwm, chm] = [
+        cw + this.domCavase.offsetx,
+        ch + this.domCavase.offsety
+      ]
+      console.log('tag', this.stageW, this.stageH)
+    }
+
     let _this = this
     window.document.onkeydown = function(e) {
       const keynum = window.event ? e.keyCode : e.which
@@ -327,9 +351,34 @@ export default {
     handler.clickHandler(e => {
       this.setEditType(ELEMENT_SCREEN)
     })
+    handler.dropHandler(e=>{
+     
+     const item = JSON.parse(e.dataTransfer.getData("item"))
+     const startX = e.clientX - this.GetPosition(this.$refs.stage).left 
+     const startY = e.clientY - this.GetPosition(this.$refs.stage).top 
+     const id = getuuid()
+      const chart = {
+        id,
+        type: item.type,
+        name: item.title,
+        version: item.version,
+        text: item.text, //临时代码
+        fontSize: item.fontSize //临时代码
+      }
+      const obj={
+        w:item.w || 200,
+        h:item.h || 200,
+        x:startX,
+        y:startY,
+        elType:item.type,
+        name:item.title,
+        chart
+      }
+      this.addNode(obj)
+    })
     handler.selectNodes(e => {
       this.rightClick = false
-      this.$emit('selectNodes', this.domCavase.selectNodes)    
+      this.$emit('selectNodes', this.domCavase.selectNodes)
       //this.$emit('nodelistChange', this.domCavase.nodeList)
     })
     handler.onmousewheelHandler(e => {
@@ -370,11 +419,11 @@ export default {
     })
   },
   methods: {
-    ...mapMutations('databoard', ['initDataboard', 'setEditType','_updateDB']),
-    moveline(id,pos){      
-     this.domCavase.lineList.forEach(l=>{
-       l.id === id && (l.pos=pos) 
-     })
+    ...mapMutations('databoard', ['initDataboard', 'setEditType', '_updateDB']),
+    moveline(id, pos) {
+      this.domCavase.lineList.forEach(l => {
+        l.id === id && (l.pos = pos)
+      })
     },
     hideline() {
       this.showline = !this.showline
@@ -390,7 +439,6 @@ export default {
     },
     previewLine(pos, type) {
       this.domCavase.createPreviewLine(pos, type)
-     
     },
     getNodeLlist(callback) {
       callback &&
@@ -568,6 +616,7 @@ export default {
       this.$emit('nodeClick', this.domCavase.selectNodes)
     },
     nodeMousedown(node) {
+      console.log(node)
       this.rightClick = false
       if (this.domCavase.selectNodes.map(n => n.id).includes(node.id)) return
       console.log('@@@@@@@@@@@@@@@', this.ctrlDown)
@@ -608,12 +657,29 @@ export default {
       this.domCavase.refreshNode(node)
     },
     nodeDrag(e, node) {
-      const yArray = this.domCavase.lineList
+      const yline = this.domCavase.lineList
         .filter(n => n.type === 'xline')
         .map(n => n.pos)
-      const xArray = this.domCavase.lineList
+
+      const xline = this.domCavase.lineList
         .filter(n => n.type === 'yline')
         .map(n => n.pos)
+      const selectId = this.domCavase.selectNodes.map(n => n.id)
+      const nodeXPos = this.domCavase.nodeList
+        .filter(n => !selectId.includes(n.id))
+        .map(n => n.x)
+      const nodeYPos = this.domCavase.nodeList
+        .filter(n => !selectId.includes(n.id))
+        .map(n => n.y)
+      const nodeRPos = this.domCavase.nodeList
+        .filter(n => !selectId.includes(n.id))
+        .map(n => n.x + n.w)
+      const nodeBPos = this.domCavase.nodeList
+        .filter(n => !selectId.includes(n.id))
+        .map(n => n.y + n.h)
+      const yArray = [...yline, ...nodeYPos, ...nodeBPos]
+      const xArray = [...xline, ...nodeXPos, ...nodeRPos]
+
       const _x = this.domCavase.eventZoom(e).clientX
       const _y = this.domCavase.eventZoom(e).clientY
       const dx = _x - this.startX
@@ -623,7 +689,7 @@ export default {
       const idList = this.domCavase.selectNodes.map(n => n.id)
       for (let i = 0; i < this.domCavase.selectNodes.length; i++) {
         let nd = this.domCavase.selectNodes[i]
-        const l = xArray.find(v => Math.abs(nd.x + dx - v) <3)
+        const l = xArray.find(v => Math.abs(nd.x + dx - v) < 3)
         const t = yArray.find(v => Math.abs(nd.y + dy - v) < 3)
         const r = xArray.find(v => Math.abs(nd.x + nd.w + dx - v) < 3)
         const b = yArray.find(v => Math.abs(nd.y + nd.h + dy - v) < 3)
@@ -640,6 +706,23 @@ export default {
           offset = [_l, _t, _r, _b]
           offset = offset.map(v => (v ? v : 0))
           console.log(offset)
+          check.forEach((n, i) => {
+            
+            if (n !== undefined) {
+              const id =getuuid()
+              if (i === 0 || i ===  2) {                
+                this.domCavase.createPreviewLine(n, "xRuler" ,id)
+                setTimeout(() => {
+                  this.domCavase.previewLine=null
+                }, 50);
+              } else {               
+                this.domCavase.createPreviewLine(n, "yRuler" ,id)
+                setTimeout(() => {
+                   this.domCavase.previewLine=null
+                }, 50);
+              }
+            }
+          })
           stop = true
           break
         }
@@ -715,22 +798,33 @@ export default {
     eventZoom(e) {
       this.domCavase.eventZoom(e)
     },
+    GetPosition(obj) {
+  let left = 0
+  let top = 0
+  while (obj.offsetParent) {
+    left += obj.offsetLeft
+    top += obj.offsetTop
+    obj = obj.offsetParent
+  }
+  return { left, top }
+},
     queryDataboard() {
       getDataBoardData(this.databoardID).then(rsp => {
         console.log(rsp)
-        if(rsp.status === 0){
+        if (rsp.status === 0) {
+          console.log(rsp.data)
           this.canvasConfig = rsp.data
-          this.domCavase.createCanvas(this.canvasConfig) 
+          this.domCavase.createCanvas(this.canvasConfig)
           this.initDataboard(this.domCavase.canvas)
-        }else{
-          console.log("接口请求失败")
+        } else {
+          console.log('接口请求失败')
         }
       })
     }
   },
-  created() {    
-    this.domCavase = new Dcanvas.Stage()  
-    this.queryDataboard(); 
+  created() {
+    this.domCavase = new Dcanvas.Stage()
+    this.queryDataboard()
     this.nodelist = this.domCavase.nodeList
     if (JSON.parse(window.localStorage.getItem('saveNode'))) {
       JSON.parse(window.localStorage.getItem('saveNode'))

@@ -1,12 +1,11 @@
 <template>
-  <router-view/>
+  <router-view />
 </template>
 <script>
+import { debuglog } from 'util'
 export default {
   name: 'App',
-  mounted () {
-    window.onresize = () => {this.$bus.$emit('windowResize')}//this.$bus.$emit('resizeChart') 
-  }
+
 }
 </script>
 

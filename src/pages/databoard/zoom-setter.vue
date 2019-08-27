@@ -1,7 +1,7 @@
 <template>
   <div class='zoom_setter'>
     <span class='zoom_number'>{{zoomPst}}</span>
-        <slide-bar :min='0.1' :max="1" :value="zoomSize" :w="100" @changHandler="changHandler"></slide-bar>
+        <slide-bar :min='0.1' :max="1.5" :value="zoomSize" :w="80" @changHandler="changHandler"></slide-bar>
   </div>
 </template>
 
@@ -44,6 +44,7 @@ import SlideBar from '../../components/slidbar.vue'
   bottom: 0;
   border-top:@border_Data_bottom;
   overflow: hidden;
+  z-index: 999;
 .zoom_number{
   float: left;
   width: 0.3rem;

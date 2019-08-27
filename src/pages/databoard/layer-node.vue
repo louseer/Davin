@@ -5,7 +5,7 @@
       :draggable="candrage"
       @dragover.stop="dragover"
       @dragstart="dragStart($event)"
-       @dragend.stop="dragEnd($event)"
+      @dragend.stop="dragEnd($event)"
       :class="node.type === 'element' ? 'node' : 'group'"
       :id="node.id"
       :style="style"
@@ -66,7 +66,7 @@ export default {
   watch: {
     node: {
       handler: function(val) {
-        this.rnode = val       
+        this.rnode = val
       },
       deep: true
     }
@@ -124,7 +124,13 @@ export default {
 
   computed: {
     style() {
-      return `z-index:${this.rnode.zindex};transform-origin:0 0;transform:translate(${this.rnode.x}px,${this.rnode.y}px);width:${this.rnode.w}px;height:${this.rnode.h}px`
+      return `z-index:${
+        this.rnode.zindex
+      };transform-origin:0 0;transform:translate(${this.rnode.x}px,${
+        this.rnode.y
+      }px);width:${this.rnode.w}px;height:${this.rnode.h}px;pointer-events: ${
+        this.rnode.disable ? 'none' : 'auto'
+      };`
     }
   },
 
@@ -142,14 +148,14 @@ export default {
       e.dataTransfer.effectAllowed = 'move'
       this.$emit('nodeDragStart', e)
     },
-    dragEnd(e){
-      this.$emit('nodeDrag', e,this.rnode)
+    dragEnd(e) {
+      this.$emit('nodeDrag', e, this.rnode)
     },
     resizeMousedown(e) {
       this.candrage = false
       this.$emit('nodeResizeMousedown', e, this.rnode)
     },
-    dragendresizeNode(type, e){
+    dragendresizeNode(type, e) {
       this.$emit('nodeResizeNode', type, e, this.rnode)
     },
     resizeNode(type, e) {

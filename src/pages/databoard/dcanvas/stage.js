@@ -13,10 +13,11 @@ export default class Stage {
     this.eventCrash = false
     this.mode = 'select'
     this.canvas = {}
-    this._offset = 50
+    this._offsetx =100
+    this._offsety =100
     this.grid = 10
     this.bassIndex = 9000
-    this.maxZoom = 1
+    this.maxZoom = 1.5
     this.minZoom = 0.1
     this.previewLine=null
     this.lineList=[]
@@ -41,12 +42,19 @@ export default class Stage {
       this.canvas.zoomSize = val
     }
   }
-  get offset() {
-    return this._offset
+  get offsetx() {
+    return this._offsetx
   }
-  set offset(val) {
-    this._offset = val
-    this.canvas.offset = val
+  set offsetx(val) {
+    this._offsetx = val
+    this.canvas.offsetx = val
+  }
+  get offsety() {
+    return this._offsety
+  }
+  set offsety(val) {
+    this._offsety = val
+    this.canvas.offsety = val
   }
   removeGuideLineById(id){
     this.lineList=this.lineList.filter(l=>l.id !== id)
@@ -57,17 +65,18 @@ export default class Stage {
   createGuideLine(positon,type){
     const obj={
       type:type === "xRuler" ? "yline" :"xline",
-      pos:positon,
+      pos:positon,      
     }
     const line= new Dcanvas.GuideLine(obj)
     this.lineList.push(line)
   }
-  createPreviewLine(positon,type){
+  createPreviewLine(positon,type,id){
    if(type){
     this.previewLine=null
     const obj={
       type:type === "xRuler" ? "yline" :"xline",
       pos:positon,
+      id:id||getuuid()
     }
     this.previewLine=new Dcanvas.GuideLine(obj)
    }
@@ -80,7 +89,8 @@ export default class Stage {
     const _this = this
     const obj = Object.assign({
       zoomSize: _this.zoomSize,     
-      offset: _this.offset,
+      offsetx: _this.offsetx,
+      offsety: _this.offsety,
     },config);
     this.canvas = new Dcanvas.Canvas(obj)
     console.log('tag', this.canvas)
@@ -397,14 +407,15 @@ export default class Stage {
   filterNode(rect) {
     console.log(rect)
     const { x, y, w, h } = rect
-    const offset = this.offset
+    const offsetx = this.offsetx
+    const offsety = this.offsety
     //最小包围和
     const choiceNodes = this.nodeList.filter(
       node =>
-        (node.x + node.w) * this.zoomSize + offset >= x &&
-        (node.y + node.h) * this.zoomSize + offset >= y &&
-        x + w >= node.x * this.zoomSize + offset &&
-        y + h >= node.y * this.zoomSize + offset
+        (node.x + node.w) * this.zoomSize + offsetx >= x &&
+        (node.y + node.h) * this.zoomSize + offsety >= y &&
+        x + w >= node.x * this.zoomSize + offsetx &&
+        y + h >= node.y * this.zoomSize + offsety
     )
 
     const nodesInGroup = []
@@ -615,6 +626,16 @@ export default class Stage {
         ele.onclick = e => {
           clearEventBubble(e)
           const event = e || window.event
+          callback && typeof callback === 'function' && callback(event)
+        }
+      },
+    
+      dropHandler(callback) {        
+        ele.ondrop = e => {   
+              
+          clearEventBubble(e)
+          const event = e || window.event
+          event.preventDefault()    
           callback && typeof callback === 'function' && callback(event)
         }
       },
