@@ -1,7 +1,7 @@
 import Echart from './echart.js';
 
 //V-chart极坐标依赖
-import 'echarts/lib/chart/pie'
+import 'echarts/lib/chart/radar'
 export default class Polar extends Echart{
   constructor(config) {
     super(config);

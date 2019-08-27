@@ -1,4 +1,5 @@
 import Echart from './echart.js';
+import 'echarts/lib/chart/line';
 
 const defaultOption = {
   grid: {
