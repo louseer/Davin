@@ -69,13 +69,11 @@ export default {
       import(`./lib/${this.type}.js`).then((module) => {
         let editor = module.default;
         this.form = new DynamicForm(editor.options,editor.handlers,this.setting,this.commitUpdate);
-        console.log("form==========",this.form)
       }).catch(e=>{
         console.log(e)
       })
     },
     popevent(emitTag){
-      console.log("DynamicForm emit tag:",emitTag)
       this.$emit(emitTag)
     }
   },
@@ -84,7 +82,7 @@ export default {
     this.importConfig()
   },
   updated() {
-    console.log("编辑栏切换为",this.type,JSON.stringify(this.setting))
+    console.log("编辑栏切换为",this.type,this.setting)
   }
 }
 </script>
