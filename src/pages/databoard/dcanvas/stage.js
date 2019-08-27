@@ -13,7 +13,7 @@ export default class Stage {
     this.eventCrash = false
     this.mode = 'select'
     this.canvas = {}
-    this._offset = 50
+    this._offset = 15
     this.grid = 10
     this.bassIndex = 9000
     this.maxZoom = 1

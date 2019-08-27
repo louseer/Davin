@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="btn" :title="btn.name"><i v-if="btn.type === 'icon' " class="iconfont"  :class="btn.icon ? btn.icon : ''" @click="btn.event"></i><slot/></div>
+    <div class="btn" v-if="!btn.disabled" :title="btn.name"><i v-if="btn.type === 'icon' " class="iconfont"  :class="btn.icon ? btn.icon : ''" @click="btn.event"></i><slot/></div>
   </div>
 </template>
 
@@ -11,7 +11,7 @@
         type: Object,
         default: ()=>{}
       },
-    },
+    }
   }
 </script>
 

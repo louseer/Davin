@@ -138,25 +138,29 @@ export default {
           name: '发布',
           icon: 'icon-ico_db_public',
           event: this.public,
-          type: 'icon'
+          type: 'icon',
+          disabled:true
         },
         {
           name: '预览',
           icon: 'icon-ico_db_view',
           event: this.view,
-          type: 'icon'
+          type: 'icon',
+          disabled:true
         },
         {
           name: '保存',
           icon: 'icon-ico_db_save',
           event: this.save,
-          type: 'icon'
+          type: 'icon',
+          disabled:true
         },
         {
           name: '退出',
           icon: 'icon-ico_db_back',
           event: this.quit,
-          type: 'icon'
+          type: 'icon',
+          disabled:true
         }
       ],
       laysets: [
@@ -216,12 +220,12 @@ export default {
         {
           name: '图层',
           id: 1,
-          active: true
+          active: false
         },
         {
           name: '组件',
           id: 2,
-          active: false
+          active: true
         }
       ],
       typetree: [

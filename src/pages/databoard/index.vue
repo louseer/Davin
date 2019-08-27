@@ -7,7 +7,7 @@
       :rightMenu="rightMenu"
       @hide="contextmenuHide"
     />
-    <div class="ex">
+    <!--<div class="ex">
       <input type="text" v-model="domCavase.canvas.width" placeholder="请输入宽度" />
       <input type="text" v-model="domCavase.canvas.height" />
       <input type="text" v-model="domCavase.zoomSize" placeholder="请输入放大值" />
@@ -57,9 +57,9 @@
           <button style="float:left" v-if="multiple.length>=2" @click="nodeAlign('Vline')">垂直联排</button>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="stage" ref="stage">
-      <ruler :zoomSize="domCavase.zoomSize" />
+      <!-- <ruler :zoomSize="domCavase.zoomSize" /> -->
       <Cav :canvasConfig="domCavase.canvas">
         <Node
           class="layernode"
@@ -153,10 +153,10 @@ export default {
           name: '重命名',
           event: this.reNameNode
         },
-        {
-          name: '复制',
-          event: this.copyNode
-        },
+        // {
+        //   name: '复制',
+        //   event: this.copyNode
+        // },
         {
           name: '删除',
           event: this.deleteNode
@@ -239,12 +239,12 @@ export default {
             this.toExcel()
           }
         },
-        {
-          name: '粘贴',
-          event: () => {
-            this.paste()
-          }
-        },
+        // {
+        //   name: '粘贴',
+        //   event: () => {
+        //     this.paste()
+        //   }
+        // },
         {
           name: '全选',
           event: () => {
