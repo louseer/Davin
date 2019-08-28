@@ -51,7 +51,7 @@ computed: {
           break;
         case 3:
           bgimgStr += 'background-repeat: repeat;'
-        default:;
+        default:
       }
       
       if(imgBlur){

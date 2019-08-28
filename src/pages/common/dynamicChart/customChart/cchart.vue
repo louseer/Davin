@@ -34,7 +34,7 @@ export default {
         case 'decorate':
           return customDecorate
           break;
-        default:;
+        default:
       }
     }
   },

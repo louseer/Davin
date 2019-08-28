@@ -126,7 +126,6 @@ export default {
 @import '../../assets/styles/base.less';
 .previewLine {
   position: absolute;
-
   border-left: @border_Data_dottedline;
   border-top: @border_Data_dottedline;
   z-index: 997;

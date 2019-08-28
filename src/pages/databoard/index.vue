@@ -352,8 +352,8 @@ export default {
       this.setEditType(ELEMENT_SCREEN)
     })
     handler.dropHandler(e=>{
-     
-     const item = JSON.parse(e.dataTransfer.getData("item"))
+     if(e.dataTransfer.getData("item")!==null){
+        const item = JSON.parse(e.dataTransfer.getData("item"))
      const startX = e.clientX - this.GetPosition(this.$refs.stage).left 
      const startY = e.clientY - this.GetPosition(this.$refs.stage).top 
      const id = getuuid()
@@ -375,6 +375,8 @@ export default {
         chart
       }
       this.addNode(obj)
+     }
+    
     })
     handler.selectNodes(e => {
       this.rightClick = false
@@ -706,17 +708,16 @@ export default {
           offset = [_l, _t, _r, _b]
           offset = offset.map(v => (v ? v : 0))
           console.log(offset)
-          check.forEach((n, i) => {
-            
+          check.forEach((n, i) => {            
             if (n !== undefined) {
               const id =getuuid()
               if (i === 0 || i ===  2) {                
-                this.domCavase.createPreviewLine(n, "xRuler" ,id)
+                this.domCavase.createPreviewLine(parseInt(n), "xRuler" ,id)
                 setTimeout(() => {
                   this.domCavase.previewLine=null
                 }, 50);
               } else {               
-                this.domCavase.createPreviewLine(n, "yRuler" ,id)
+                this.domCavase.createPreviewLine(parseInt(n), "yRuler" ,id)
                 setTimeout(() => {
                    this.domCavase.previewLine=null
                 }, 50);

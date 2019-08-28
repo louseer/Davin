@@ -207,6 +207,7 @@ export default {
   position: absolute;
   z-index: 999;
   border: @border_Data_red50;
+  box-sizing: border-box;
   i {
     width: 10px;
     height: 10px;

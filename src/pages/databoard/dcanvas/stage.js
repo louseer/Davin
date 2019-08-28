@@ -140,6 +140,15 @@ export default class Stage {
       }
     })
   }
+  getNodesById(nodeId){
+    const choiceNodes=[]
+    const  inNode = this.nodeList.find(n=> n.id === nodeId )
+    inNode.cid ? choiceNodes.push(this.nodeList.filter(n=> inNode.cid.includes(n.id))) : choiceNodes.push(inNode)
+    const noGroupNodes=choiceNodes.filter(n => n.type === "element")
+    return { choiceNodes , noGroupNodes}
+  }
+
+
   lockNode() {
     this.selectNodes.forEach(n => {
       n.disable = true
