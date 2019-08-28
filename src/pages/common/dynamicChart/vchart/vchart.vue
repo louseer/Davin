@@ -5,12 +5,6 @@
 
 <script>
 //import {组件名称} from '组件路径';
-import 'echarts/lib/chart/bar'
-import 'echarts/lib/chart/line'
-import 'echarts/lib/chart/pie'
-import 'echarts/lib/chart/map'
-import 'echarts/lib/chart/radar'
-import 'echarts/lib/chart/scatter'
 import 'echarts/lib/chart/effectScatter'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/polar'

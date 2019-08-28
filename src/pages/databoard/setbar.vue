@@ -93,7 +93,6 @@ export default {
     interceptCavas(){
       const canvas = document.querySelector("#canvas");
       html2canvas(document.querySelector("#canvas")).then(canvas => {
-          document.body.appendChild(canvas)
           var dataURL  = canvas.toDataURL('image/png');
           this.updateDataboard({"thumbnail":dataURL})
       });
