@@ -525,22 +525,22 @@ export default {
       const cy = setting.y - node.y
       const zW = setting.w / node.w
       const zH = setting.h / node.h
-      node.x = setting.x
-      node.y = setting.y
-      node.w = setting.w
-      node.h = setting.h
-      node.opacity = setting.opacity
       if (node.cid === null) return
       const chilrenlist = node.cid
       this.domCavase.nodeList.forEach(n => {
         if (chilrenlist.includes(n.id)) {
-          n.x += cx
-          n.y += cy
+          n.x = setting.x + (n.x - node.x) * zW
+          n.y = setting.y + (n.y - node.y) * zH
           n.w = n.w * zW
           n.h = n.h * zH 
           n.opacity = setting.opacity
         }
       })
+      node.x = setting.x
+      node.y = setting.y
+      node.w = setting.w
+      node.h = setting.h
+      node.opacity = setting.opacity
     },
     nodeResizeNode(type, e, node) {
       let resizeTimer = null
