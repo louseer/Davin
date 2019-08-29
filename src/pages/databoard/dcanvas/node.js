@@ -17,6 +17,7 @@ export default class Node {
     this.name=node.name || (this.type ==='group' ? '组' : '元素')
     this.hide=node.hide || false
     this.chart=node.chart || null
+    this.opacity = node.opacity || 100
   }
  
  

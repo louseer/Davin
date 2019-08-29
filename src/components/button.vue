@@ -1,6 +1,18 @@
 <template>
   <div>
-    <div class="btn" :title="btn.name"><i v-if="btn.type === 'icon' " class="iconfont"  :class="btn.icon ? btn.icon : ''" @click="btn.event"></i><slot/></div>
+    <div 
+      class="btn"
+      :title="btn.name"
+      v-if='!btn.hide'
+    >
+      <i 
+        v-if="btn.icon" 
+        class="iconfont"  
+        :class="btn.icon" 
+        @click="btn.event"
+      ></i>
+      <slot/>
+    </div>
   </div>
 </template>
 
@@ -11,7 +23,7 @@
         type: Object,
         default: ()=>{}
       },
-    },
+    }
   }
 </script>
 

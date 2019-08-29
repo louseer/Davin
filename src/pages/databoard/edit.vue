@@ -3,43 +3,12 @@
   <div class="edit-page">
     <Eheader :maintit="maintit" :toptools="toptools" />
     <div class="content">
-      <!-- <div class="setbar">
-        <Setbar :editType='editType'></Setbar>
-        
-        <div v-if='editType === ELEMENT_MULTI'>
-          <button
-            v-for="(btn,index) in  aglinList"
-            :key="index"
-            style="float:left"
-            @click="$refs.stage.nodeAlign(btn.type)"
-          >{{btn.name}}</button>
-          <button 
-            style="float:left" 
-            v-if="multiple.length>=2" 
-            @click="$refs.stage.nodeAlign('Hline')"
-          >水平联排</button>
-          <button 
-            style="float:left" 
-            v-if="multiple.length>=2"
-            @click="$refs.stage.nodeAlign('Vline')"
-          >垂直联排</button>
-          <button
-            style="float:left"
-            v-if="multiple.length>=3"
-            @click="$refs.stage.multipleNodesAlign('VerticalAverage')"
-          >垂直均分</button>
-          <button
-            style="float:left"
-            v-if="multiple.length>=3"
-            @click="$refs.stage.multipleNodesAlign('HorizontalAverage')"
-          >水平均分</button>
-        </div>
-        
-      </div> -->
+      <div class="setbar">
+        <Setbar :editType='editType' :nodeNum='rootNodesLen' @btnClick='setBarBtnClick' @updateGroup='updateGroup'></Setbar>
+      </div>
       <div class="leftbar">
         <Dtab :tabs="leftTab">
           <Dswitch slot="tabsloat" :state="showMmore" @switchChange="switchChange" />
-
           <div slot="tab1">
             <div class="laysetbar">
               <b v-for="(bbtn,bbindex) in  laysets" :key="bbindex">
@@ -69,9 +38,8 @@
       <div class="rightbar">
         <Stage 
           @nodelistChange="nodechange" 
-          @zoomChange="zoomChange" 
-          @nodeClick='selectOneNode'
-          @selectNodes='selectNodes' 
+          @zoomChange="zoomChange"
+          @switchEditPanel='switchEditPanel'
           ref="stage" 
         ></Stage>
         <ZoomSetter :zoomSize="zoom" @changeSize="changeSize" />
@@ -97,7 +65,7 @@ import DForm from '../common/dynamicForm/dynamicForm.vue'
 import Setbar from './setbar.vue'
 
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import { ELEMENT_SCREEN,ELEMENT_NODE,ELEMENT_MULTI } from "@/store/constants"
+import { ELEMENT_SCREEN,NODE_ELEMENT,NODE_MULTI,NODE_GROUP } from "@/store/constants"
 
 
 export default {
@@ -118,18 +86,13 @@ export default {
   data() {
     return {
       ELEMENT_SCREEN,
-      ELEMENT_NODE,
-      ELEMENT_MULTI,
+      NODE_ELEMENT,
+      NODE_MULTI,
+      NODE_GROUP,
+      editType:ELEMENT_SCREEN,
+      rootNodesLen:0,
       databoardConfig:null,
      // maintit:'',
-      aglinList: [
-        { type: 'top', name: '顶对齐' },
-        { type: 'right', name: '右对齐' },
-        { type: 'bottom', name: '底对齐' },
-        { type: 'left', name: '左对齐' },
-        { type: 'HCenter', name: '垂直居中' },
-        { type: 'VCenter', name: '水平居中' }
-      ],
       zoom:0.5,
       showMmore: true,
       treenode: [],
@@ -457,8 +420,7 @@ export default {
       databoard:state => state.databoard,
       editNode:state => state.editNode,
       editChart:state => state.editChart,
-      editType:state => state.editType,
-
+      editGroup:state => state.editGroup
     }),
     ...mapGetters ('databoard',[
       'isEditing'
@@ -470,7 +432,11 @@ export default {
     },
     maintit(){
       return this.databoard ? this.databoard.name : ''
+    },
+    activeNodes(){
+      return this.$refs.stage && this.$refs.stage.domCavase ? this.$refs.stage.domCavase.selectNodes : []
     }
+
   },
   // watch:{
   //   databoard:{
@@ -485,33 +451,50 @@ export default {
   methods: {
     ...mapMutations('databoard',[
       'openEditMode',
-      'setEditType',
       'initEditNode',
+      'initEditGroup',
       'initEditChart',
       'setDBID'
     ]),
+    updateGroup(setting){
+      this.$refs.stage.configGroup(setting,this.editGroup)
+    },
+    setBarBtnClick(handler,param){
+      if(handler && this[handler]){
+        this[handler](param);
+      }
+    },
     multipleNodesAlign(type) {
       this.$refs.stage.domCavase.multipleNodesAlign(type)
     },
     nodeAlign(type) {
       this.$refs.stage.domCavase.nodesAlign(type)
     },
-    selectOneNode(nodes) {
-      const length = nodes.length;
-      if(length === 1){
-        this.setEditType(ELEMENT_NODE)
-        this.initEditNode(nodes[0])
-        this.initEditChart(nodes[0].chart)
+    switchEditPanel(){
+      if(this.activeNodes.length === 0){
+        this.editType = ELEMENT_SCREEN;
+        return;
       }
-    },
-    selectNodes(nodes){
-      const length = nodes.length;
-      if( 2 <= length){
-        this.setEditType(ELEMENT_MULTI)
-      }
-    },
-    getEditType(){
+      let rootNodes = this.activeNodes.filter(n => {
+        return n.pid === null
+      })
+      this.rootNodesLen = rootNodes.length;
+      if(this.rootNodesLen === 1){
+        if(rootNodes[0].type==='element'){
+          this.editType = NODE_ELEMENT
+          this.initEditNode(rootNodes[0])
+          this.initEditChart(rootNodes[0].chart)
+          // this.editNode = rootNodes[0]
+          // this.editChart = rootNodes[0].chart
+        }else if(rootNodes[0].type==='group'){
+          this.editType = NODE_GROUP
+          this.initEditGroup(rootNodes[0])
+          //this.editGroup = rootNodes[0]
+        }
+      }else{
+        this.editType = NODE_MULTI
 
+      }
     },
     changeSize(val) {
       this.$refs.stage.setZoom(val)
@@ -585,7 +568,6 @@ export default {
     },
     toggleGrop() {
       console.log('编组')
-
       this.$refs.stage.toggleGrop()
     },
     public() {
@@ -607,6 +589,7 @@ export default {
     },
     treeNodeClick(nodeId) {
       this.$refs.stage.choiceNodeById(nodeId)
+      this.switchEditPanel()
     },
     unhideNode(nodeId) {
       this.$refs.stage.unhideNode(nodeId)
@@ -695,6 +678,7 @@ button {
       width: 3rem;
       background: @bg_Data_left;
       right: 0;
+      top: 25px;
       height: 100%;
       z-index: 999;
     }

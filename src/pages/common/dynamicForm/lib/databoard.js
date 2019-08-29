@@ -10,9 +10,9 @@ import {
   BGIMG_BLUR_MAX,
   BGIMG_BLUR_STEP,
   BGIMG_OPACITY,
-  BGIMG_OPACITY_MIN,
-  BGIMG_OPACITY_MAX,
-  BGIMG_OPACITY_STEP,
+  OPACITY_MIN,
+  OPACITY_MAX,
+  OPACITY_STEP,
   WHITE,
   CHBK,
   COLOR_PREDEFINE
@@ -122,9 +122,9 @@ const options = {
         "type":OPTIONTYPE.SLIDER,
         "hide":true,
         "defaultVal":BGIMG_OPACITY,
-        "min":BGIMG_OPACITY_MIN,
-        "max":BGIMG_OPACITY_MAX,
-        "step":BGIMG_OPACITY_STEP
+        "min":OPACITY_MIN,
+        "max":OPACITY_MAX,
+        "step":OPACITY_STEP
       },
       "bgcolor":{
         "name":"背景色",
