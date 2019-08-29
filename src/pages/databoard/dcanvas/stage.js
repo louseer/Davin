@@ -709,9 +709,11 @@ export default class Stage {
         let startX = 0
         let startY = 0
         this.mousedownHandler(e => {
-          this.mouseOn = true
+         
           if(_this.mode === "select") {
-            const mouseStopId = setTimeout(() => {               
+            
+            const mouseStopId = setTimeout(() => {
+              this.mouseOn = true               
               startX = e.clientX - GetPosition(ele).left + ele.scrollLeft
               startY = e.clientY - GetPosition(ele).top + ele.scrollTop
               let selDiv = document.createElement('div')
@@ -724,6 +726,7 @@ export default class Stage {
             }, 50)
           }
           else{
+            this.mouseOn = true
             startX= e.clientX
             startY= e.clientY
             
@@ -745,6 +748,7 @@ export default class Stage {
               }
     
               let selDiv = document.getElementById('selectDiv')
+              console.log('tag', selDiv)
               selDiv.style.display = 'block'
               selDiv.style.left = Math.min(_x, startX) + 'px'
               selDiv.style.top = Math.min(_y, startY) + 'px'
