@@ -520,6 +520,8 @@ export default {
       )
     },
     nodeResizeNode(type, e, node) {
+      let resizeTimer = null
+      
       e.target.style.opacity = '1'
       const event = e || window.event
       const _x = e.clientX - this.dx
@@ -652,7 +654,7 @@ export default {
       this.$emit('nodeClick', this.domCavase.selectNodes)
     },
     nodeMousedown(node) {
-      console.log(node)
+    
       this.rightClick = false
       if (this.domCavase.selectNodes.map(n => n.id).includes(node.id)) return
       console.log('@@@@@@@@@@@@@@@', this.ctrlDown)

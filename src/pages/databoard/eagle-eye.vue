@@ -75,47 +75,32 @@ export default {
   },
   computed: {
     getMaxArea() {
-      const MaxW =
-        Math.max.apply(null, [
-          ...this.nodeList.map(n => n.x + n.w),
-          this.stageW / this.zoomSize
-        ]) +
-        this.offSetx / this.zoomSize
-      const MaxH =
-        Math.max.apply(null, [
-          ...this.nodeList.map(n => n.y + n.h),
-          this.stageH / this.zoomSize
-        ]) +
-        this.offSetx / this.zoomSize
-      return { MaxW, MaxH, Max: MaxW > MaxH ? 'MaxW' : 'MaxH' }
+      const MaxW = this.canvasObj.width * 10      
+      const MaxH = this.canvasObj.height * 10        
+      return { MaxW, MaxH }
     },
-    ratio() {
-   
-      if (this.getMaxArea.Max === 'MaxW') {
-        return this.getMaxArea.MaxW / this.eWidth
-      } else {
-        return this.getMaxArea.MaxH / this.eHeight
-      }
+    ratio() {     
+        return this.getMaxArea.MaxW / this.eWidth     
     },
 
     subNodeStyle() {
       return function(node) {
         return node.active
           ? ` width:${node.w / this.ratio}px;height:${node.h /
-              this.ratio}px;left:${(node.x + this.offSetx) /
-              this.ratio}px;top:${(node.y + this.offSety) /
+              this.ratio}px;left:${(node.x + this.offSetx)/this.zoomSize /
+              this.ratio}px;top:${(node.y + this.offSety) /this.zoomSize/
               this.ratio}px; background:rgba(246,6,6 ,0.5)`
           : ` width:${node.w / this.ratio}px;height:${node.h /
-              this.ratio}px;left:${(node.x + this.offSetx) /
-              this.ratio}px;top:${(node.y + this.offSety) / this.ratio}px; `
+              this.ratio}px;left:${(node.x + this.offSetx) /this.zoomSize/
+              this.ratio}px;top:${(node.y + this.offSety)/this.zoomSize / this.ratio}px; `
       }
     },
     screenStyle() {
-      return ` width:${(this.stageW + this.offSetx) /
+      return ` width:${(this.stageW ) /
         this.zoomSize /
-        this.ratio}px;height:${(this.stageH + this.offSety) /
+        this.ratio}px;height:${(this.stageH ) /
         this.zoomSize /
-        this.ratio}px;left:${this.offx}px;top:${this.offy}px `
+        this.ratio}px;left:${-this.offSetx/this.ratio}px;top:${-this.offSety/this.ratio}px `
     }
   },
 
@@ -162,7 +147,7 @@ export default {
     position: absolute;
     width: 10px;
     height: 20px;
-    border: 2px red solid;
+    border: 2px red inset;
     box-sizing: border-box;
     border-radius: 4px;
   }
