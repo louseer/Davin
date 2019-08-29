@@ -3,7 +3,7 @@
   <div class="edit-page">
     <Eheader :maintit="maintit" :toptools="toptools" />
     <div class="content">
-      <div class="setbar">
+      <!-- <div class="setbar">
         <Setbar :editType='editType'></Setbar>
         
         <div v-if='editType === ELEMENT_MULTI'>
@@ -35,7 +35,7 @@
           >水平均分</button>
         </div>
         
-      </div>
+      </div> -->
       <div class="leftbar">
         <Dtab :tabs="leftTab">
           <Dswitch slot="tabsloat" :state="showMmore" @switchChange="switchChange" />

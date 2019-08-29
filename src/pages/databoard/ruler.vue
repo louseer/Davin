@@ -48,7 +48,18 @@ export default {
         this.drawRuler()
       }
     },
-    deep: true
+    offSety: {
+      handler(val) {
+        
+        this.drawRuler()
+      }
+    },
+     offSetx: {
+      handler(val) {
+        this.drawRuler()
+      }
+    },
+   
   },
   mounted() {
     this.drawRuler()
@@ -145,10 +156,10 @@ export default {
     },
     drawline(ctx) {
       let blocksx =
-        (this.$parent.$el.clientWidth - this.offSetx) / this.zoomSize
+       parseInt ((this.$parent.$el.clientWidth - this.offSetx) / this.zoomSize)
 
       let blocksy =
-        (this.$parent.$el.clientHeight - this.offSety) / this.zoomSize
+        parseInt((this.$parent.$el.clientHeight - this.offSety) / this.zoomSize)
       let zBetween = 5
 
       if (this.type === 'xRuler') {

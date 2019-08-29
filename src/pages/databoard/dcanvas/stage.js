@@ -13,16 +13,20 @@ export default class Stage {
     this.eventCrash = false
     this.mode = 'select'
     this.canvas = {}
-    this._offsetx =100
-    this._offsety =100
+    this._offsetx =300
+    this._offsety =300
     this.grid = 10
     this.bassIndex = 9000
     this.maxZoom = 1.5
     this.minZoom = 0.1
     this.previewLine=null
-    this.lineList=[]
-    this.width=''
-    this.height=''
+    this.lineList=[]    
+  }
+  get width(){
+    return this.canvas.width/this.minZoom
+  }
+  get height(){
+    return this.canvas.height/this.minZoom
   }
   get indexList() {
     return this.nodeList.sort((a, b) => a.zindex - b.zindex)
@@ -613,6 +617,7 @@ export default class Stage {
       mIndex--
     })
   }
+
   nodesMaxArea(nodes) {
     const minX = Math.min.apply(null, nodes.map(n => n.x))
     const minY = Math.min.apply(null, nodes.map(n => n.y))
@@ -699,48 +704,69 @@ export default class Stage {
       reNameNode(node, newname) {
         node.name = newname
       },
-      selectNodes(callback) {
+   
+      selectNodes(callback) {       
         let startX = 0
         let startY = 0
         this.mousedownHandler(e => {
-          const mouseStopId = setTimeout(() => {
-            this.mouseOn = true
-
-            startX = e.clientX - GetPosition(ele).left + ele.scrollLeft
-            startY = e.clientY - GetPosition(ele).top + ele.scrollTop
-            let selDiv = document.createElement('div')
-            selDiv.style.cssText =
-              'position:absolute;width:0;height:0;margin:0;padding:0;border:1px dashed #eee;z-index:1000;opacity:0.6;display:none;'
-            selDiv.id = 'selectDiv'
-            ele.appendChild(selDiv)
-            selDiv.style.left = startX + 'px'
-            selDiv.style.top = startY + 'px'
-          }, 50)
+          this.mouseOn = true
+          if(_this.mode === "select") {
+            const mouseStopId = setTimeout(() => {               
+              startX = e.clientX - GetPosition(ele).left + ele.scrollLeft
+              startY = e.clientY - GetPosition(ele).top + ele.scrollTop
+              let selDiv = document.createElement('div')
+              selDiv.style.cssText =
+                'position:absolute;width:0;height:0;margin:0;padding:0;border:1px dashed #eee;z-index:1000;opacity:0.6;display:none;'
+              selDiv.id = 'selectDiv'
+              ele.appendChild(selDiv)
+              selDiv.style.left = startX + 'px'
+              selDiv.style.top = startY + 'px'
+            }, 50)
+          }
+          else{
+            startX= e.clientX
+            startY= e.clientY
+            
+          }
+          
         })
         this.mousemoveHandler(e => {
-          let _x = e.clientX - GetPosition(ele).left + ele.scrollLeft
-          let _y = e.clientY - GetPosition(ele).top + ele.scrollTop
-          let _H = ele.clientHeight
-
-          if (_y >= _H && ele.scrollTop <= _H) {
-            ele.scrollTop += _y - _H
-          }
-          // 向上拖拽
-          if (e.clientY <= GetPosition(ele).top && ele.scrollTop > 0) {
-            ele.scrollTop = Math.abs(e.clientY - GetPosition(ele).top)
-          }
-
-          let selDiv = document.getElementById('selectDiv')
-          selDiv.style.display = 'block'
-          selDiv.style.left = Math.min(_x, startX) + 'px'
-          selDiv.style.top = Math.min(_y, startY) + 'px'
-          selDiv.style.width = Math.abs(_x - startX) + 'px'
-          selDiv.style.height = Math.abs(_y - startY) + 'px'
-          selDiv.style.cursor = 'crosshair'
+            if(_this.mode  === "select") {
+              let _x = e.clientX - GetPosition(ele).left + ele.scrollLeft
+              let _y = e.clientY - GetPosition(ele).top + ele.scrollTop
+              let _H = ele.clientHeight
+    
+              if (_y >= _H && ele.scrollTop <= _H) {
+                ele.scrollTop += _y - _H
+              }
+              // 向上拖拽
+              if (e.clientY <= GetPosition(ele).top && ele.scrollTop > 0) {
+                ele.scrollTop = Math.abs(e.clientY - GetPosition(ele).top)
+              }
+    
+              let selDiv = document.getElementById('selectDiv')
+              selDiv.style.display = 'block'
+              selDiv.style.left = Math.min(_x, startX) + 'px'
+              selDiv.style.top = Math.min(_y, startY) + 'px'
+              selDiv.style.width = Math.abs(_x - startX) + 'px'
+              selDiv.style.height = Math.abs(_y - startY) + 'px'
+              selDiv.style.cursor = 'crosshair'
+            }
+            else{
+              const dx = e.clientX - startX
+              const dy = e.clientY - startY
+              _this.offsetx += parseInt (dx)
+              _this.offsety += parseInt (dy)
+             startX= e.clientX
+              startY=e.clientY
+            }
+         
+         
         })
         this.mouseupHandler(e => {
           this.mouseOn = false
-          let selDiv = document.getElementById('selectDiv')
+          if(_this.mode === "select") {
+            let selDiv = document.getElementById('selectDiv')
           const rect = {
             x: +selDiv.style.left.substring(0, selDiv.style.left.length - 2),
             y: +selDiv.style.top.substring(0, selDiv.style.top.length - 2),
@@ -751,6 +777,9 @@ export default class Stage {
           selDiv.style.display = 'none'
           selDiv.remove()
           callback && typeof callback === 'function' && callback(event)
+          }
+         
+          
         })
       }
     }

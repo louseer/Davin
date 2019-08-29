@@ -59,8 +59,17 @@
         </div>
       </div>
     </div>-->
-    <div class="stage" ref="stage" @dragover.prevent>
-      <eagle-eye />
+    <div class="stage" ref="stage" @dragover.prevent :style='domCavase.mode === "select" ? " cursor: crosshair;":" cursor: move	;"'>
+      <eagle-eye 
+      :canvasObj="domCavase.canvas"
+      :zoomSize="domCavase.zoomSize"
+      :stageW="stageW"
+      :stageH="stageH"
+      :offSetx="domCavase.offsetx"
+      :offSety="domCavase.offsety"
+      :nodeList="domCavase.nodeList"
+      @changeView="changeView"
+      />
       <guide-line
         v-if="showline"
         ref="line"
@@ -131,8 +140,8 @@ export default {
   },
   data() {
     return {
-      stageW: '',
-      stageH: '',
+      stageW: 0,
+      stageH: 0,
       stop: false,
       showline: true,
       domCavase: '',
@@ -318,22 +327,39 @@ export default {
   },
 
   mounted() {
+    this.stageW = this.$refs.stage.clientWidth
+    this.stageH = this.$refs.stage.clientHeight
+    
     window.onresize = () => {
-      this.stageW = this.$refs.stage.clientWidth
-      this.stageH = this.$refs.stage.clientHeight
-      const cw = this.domCavase.canvas.width
-      const ch = this.domCavase.canvas.height
-      const [cwm, chm] = [
-        cw + this.domCavase.offsetx,
-        ch + this.domCavase.offsety
-      ]
-      console.log('tag', this.stageW, this.stageH)
-    }
+      let resizeTimer = null
+      return (() => {
+        if (resizeTimer) clearTimeout(resizeTimer)
+        resizeTimer = setTimeout(() => {
+          this.stageW = this.$refs.stage.clientWidth
+          this.stageH = this.$refs.stage.clientHeight
+          const size = this.domCavase.zoomSize
+          const cw = this.domCavase.canvas.width
+          const ch = this.domCavase.canvas.height
+          const [cwReal, chReal] = [cw * size, ch * size]
 
+          const xVal = this.stageW / cwReal
+          const yVal = this.stageH / chReal
+          xVal < yVal
+            ? this.setZoom((this.stageW - 20 - this.domCavase.offsetx) / cw)
+            : this.setZoom((this.stageH - 30 -this.domCavase.offsety) / ch)
+        }, 200)
+      })()
+    }
+    
     let _this = this
     window.document.onkeydown = function(e) {
       const keynum = window.event ? e.keyCode : e.which
-
+      if (keynum === 32) {
+        if (_this.domCavase.mode === "move") return
+        _this.domCavase.mode = "move"
+        console.log(_this.domCavase.mode)        
+        return
+      }
       if (keynum === 17) {
         if (this.ctrlDown) return
         _this.ctrlDown = true
@@ -343,46 +369,50 @@ export default {
     }
     window.document.onkeyup = function(e) {
       const keynum = window.event ? e.keyCode : e.which
+      _this.domCavase.mode = "select"
       _this.ctrlDown = false
       console.log(_this.ctrlDown)
+      console.log(_this.domCavase.mode)  
     }
 
     const handler = this.domCavase.Handler(this.$refs.stage)
     handler.clickHandler(e => {
       this.setEditType(ELEMENT_SCREEN)
     })
-    handler.dropHandler(e=>{
-     if(e.dataTransfer.getData("item")!==null){
-        const item = JSON.parse(e.dataTransfer.getData("item"))
-     const startX = e.clientX - this.GetPosition(this.$refs.stage).left 
-     const startY = e.clientY - this.GetPosition(this.$refs.stage).top 
-     const id = getuuid()
-      const chart = {
-        id,
-        type: item.type,
-        name: item.title,
-        version: item.version,
-        text: item.text, //临时代码
-        fontSize: item.fontSize //临时代码
+    handler.dropHandler(e => {
+      if (e.dataTransfer.getData('item') !== null) {
+        const item = JSON.parse(e.dataTransfer.getData('item'))
+        const startX = e.clientX - this.GetPosition(this.$refs.stage).left
+        const startY = e.clientY - this.GetPosition(this.$refs.stage).top
+        const id = getuuid()
+        const chart = {
+          id,
+          type: item.type,
+          name: item.title,
+          version: item.version,
+          text: item.text, //临时代码
+          fontSize: item.fontSize //临时代码
+        }
+        const obj = {
+          w: item.w || 200,
+          h: item.h || 200,
+          x: startX,
+          y: startY,
+          elType: item.type,
+          name: item.title,
+          chart
+        }
+        this.addNode(obj)
       }
-      const obj={
-        w:item.w || 200,
-        h:item.h || 200,
-        x:startX,
-        y:startY,
-        elType:item.type,
-        name:item.title,
-        chart
-      }
-      this.addNode(obj)
-     }
-    
     })
     handler.selectNodes(e => {
+      
       this.rightClick = false
       this.$emit('selectNodes', this.domCavase.selectNodes)
-      //this.$emit('nodelistChange', this.domCavase.nodeList)
-    })
+     
+    },)
+    
+
     handler.onmousewheelHandler(e => {
       let startZoom = this.domCavase.zoomSize
       if (e.wheelDelta == 120) {
@@ -422,6 +452,10 @@ export default {
   },
   methods: {
     ...mapMutations('databoard', ['initDataboard', 'setEditType', '_updateDB']),
+    changeView(x,y){
+      this.domCavase.offsetx=x
+      this.domCavase.offsety=y
+    },
     moveline(id, pos) {
       this.domCavase.lineList.forEach(l => {
         l.id === id && (l.pos = pos)
@@ -691,10 +725,10 @@ export default {
       const idList = this.domCavase.selectNodes.map(n => n.id)
       for (let i = 0; i < this.domCavase.selectNodes.length; i++) {
         let nd = this.domCavase.selectNodes[i]
-        const l = xArray.find(v => Math.abs(nd.x + dx - v) < 3)
-        const t = yArray.find(v => Math.abs(nd.y + dy - v) < 3)
-        const r = xArray.find(v => Math.abs(nd.x + nd.w + dx - v) < 3)
-        const b = yArray.find(v => Math.abs(nd.y + nd.h + dy - v) < 3)
+        const l = xArray.find(v => Math.abs(nd.x + dx - v) < 5)
+        const t = yArray.find(v => Math.abs(nd.y + dy - v) < 5)
+        const r = xArray.find(v => Math.abs(nd.x + nd.w + dx - v) < 5)
+        const b = yArray.find(v => Math.abs(nd.y + nd.h + dy - v) < 5)
         const check = [l, t, r, b]
         if (check.every(v => v === undefined)) {
           stop = false
@@ -708,19 +742,19 @@ export default {
           offset = [_l, _t, _r, _b]
           offset = offset.map(v => (v ? v : 0))
           console.log(offset)
-          check.forEach((n, i) => {            
+          check.forEach((n, i) => {
             if (n !== undefined) {
-              const id =getuuid()
-              if (i === 0 || i ===  2) {                
-                this.domCavase.createPreviewLine(parseInt(n), "xRuler" ,id)
+              const id = getuuid()
+              if (i === 0 || i === 2) {
+                this.domCavase.createPreviewLine(parseInt(n), 'xRuler', id)
                 setTimeout(() => {
-                  this.domCavase.previewLine=null
-                }, 50);
-              } else {               
-                this.domCavase.createPreviewLine(parseInt(n), "yRuler" ,id)
+                  this.domCavase.previewLine = null
+                }, 50)
+              } else {
+                this.domCavase.createPreviewLine(parseInt(n), 'yRuler', id)
                 setTimeout(() => {
-                   this.domCavase.previewLine=null
-                }, 50);
+                  this.domCavase.previewLine = null
+                }, 50)
               }
             }
           })
@@ -800,15 +834,15 @@ export default {
       this.domCavase.eventZoom(e)
     },
     GetPosition(obj) {
-  let left = 0
-  let top = 0
-  while (obj.offsetParent) {
-    left += obj.offsetLeft
-    top += obj.offsetTop
-    obj = obj.offsetParent
-  }
-  return { left, top }
-},
+      let left = 0
+      let top = 0
+      while (obj.offsetParent) {
+        left += obj.offsetLeft
+        top += obj.offsetTop
+        obj = obj.offsetParent
+      }
+      return { left, top }
+    },
     queryDataboard() {
       getDataBoardData(this.databoardID).then(rsp => {
         console.log(rsp)
@@ -881,7 +915,7 @@ select {
   background: url(~images/pointe.png) repeat #27272b;
   position: relative;
   overflow: hidden;
-  cursor: crosshair;
+ 
   // perspective: 1920px;
   // perspective-origin: 0% 0%;
 }
