@@ -40,7 +40,10 @@
              <li>type:{{node.elType}}</li>
             <li>{{node.disable ? 'lock' :''}}</li>
       </ul>-->
-      <d-chart :config="rnode.chart" v-if="rnode.chart" />
+      <div class='d-chart-wrapper' v-if="rnode.chart"  :style="{opacity:rnode.opacity / 100}">
+        <d-chart :config="rnode.chart" />
+      </div>
+      
     </div>
   </div>
 </template>
@@ -131,6 +134,9 @@ export default {
       }px);width:${this.rnode.w}px;height:${this.rnode.h}px;pointer-events: ${
         this.rnode.disable ? 'none' : 'auto'
       };`
+    },
+    opacity() {
+      return this.rnode.opacity
     }
   },
 
@@ -260,5 +266,9 @@ export default {
     bottom: -5px;
     cursor: se-resize;
   }
+}
+.d-chart-wrapper{
+   width: 100%;
+   height: 100%; 
 }
 </style>

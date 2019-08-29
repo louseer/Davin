@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { EDIT_MODE,VIEW_MODE,ELEMENT_SCREEN,ELEMENT_MULTI,ELEMENT_NODE } from "../constants"
+import { EDIT_MODE,VIEW_MODE,ELEMENT_SCREEN} from "../constants"
 import { getDataBoardData, updateLayoutReq } from '@/api/api.js'
 import { objDeepMerge } from '@/utils/index.js'
 export default {
@@ -11,6 +11,7 @@ export default {
     databoard:null,
     editNode:null,
     editChart:null,
+    editGroup:null,
     editType:ELEMENT_SCREEN,
     step:-1,
     snapshot:[]
@@ -32,15 +33,10 @@ export default {
     setDBID (state,id) {
       state.databoardID = id
     },
-    //
-    setDbConfig(state,data){
-      console.log("接口请求完毕")
-      state.databoard = data
-    },
     //记录当前大屏初始设置
     initDataboard (state,data) {
       console.log("设置大屏对象",data)
-      Vue.set(state, 'databoard', data);
+      state.databoard = data
     },
   
     //记录当前激活node
@@ -51,12 +47,18 @@ export default {
       console.log(chart)
       state.editChart = chart
     },
+    initEditGroup(state,group){
+      state.editGroup = group
+    },
     setEditType(state,type){
       state.editType = type
     },
     _updateDB(state,setting){
       state.databoard = objDeepMerge(state.databoard,setting)
       console.log("更新大屏对象",state.databoard)
+    },
+    _updateGroup(state,setting){
+      state.editGroup = objDeepMerge(state.editGroup,setting)
     },
     _updateNode(state,setting){
       state.editNode = objDeepMerge(state.editNode,setting)
@@ -68,7 +70,7 @@ export default {
   actions: {
     queryDataboard({state,commit}){
       getDataBoardData(state.setDBID).then(rsp => {
-        commit('setDbConfig',rsp.data)
+        commit('initDataboard',rsp.data)
       })
     },
     updateNode({commit},setting){
@@ -77,6 +79,10 @@ export default {
     },
     updateChart({commit},setting){
       commit('_updateChart',setting)
+      console.log("updateChart request api")
+    },
+    updateGroup({commit},setting){
+      commit('_updateGroup',setting)
       console.log("updateChart request api")
     },
     updateDataboard({commit},setting){

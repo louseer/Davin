@@ -142,7 +142,7 @@ export default class Stage {
           this.selectNodes = [n]
         }
       }
-    })
+    });
   }
   getNodesById(nodeId){
     const choiceNodes=[]

@@ -377,7 +377,7 @@ export default {
 
     const handler = this.domCavase.Handler(this.$refs.stage)
     handler.clickHandler(e => {
-      this.setEditType(ELEMENT_SCREEN)
+      this.$emit("switchEditPanel")
     })
     handler.dropHandler(e => {
       if (e.dataTransfer.getData('item') !== null) {
@@ -405,14 +405,11 @@ export default {
         this.addNode(obj)
       }
     })
-    handler.selectNodes(e => {
-      
+    handler.selectNodes(e => { 
       this.rightClick = false
-      this.$emit('selectNodes', this.domCavase.selectNodes)
-     
-    },)
-    
-
+      this.$emit('switchEditPanel')
+      //this.$emit('nodelistChange', this.domCavase.nodeList)
+    })
     handler.onmousewheelHandler(e => {
       let startZoom = this.domCavase.zoomSize
       if (e.wheelDelta == 120) {
@@ -499,6 +496,7 @@ export default {
     hideNode() {
       this.domCavase.hideNode()
       this.$emit('nodelistChange', this.domCavase.nodeList)
+      this.$emit("switchEditPanel")
     },
     unhideNode(id) {
       this.domCavase.unhideNode(id)
@@ -507,6 +505,7 @@ export default {
     lockNode() {
       this.domCavase.lockNode()
       this.$emit('nodelistChange', this.domCavase.nodeList)
+      this.$emit("switchEditPanel")
     },
     unlockNode(id) {
       this.domCavase.unlockNode(id)
@@ -518,6 +517,30 @@ export default {
       this.domCavase.selectNodes = this.domCavase.selectNodes.map(n =>
         Object.assign(n, { active: true })
       )
+    },
+
+    configGroup(setting,node){
+      console.log("setting",node)
+      const cx = setting.x - node.x
+      const cy = setting.y - node.y
+      const zW = setting.w / node.w
+      const zH = setting.h / node.h
+      node.x = setting.x
+      node.y = setting.y
+      node.w = setting.w
+      node.h = setting.h
+      node.opacity = setting.opacity
+      if (node.cid === null) return
+      const chilrenlist = node.cid
+      this.domCavase.nodeList.forEach(n => {
+        if (chilrenlist.includes(n.id)) {
+          n.x += cx
+          n.y += cy
+          n.w = n.w * zW
+          n.h = n.h * zH 
+          n.opacity = setting.opacity
+        }
+      })
     },
     nodeResizeNode(type, e, node) {
       let resizeTimer = null
@@ -581,9 +604,8 @@ export default {
           } else {
             n.w = n.w * zW
             n.h = n.h * zH
-            n.x = node.x - (n.x - node.x) * zW
-            n.y = node.y - (n.y - node.y) * zH
-            console.log('@@@@@@@@@@@@@@@@@@@BUGBUGBUGBUGBUGBUGBUG', n.x, n.y)
+            n.x = node.x + (n.x - this.dnode.x) * zW
+            n.y = node.y + (n.y - this.dnode.y) * zH
           }
         }
       })
@@ -624,14 +646,17 @@ export default {
     deleteNode() {
       this.domCavase.removeNodes()
       this.$emit('nodelistChange', this.domCavase.nodeList)
+      this.$emit("switchEditPanel")
     },
     outGroup() {
       this.domCavase.outGroup()
       this.$emit('nodelistChange', this.domCavase.nodeList)
+      this.$emit("switchEditPanel")
     },
     clear() {
       this.domCavase.clear()
       this.$emit('nodelistChange', this.domCavase.nodeList)
+      this.$emit("switchEditPanel")
     },
     nodeAlign(type) {
       this.domCavase.nodesAlign(type)
@@ -642,6 +667,7 @@ export default {
     toGroup() {
       this.domCavase.toGroup()
       this.$emit('nodelistChange', this.domCavase.nodeList)
+      this.$emit("switchEditPanel")
     },
     nodeDragStart(e) {
       this.startX = this.domCavase.eventZoom(e).clientX
@@ -690,6 +716,7 @@ export default {
           })
         }
       }
+      this.$emit('switchEditPanel')
     },
     resizeNode(e, node) {
       this.domCavase.refreshNode(node)

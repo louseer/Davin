@@ -262,6 +262,7 @@ export class DynamicForm {
   setSetting(setting) {
     this.assignValue(setting)
     setting = getValues(this.options)
+    console.log("@#$@%@!$@#$",setting)
     this.originSetting = setting
     this.previousSetting = setting
   }
