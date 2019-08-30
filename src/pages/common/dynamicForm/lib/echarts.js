@@ -451,8 +451,8 @@ export const _clockwise = () => {
     "type":OPTIONTYPE.RADIO,
     "defaultVal":false,
     "options":[
-      {lable:"逆时针",value:false},
-      {lable:"顺时针",value:true}
+      {label:"逆时针",value:false},
+      {label:"顺时针",value:true}
     ]
   }
 }
