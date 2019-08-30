@@ -22,7 +22,7 @@
         method="post" 
         enctype="multipart/form-data"
       >
-  　　　<input 
+  　　　<input
           type="file" 
           id="caver-upload" 
           name="upload"
@@ -85,7 +85,7 @@ import DForm from '../common/dynamicForm/dynamicForm.vue'
 import DButton from '@/components/button.vue'
 import html2canvas from 'html2canvas';
 
-
+//TODO:再抽一层组件出来，分别为大屏编辑表单，节点编辑表单，chart样式编辑表单，数据链接表单等等。
 export default {
   components: {
     DForm,
