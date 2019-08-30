@@ -748,7 +748,7 @@ export default class Stage {
               }
     
               let selDiv = document.getElementById('selectDiv')
-              console.log('tag', selDiv)
+             
               selDiv.style.display = 'block'
               selDiv.style.left = Math.min(_x, startX) + 'px'
               selDiv.style.top = Math.min(_y, startY) + 'px'
