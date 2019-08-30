@@ -308,7 +308,6 @@ export class DynamicForm {
     this.execHandler(option)
     let newSetting = getValues(this.options);
     this.setHistory(newSetting)
-    console.log("updated:",newSetting)
     this.callback && this.callback(newSetting)
   }
 }

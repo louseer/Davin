@@ -59,7 +59,6 @@ export default {
   },
   watch:{
     config(v){
-      console.log("vchart 监听是啥发送啊")
       this.combineConfig(v.options)
     }
   },
@@ -78,13 +77,11 @@ export default {
       }
       this.instance.initOpitions(this.simple)
       this.instance.setData(this.chartData)
-      console.log("this.instance.options",this.instance.options)
       this.options = this.instance.options
     },
     combineConfig(options){
       this.instance.combineConfig(options)
       this.options = this.instance.options
-      console.log("update options",this.options)
     },
     initInstance () {
       import(`./lib/${this.type}.js`).then((module) => {

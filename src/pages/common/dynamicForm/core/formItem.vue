@@ -147,7 +147,6 @@ export default {
   // },
   methods:{
     popevent(emitTag){
-      console.log("formItem emit TAG:",emitTag)
       this.$emit('popevent',emitTag)
     }
   },

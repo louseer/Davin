@@ -21,7 +21,6 @@ export default class Echart{
 
   initOpitions (options) {
     this.options = options;
-    debugger
     if(this.config.chart){
       this.combineConfig(this.config.chart)
     }

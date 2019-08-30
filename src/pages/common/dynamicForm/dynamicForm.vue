@@ -72,7 +72,6 @@ export default {
       import(`./lib/${this.type}.js`).then((module) => {
         let editor = module.default;
         this.form = new DynamicForm(editor.options,editor.handlers,this.setting,this.commitUpdate);
-        console.log("formformform",editor)
       }).catch(e=>{
         console.log(e)
       })
@@ -86,7 +85,6 @@ export default {
     this.importConfig()
   },
   updated() {
-    console.log("编辑栏切换为",this.type,this.setting)
   }
 }
 </script>

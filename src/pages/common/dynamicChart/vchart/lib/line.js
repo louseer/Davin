@@ -5,7 +5,6 @@ import 'echarts/lib/chart/line'
 export default class Line extends Echart{
   constructor(config) {
     super(config);
-    this.initOpitions();
   }
 
   //设置图例
@@ -90,14 +89,5 @@ export default class Line extends Echart{
     this.setSeries(data);   
   }
 
-
-  combineConfig() {
-     //TODO：结合接口this.config 继续整合options
-  }
-
-  initOpitions(options) {
-    this.options = options;
-    this.combineConfig();
-  }
 
 }

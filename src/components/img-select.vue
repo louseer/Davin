@@ -45,7 +45,6 @@ export default {
       if(this.imgsrc === item.url){
         return;
       }
-      console.log(item,index)
       this.selected = index
       this.imgsrc = item.url
       this.dialogVisible = false
