@@ -1,4 +1,6 @@
 import 'echarts/lib/component/legend'
+import { objDeepMerge } from '@/utils/index.js'
+
 export default class Echart{
   constructor(config){
     this.config = config
@@ -12,13 +14,18 @@ export default class Echart{
   hideLegend () {
     this.options.legend.show = flase;
   }
-  
-
-
-  queryData () {
-    
+ 
+  combineConfig() {
+    this.options = objDeepMerge(this.options,this.config)
   }
 
-  initOpitions () {
+  initOpitions (options) {
+    this.options = options;
+    this.combineConfig()
+  }
+
+  
+  queryData () {
+    
   }
 }

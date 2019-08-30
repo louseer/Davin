@@ -462,8 +462,10 @@ export const _center = (defaultVal = ['50%', '50%']) => {
     "name":"中心位置",
     "type":OPTIONTYPE.INPUTNUMBERS,
     defaultVal,
-    min:0,
-    max:100
+    unit:'%',
+    min:[0,0],
+    max:[100,100],
+    step:[5,5]
   }
 }
 

@@ -90,28 +90,13 @@ export default class Line extends Echart{
     this.setSeries(data);   
   }
 
-  setSample () {
-    this.options = {
-        xAxis: {
-            type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [{
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
-            type: 'line'
-        }]
-    };
-  }
 
   combineConfig() {
      //TODO：结合接口this.config 继续整合options
   }
 
-  initOpitions() {
-    this.setSample();
+  initOpitions(options) {
+    this.options = options;
     this.combineConfig();
   }
 

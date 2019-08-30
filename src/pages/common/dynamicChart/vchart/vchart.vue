@@ -58,19 +58,28 @@ export default {
     }
   },
   methods: {
-    refreshData () {
-      if(!this.instance || !this.chartData){
+    // refreshData () {
+    //   if(!this.instance || !this.chartData){
+    //     return;
+    //   }
+    //   this.instance.setData( this.chartData );
+    //   let options =  JSON.parse(JSON.stringify( this.instance.options))
+    //   this.options = options
+    // },
+    initOpitions(){
+      if(!this.instance || !this.chartData || !this.simple){
         return;
       }
-      this.instance.setData( this.chartData );
-      let options =  JSON.parse(JSON.stringify( this.instance.options))
-      this.options = options
+      this.instance.initOpitions(this.simple)
+      this.instance.setData(this.chartData)
+      console.log("this.instance.options",this.instance.options)
+      this.options = this.instance.options
     },
-    getInstance () {
+    initInstance () {
       import(`./lib/${this.type}.js`).then((module) => {
         let chart = module.default;
         this.instance = new chart(this.config);
-        this.refreshData();
+        this.initOpitions();
       }).catch(e=>{
         console.log(`加载./lib/${this.type}.js失败`)
         console.log(e)
@@ -79,16 +88,21 @@ export default {
     getSimple () {
       getChartTemp(this.type,this.version).then((val) => {
         this.simple = val
+         this.initOpitions();
+      }).catch(e=>{
+        console.log(`加载${this.version}版本${this.type}图opitions失败`)
+        console.log(e)
       })
     },
     getData () {
       getChartData(this.apiUrl).then(rsp => {
       if(rsp.status == 0){
           this.chartData = rsp.data
-          this.refreshData();
+          this.initOpitions();
         }
       }).catch(e => {
-
+        console.log(`加载ID为${this.config.id}图表的数据失败`)
+        console.log(e)
       })
     }
   },
@@ -99,7 +113,8 @@ export default {
   },
   created () {
     this.getData();
-    this.getInstance();
+    this.getSimple();
+    this.initInstance();
   },
   mounted() {
 

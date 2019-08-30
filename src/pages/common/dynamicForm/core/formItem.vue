@@ -74,6 +74,15 @@
         >
         <i class="el-icon-plus"></i>
         </el-upload>
+        <d-input-numbers
+          v-if="item.type === itemType.INPUTNUMBERS"
+          v-model="item.value"
+          :min='item.min'
+          :max='item.max'
+          :step='item.step'
+          :unit='item.unit'
+        > 
+        </d-input-numbers>
         <d-img-select
           v-if="item.type === itemType.IMGSELECT"
           :title='item.name'
@@ -108,12 +117,14 @@
 import { OPTIONTYPE } from "./constants.js"
 import DImgSelect from "components/img-select.vue"
 import DCoverSetting from "components/cover-setting.vue"
+import DInputNumbers from "components/input-numbers.vue"
 
 export default {
   name:"form-item",
   components:{
     DImgSelect,
-    DCoverSetting
+    DCoverSetting,
+    DInputNumbers
   },
   props:{
     options:[Object,Array]
