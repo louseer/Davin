@@ -139,28 +139,27 @@ export default {
           icon: 'icon-ico_db_public',
           event: this.public,
           type: 'icon',
-          disabled:true
+          hide:true
         },
         {
           name: '预览',
           icon: 'icon-ico_db_view',
           event: this.view,
           type: 'icon',
-          disabled:true
+          hide:true
         },
         {
           name: '保存',
           icon: 'icon-ico_db_save',
           event: this.save,
           type: 'icon',
-          disabled:true
+          hide:true
         },
         {
           name: '退出',
           icon: 'icon-ico_db_back',
           event: this.quit,
-          type: 'icon',
-          disabled:true
+          type: 'icon'
         }
       ],
       laysets: [
