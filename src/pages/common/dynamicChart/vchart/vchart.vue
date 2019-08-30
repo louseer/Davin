@@ -42,12 +42,12 @@ export default {
     return {
       instance:null,
       chartData:null,
-      options:'',
-      simple:null
+      simple:null,
+      options:null
     }
   },
   computed: {
-    type () {  
+    type () {
       return this.config.type;
     },
     version() {
@@ -55,6 +55,12 @@ export default {
     },
     apiUrl () {
       return this.config.data && this.config.data.apiUrl || `/sampledata/${this.type}.json`;
+    }
+  },
+  watch:{
+    config(v){
+      console.log("vchart 监听是啥发送啊")
+      this.combineConfig(v.options)
     }
   },
   methods: {
@@ -74,6 +80,11 @@ export default {
       this.instance.setData(this.chartData)
       console.log("this.instance.options",this.instance.options)
       this.options = this.instance.options
+    },
+    combineConfig(options){
+      this.instance.combineConfig(options)
+      this.options = this.instance.options
+      console.log("update options",this.options)
     },
     initInstance () {
       import(`./lib/${this.type}.js`).then((module) => {
@@ -106,11 +117,6 @@ export default {
       })
     }
   },
-  watch:{
-    options(v){
-      console.log("chart options update",v)
-    }
-  },
   created () {
     this.getData();
     this.getSimple();
@@ -119,6 +125,8 @@ export default {
   mounted() {
 
   },
+  updated(){
+  }
 }
 </script>
 <style lang='less' scoped>

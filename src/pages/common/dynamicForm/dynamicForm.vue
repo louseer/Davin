@@ -49,13 +49,16 @@ export default {
     type () {
       this.importConfig();
     },
-    setting:{
-      handler:function(){
-        console.log("dynamicForm 检测到新的setting",this.setting)
-        this.form && this.form.setSetting(this.setting)
-      },
-      deep:true
+    setting(){
+      this.form && this.form.setSetting(this.setting)
     }
+    // setting:{
+    //   handler:function(){
+    //     console.log("dynamicForm 检测到新的setting",this.setting)
+    //     this.form && this.form.setSetting(this.setting)
+    //   },
+    //   deep:true
+    // }
   },
   methods: {
     commitUpdate(newSetting){

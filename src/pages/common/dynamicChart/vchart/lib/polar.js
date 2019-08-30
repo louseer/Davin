@@ -7,7 +7,6 @@ import 'echarts/lib/component/polar'
 export default class Polar extends Echart{
   constructor(config) {
     super(config);
-    this.initOpitions();
   }
 
   //设置图例
@@ -38,10 +37,6 @@ export default class Polar extends Echart{
     const {series} = data;
     this.setLegend(series);
     this.setSeries(series)
-  }
-
-  combineConfig() {
-     //TODO：结合接口this.config 继续整合options
   }
 
 }

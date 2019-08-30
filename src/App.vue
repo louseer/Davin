@@ -11,4 +11,5 @@ export default {
 
 <style lang='less' scoped>
 @import '~styles/reset.css';
+@import '~styles/ui-element.css';
 </style>

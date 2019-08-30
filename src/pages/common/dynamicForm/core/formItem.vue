@@ -81,6 +81,7 @@
           :max='item.max'
           :step='item.step'
           :unit='item.unit'
+          :valueWithUnit='item.valueWithUnit'
         > 
         </d-input-numbers>
         <d-img-select

@@ -65,6 +65,7 @@ export default {
     },
     _updateChart(state,setting){
       state.editChart = objDeepMerge(state.editChart,setting)
+      state.editNode.chart = Object.assign({},state.editChart)
     }
   },
   actions: {

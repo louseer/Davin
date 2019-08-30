@@ -40,6 +40,7 @@
           @nodelistChange="nodechange" 
           @zoomChange="zoomChange"
           @switchEditPanel='switchEditPanel'
+          @updateNodeSetting = 'updateNodeSetting'
           ref="stage" 
         ></Stage>
         <ZoomSetter :zoomSize="zoom" @changeSize="changeSize" />
@@ -470,6 +471,18 @@ export default {
     nodeAlign(type) {
       this.$refs.stage.domCavase.nodesAlign(type)
     },
+    updateNodeSetting(){
+      let rootNodes = this.activeNodes.filter(n => {
+        return n.pid === null
+      })
+      if(this.rootNodesLen === 1){
+        if(rootNodes[0].type==='element'){
+          this.initEditNode(rootNodes[0])
+        }else if(rootNodes[0].type==='group'){
+          this.initEditGroup(rootNodes[0])
+        }
+      }
+    },
     switchEditPanel(){
       if(this.activeNodes.length === 0){
         this.editType = ELEMENT_SCREEN;
@@ -484,16 +497,12 @@ export default {
           this.editType = NODE_ELEMENT
           this.initEditNode(rootNodes[0])
           this.initEditChart(rootNodes[0].chart)
-          // this.editNode = rootNodes[0]
-          // this.editChart = rootNodes[0].chart
         }else if(rootNodes[0].type==='group'){
           this.editType = NODE_GROUP
           this.initEditGroup(rootNodes[0])
-          //this.editGroup = rootNodes[0]
         }
       }else{
         this.editType = NODE_MULTI
-
       }
     },
     changeSize(val) {

@@ -5,7 +5,7 @@
       {{name}}
     </div>
     <div class='chart-body'>
-      <component :is="chart" :config='theconfig' ></component>
+      <component :is="chart" :config='config' ></component>
     </div>
   </div>
 </template>
@@ -38,20 +38,16 @@ export default {
   },
   data() {
     return {
-      //isMounted:false,
-      theconfig:this.config
     };
   },
   watch:{
-    config:{
-      handler:function(v){
-        console.log('dchart监听到config变化',v)
-        this.theconfig = v
-      
-      
-      },
-      deep:true
-    }
+    // config:{
+    //   handler:function(v){
+    //     console.log('dchart监听到config变化',v)
+    //     this.theconfig = v
+    //   },
+    //   deep:true
+    // }
   },
   computed: {
     id () {  
@@ -70,15 +66,8 @@ export default {
         return 'CChart';
       }
     }
-    
   },
-  watch: {
-    config:{
-      handler:function (value) {
-        this.theconfig = Object.assign({},value)
-      }
-    }
-  },
+
   methods: {
     resize() {
 
@@ -96,7 +85,7 @@ export default {
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
   updated() {
-    console.log('chart UPDATED')
+    console.log('dynamicchart UPDATED')
     console.log(this.config)
   }, //生命周期 - 更新之后
   beforeDestroy() {}, //生命周期 - 销毁之前

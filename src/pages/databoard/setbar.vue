@@ -35,7 +35,16 @@
 
       </div>
       <div class='form-wrapper'>
-        <DForm type='node' :setting='editNode' @update='updateNode' key='node'/>
+        <nodeConfigForm 
+          :name='editNode.name'
+          :id='editNode.id'
+          :x ='editNode.x'
+          :y ='editNode.y'
+          :w ='editNode.w'
+          :h ='editNode.h'
+          :key='editNode.id'
+          @update='updateNode'
+        />
         <DForm :type='editChart.type' :setting='editChart' @update='updateChart' key='chart'/>
       </div>
     </div>
@@ -83,13 +92,14 @@ import { ELEMENT_SCREEN,NODE_ELEMENT,NODE_MULTI,NODE_GROUP } from "@/store/const
 import { mapState, mapActions } from 'vuex'
 import DForm from '../common/dynamicForm/dynamicForm.vue'
 import DButton from '@/components/button.vue'
+import nodeConfigForm from '@/components/node-config-form.vue'
 import html2canvas from 'html2canvas';
 
-//TODO:再抽一层组件出来，分别为大屏编辑表单，节点编辑表单，chart样式编辑表单，数据链接表单等等。
 export default {
   components: {
     DForm,
-    DButton
+    DButton,
+    nodeConfigForm
   },
   props:{
     editType:{
@@ -99,11 +109,6 @@ export default {
     nodeNum:{
       type:Number,
       default:0
-    }
-  },
-  watch:{
-    nodeNum(newV,oldV){
-      console.log(newV,oldV)
     }
   },
   data() {
@@ -253,24 +258,7 @@ export default {
     updateGroup(setting){
       this.$emit("updateGroup",setting)
     }
-  },
-  //生命周期 - 创建完成（可以访问当前this实例）
-  created() {
-  console.log('nodeNum',this.nodeNum)
-  },
-  //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {
-  
-  },
-  beforeCreate() {}, //生命周期 - 创建之前
-  beforeMount() {}, //生命周期 - 挂载之前
-  beforeUpdate() {}, //生命周期 - 更新之前
-  updated() {
-      console.log('nodeNum',this.nodeNum)
-  }, //生命周期 - 更新之后
-  beforeDestroy() {}, //生命周期 - 销毁之前
-  destroyed() {}, //生命周期 - 销毁完成
-  activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
+  }
 }
 </script>
 <style>
@@ -298,6 +286,9 @@ export default {
     }
     /deep/ .el-radio__label{
       padding-left: 5px;
+    }
+    /deep/ .unit {
+      color:@icon_DataC_main;
     }
     .aglinBtn{
       width:24px;

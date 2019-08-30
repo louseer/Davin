@@ -403,6 +403,7 @@ export default {
           chart
         }
         this.addNode(obj)
+        this.$emit("switchEditPanel")
       }
     })
     handler.selectNodes(e => { 
@@ -808,10 +809,9 @@ export default {
           })
         )
       }
-      console.log('tag', stop)
-
       this.startX = this.domCavase.eventZoom(e).clientX
       this.startY = this.domCavase.eventZoom(e).clientY
+      this.$emit('updateNodeSetting')
     },
     toggleGrop() {
       const rootLIst = this.domCavase.selectNodes.filter(n => n.pid === null)

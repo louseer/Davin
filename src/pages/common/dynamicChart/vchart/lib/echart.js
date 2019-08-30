@@ -15,16 +15,18 @@ export default class Echart{
     this.options.legend.show = flase;
   }
  
-  combineConfig() {
-    this.options = objDeepMerge(this.options,this.config)
+  combineConfig(options) {
+    this.options = objDeepMerge(this.options,options)
   }
 
   initOpitions (options) {
     this.options = options;
-    this.combineConfig()
+    debugger
+    if(this.config.chart){
+      this.combineConfig(this.config.chart)
+    }
   }
 
-  
   queryData () {
     
   }
