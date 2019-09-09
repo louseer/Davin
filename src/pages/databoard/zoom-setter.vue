@@ -1,57 +1,72 @@
 <template>
-  <div class='zoom_setter'>
-    <span class='zoom_number'>{{zoomPst}}</span>
-        <slide-bar :min='0.1' :max="1.5" :value="zoomSize" :w="80" @changHandler="changHandler"></slide-bar>
+  <div class="zoom_setter">
+    <span class="zoom_number">{{zoomPst}}</span>
+    <slide-bar :min="0.1" :max="1.5" :value="zoomSize" :w="80" @changHandler="changHandler"></slide-bar>
   </div>
 </template>
 
 <script>
 import SlideBar from '../../components/slidbar.vue'
 
-  export default {
-    components: {
-      SlideBar
-    },
-    props: {
-      zoomSize: {
-        type: Number,
-        default: 0,
-      },
-     
-    },
-  
-    computed: {
-      zoomPst() {
-        return parseInt(this.zoomSize.toFixed(2)*100) + '%'
-      }
-    },
-    methods: {
-      changHandler(val) {        
-       this.$emit("changeSize",val)
-      }
-    },
- 
+export default {
+  components: {
+    SlideBar
+  },
+  props: {
+    zoomSize: {
+      type: Number,
+      default: 0
+    }
+  },
+  data() {
+    return {
+      tools: [
+        {
+          name: '发布',
+          icon: 'icon-ico_db_public',
+          event: this.public,
+          type: 'icon'
+        },
+        {
+          name: '预览',
+          icon: 'icon-ico_db_view',
+          event: this.view,
+          type: 'icon'
+        }       
+      ]
+    }
+  },
+  computed: {
+    zoomPst() {
+      return parseInt(this.zoomSize.toFixed(2) * 100) + '%'
+    }
+  },
+  methods: {
+    changHandler(val) {
+      this.$emit('changeSize', val)
+    }
   }
+}
 </script>
 
 <style lang="less" scoped>
 @import '../../assets/styles/base.less';
-.zoom_setter{
+.zoom_setter {
   width: 100%;
   background: @bg_Data_bottom;
   height: 0.3rem;
   position: absolute;
   bottom: 0;
-  border-top:@border_Data_bottom;
+  border-top: @border_Data_bottom;
   overflow: hidden;
   z-index: 999;
-.zoom_number{
-  float: left;
-  width: 0.3rem;
-  margin: 0 0.1rem;
-  font:@Font_en12;
-  line-height: 0.3rem;
-  color:@Font_DataC_main;
-}
+  .zoom_number {
+    float: left;
+    width: 0.3rem;
+    margin: 0 0.1rem;
+    font: @Font_en12;
+    line-height: 0.3rem;
+    color: @Font_DataC_main;
+  }
 }
 </style>

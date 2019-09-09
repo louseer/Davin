@@ -39,7 +39,7 @@
             <li>id:{{node.id}}</li>
              <li>type:{{node.elType}}</li>
             <li>{{node.disable ? 'lock' :''}}</li>
-      </ul>-->
+      </ul> -->
       <div class='d-chart-wrapper' v-if="rnode.chart"  :style="{opacity:rnode.opacity / 100}">
         <d-chart :config="rnode.chart" />
       </div>

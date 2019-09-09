@@ -10,6 +10,7 @@
         class="iconfont"  
         :class="btn.icon" 
         @click="btn.event"
+        :style="`font-size:${iconSize}px`"
       ></i>
       <slot/>
     </div>
@@ -23,6 +24,10 @@
         type: Object,
         default: ()=>{}
       },
+      iconSize:{
+        type:Number,
+        default:16,     
+      }
     }
   }
 </script>

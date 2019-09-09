@@ -8,7 +8,7 @@
       </ol>
       <ol class="toolsbar">
         <li v-for="(btn,bindex) in toptools " :key="bindex">
-          <Dbutton :btn="btn"></Dbutton>
+          <Dbutton :btn="btn" :iconSize="20"></Dbutton>
         </li>
       </ol>
     </div>

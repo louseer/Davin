@@ -160,7 +160,7 @@ export default {
 
       let blocksy =
         parseInt((this.$parent.$el.clientHeight - this.offSety) / this.zoomSize)
-      let zBetween = 5
+      let zBetween = 5 //间隔
 
       if (this.type === 'xRuler') {
         for (let i = -Math.abs(this.offSetx); i < blocksx; i++) {

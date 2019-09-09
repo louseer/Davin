@@ -59,16 +59,21 @@
         </div>
       </div>
     </div>-->
-    <div class="stage" ref="stage" @dragover.prevent :style='domCavase.mode === "select" ? " cursor: crosshair;":" cursor: move	;"'>
-      <eagle-eye 
-      :canvasObj="domCavase.canvas"
-      :zoomSize="domCavase.zoomSize"
-      :stageW="stageW"
-      :stageH="stageH"
-      :offSetx="domCavase.offsetx"
-      :offSety="domCavase.offsety"
-      :nodeList="domCavase.nodeList"
-      @changeView="changeView"
+    <div
+      class="stage"
+      ref="stage"
+      @dragover.prevent
+      :style="domCavase.mode === "select" ? " cursor: crosshair;":" cursor: move	;""
+    >
+      <eagle-eye
+        :canvasObj="domCavase.canvas"
+        :zoomSize="domCavase.zoomSize"
+        :stageW="stageW"
+        :stageH="stageH"
+        :offSetx="domCavase.offsetx"
+        :offSety="domCavase.offsety"
+        :nodeList="domCavase.nodeList"
+        @changeView="changeView"
       />
       <guide-line
         v-if="showline"
@@ -329,7 +334,7 @@ export default {
   mounted() {
     this.stageW = this.$refs.stage.clientWidth
     this.stageH = this.$refs.stage.clientHeight
-    
+
     window.onresize = () => {
       let resizeTimer = null
       return (() => {
@@ -346,18 +351,18 @@ export default {
           const yVal = this.stageH / chReal
           xVal < yVal
             ? this.setZoom((this.stageW - 20 - this.domCavase.offsetx) / cw)
-            : this.setZoom((this.stageH - 30 -this.domCavase.offsety) / ch)
+            : this.setZoom((this.stageH - 30 - this.domCavase.offsety) / ch)
         }, 200)
       })()
     }
-    
+
     let _this = this
     window.document.onkeydown = function(e) {
       const keynum = window.event ? e.keyCode : e.which
       if (keynum === 32) {
-        if (_this.domCavase.mode === "move") return
-        _this.domCavase.mode = "move"
-        console.log(_this.domCavase.mode)        
+        if (_this.domCavase.mode === 'move') return
+        _this.domCavase.mode = 'move'
+        console.log(_this.domCavase.mode)
         return
       }
       if (keynum === 17) {
@@ -369,15 +374,15 @@ export default {
     }
     window.document.onkeyup = function(e) {
       const keynum = window.event ? e.keyCode : e.which
-      _this.domCavase.mode = "select"
+      _this.domCavase.mode = 'select'
       _this.ctrlDown = false
       console.log(_this.ctrlDown)
-      console.log(_this.domCavase.mode)  
+      console.log(_this.domCavase.mode)
     }
 
     const handler = this.domCavase.Handler(this.$refs.stage)
     handler.clickHandler(e => {
-      this.$emit("switchEditPanel")
+      this.$emit('switchEditPanel')
     })
     handler.dropHandler(e => {
       if (e.dataTransfer.getData('item') !== null) {
@@ -403,10 +408,10 @@ export default {
           chart
         }
         this.addNode(obj)
-        this.$emit("switchEditPanel")
+        this.$emit('switchEditPanel')
       }
     })
-    handler.selectNodes(e => { 
+    handler.selectNodes(e => {
       this.rightClick = false
       this.$emit('switchEditPanel')
       //this.$emit('nodelistChange', this.domCavase.nodeList)
@@ -450,9 +455,9 @@ export default {
   },
   methods: {
     ...mapMutations('databoard', ['initDataboard', 'setEditType', '_updateDB']),
-    changeView(x,y){
-      this.domCavase.offsetx=x
-      this.domCavase.offsety=y
+    changeView(x, y) {
+      this.domCavase.offsetx = x
+      this.domCavase.offsety = y
     },
     moveline(id, pos) {
       this.domCavase.lineList.forEach(l => {
@@ -497,7 +502,7 @@ export default {
     hideNode() {
       this.domCavase.hideNode()
       this.$emit('nodelistChange', this.domCavase.nodeList)
-      this.$emit("switchEditPanel")
+      this.$emit('switchEditPanel')
     },
     unhideNode(id) {
       this.domCavase.unhideNode(id)
@@ -506,7 +511,7 @@ export default {
     lockNode() {
       this.domCavase.lockNode()
       this.$emit('nodelistChange', this.domCavase.nodeList)
-      this.$emit("switchEditPanel")
+      this.$emit('switchEditPanel')
     },
     unlockNode(id) {
       this.domCavase.unlockNode(id)
@@ -520,8 +525,8 @@ export default {
       )
     },
 
-    configGroup(setting,node){
-      console.log("setting",node)
+    configGroup(setting, node) {
+      console.log('setting', node)
       const cx = setting.x - node.x
       const cy = setting.y - node.y
       const zW = setting.w / node.w
@@ -533,7 +538,7 @@ export default {
           n.x = setting.x + (n.x - node.x) * zW
           n.y = setting.y + (n.y - node.y) * zH
           n.w = n.w * zW
-          n.h = n.h * zH 
+          n.h = n.h * zH
           n.opacity = setting.opacity
         }
       })
@@ -545,7 +550,7 @@ export default {
     },
     nodeResizeNode(type, e, node) {
       let resizeTimer = null
-      
+
       e.target.style.opacity = '1'
       const event = e || window.event
       const _x = e.clientX - this.dx
@@ -647,17 +652,17 @@ export default {
     deleteNode() {
       this.domCavase.removeNodes()
       this.$emit('nodelistChange', this.domCavase.nodeList)
-      this.$emit("switchEditPanel")
+      this.$emit('switchEditPanel')
     },
     outGroup() {
       this.domCavase.outGroup()
       this.$emit('nodelistChange', this.domCavase.nodeList)
-      this.$emit("switchEditPanel")
+      this.$emit('switchEditPanel')
     },
     clear() {
       this.domCavase.clear()
       this.$emit('nodelistChange', this.domCavase.nodeList)
-      this.$emit("switchEditPanel")
+      this.$emit('switchEditPanel')
     },
     nodeAlign(type) {
       this.domCavase.nodesAlign(type)
@@ -668,7 +673,7 @@ export default {
     toGroup() {
       this.domCavase.toGroup()
       this.$emit('nodelistChange', this.domCavase.nodeList)
-      this.$emit("switchEditPanel")
+      this.$emit('switchEditPanel')
     },
     nodeDragStart(e) {
       this.startX = this.domCavase.eventZoom(e).clientX
@@ -681,7 +686,6 @@ export default {
       this.$emit('nodeClick', this.domCavase.selectNodes)
     },
     nodeMousedown(node) {
-    
       this.rightClick = false
       if (this.domCavase.selectNodes.map(n => n.id).includes(node.id)) return
       console.log('@@@@@@@@@@@@@@@', this.ctrlDown)
@@ -944,7 +948,7 @@ select {
   background: url(~images/pointe.png) repeat #27272b;
   position: relative;
   overflow: hidden;
- 
+
   // perspective: 1920px;
   // perspective-origin: 0% 0%;
 }
