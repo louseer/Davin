@@ -7,63 +7,11 @@
       :rightMenu="rightMenu"
       @hide="contextmenuHide"
     />
-    <!-- <div class="ex">
-      <input type="text" v-model="domCavase.canvas.width" placeholder="请输入宽度" />
-      <input type="text" v-model="domCavase.canvas.height" />
-      <input type="text" v-model="domCavase.zoomSize" placeholder="请输入放大值" />
-      <input type="text" placeholder="请输入透明度" />
-      <input type="select" placeholder="请输入背景色" />
-      <select>
-        <option value="black">黑色</option>
-        <option value="red">红色</option>
-        <option value="yellow">黄色</option>
-        <option value="blue">蓝色</option>
-      </select>
-
-      <div style="clear:both;padding:10px">
-        <div style="margin:0 auto; width:100%">
-          <button
-            v-for="(btn,index) in  aglinList"
-            :key="index"
-            style="float:left"
-            @click="nodeAlign(btn.type)"
-          >{{btn.name}}</button>
-
-          <button @click="fillNode">添加</button>
-          <button @click="toGroup">编组</button>
-          <button @click="outGroup">解除编组</button>
-          <button @click="clear">清空</button>
-          <button @click="deleteNode">删除</button>
-          <button @click="selectAll">全选</button>
-          <button @click="lockNode">锁定</button>
-          <button @click="hideNode">隐藏</button>
-
-          <button @click="downLayer">下移一层</button>
-
-          <button @click="upLayer">上移一层</button>
-          <button @click="toBottomLayer">置于底层</button>
-          <button @click="toTopLayer">置于顶层</button>
-          <button @click="clearLine">清除参考线</button>
-          <button
-            style="float:left"
-            v-if="multiple.length>=3"
-            @click="multipleNodesAlign('VerticalAverage')"
-          >垂直均分</button>
-          <button
-            style="float:left"
-            v-if="multiple.length>=3"
-            @click="multipleNodesAlign('HorizontalAverage')"
-          >水平均分</button>
-          <button style="float:left" v-if="multiple.length>=2" @click="nodeAlign('Hline')">水平联排</button>
-          <button style="float:left" v-if="multiple.length>=2" @click="nodeAlign('Vline')">垂直联排</button>
-        </div>
-      </div>
-    </div>-->
     <div
       class="stage"
       ref="stage"
       @dragover.prevent
-      :style="domCavase.mode === "select" ? " cursor: crosshair;":" cursor: move	;""
+      :style="domCavase.mode === 'select' ? ' cursor: crosshair;':' cursor: move	;'"
     >
       <eagle-eye
         :canvasObj="domCavase.canvas"
