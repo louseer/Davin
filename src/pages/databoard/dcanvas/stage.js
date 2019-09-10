@@ -183,6 +183,13 @@ export default class Stage {
       }
     })
   }
+  editNodeName(tag) {
+    this.nodeList.forEach(n => {
+      if (n.id === id) {
+        n.edit = tag
+      }
+    })
+  }
   hideNode() {
     this.selectNodes.forEach(n => {
       n.hide = true

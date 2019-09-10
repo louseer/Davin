@@ -9,6 +9,7 @@ export default {
       }
   },
   "grid": {
+      "top":"5%",
       "left": "3%",
       "right": "4%",
       "bottom": "3%",

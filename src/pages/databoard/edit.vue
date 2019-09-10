@@ -19,6 +19,7 @@
               :listType="listType"
               :treenode="treenode"
               @treeNodeClick="treeNodeClick"
+              
               @unhideNode="unhideNode"
               @unlockNode="unlockNode"
             />

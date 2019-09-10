@@ -1,16 +1,6 @@
 import Echart from './echart.js';
 import 'echarts/lib/chart/line';
 
-const defaultOption = {
-  grid: {
-    show: false,
-    left: 60,
-    right: 60,
-    bottom: 30,
-    top:50
-  }
-}
-
 export default class Line extends Echart{
   constructor(config) {
     super(config);
@@ -90,6 +80,12 @@ export default class Line extends Echart{
         d.s = d[fieldMap.s];
       }
     }
+  }
+
+  setData(data) {
+    // this.mapFields(data);
+    // this.setLegend(data);
+    // this.setSeries(data);   
   }
 
 }
