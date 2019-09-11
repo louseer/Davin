@@ -1,10 +1,5 @@
 import { OPTIONTYPE } from '../core/constants.js'
 const options = {
-  "name":{
-    "name":"名称",
-    "type":OPTIONTYPE.INPUT,
-    "defaultVal":''
-  },
   "size":{
     "name":"大小",
     "type":OPTIONTYPE.INPUTNUMBERS,

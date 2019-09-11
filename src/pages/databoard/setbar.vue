@@ -1,9 +1,9 @@
 <!--  -->
 <template>
-  <div class='set-bar'>
+  <div class='set-bar' :class="{'opend':opend,'shrink':!opend}">
     <div class='canvas-set' v-if='editType===ELEMENT_SCREEN'>
       <div class='top'>
-        大屏设置
+        <h3>大屏设置</h3>
       </div>
       <div class='form-wrapper'>
         <DForm 
@@ -32,7 +32,8 @@
     </div>
     <div class='single-node-set' v-if='editType===NODE_ELEMENT'>
       <div class='top'>
-
+        <h3>{{editNode.name}}</h3>
+        <h4 class='sub-title'>V{{editChart.version}} | {{chartTitle}}</h4>
       </div>
       <div class='form-wrapper'>
         <nodeConfigForm 
@@ -50,7 +51,7 @@
     </div>
     <div class='single-group-set' v-if='editType === NODE_GROUP'>
       <div class='top'>
-        组内设置
+        <h3>组内设置</h3>
       </div>
       <div class='form-wrapper' >
         <DForm type='group' :setting='editGroup' @update='updateGroup' key='node'/>
@@ -58,7 +59,7 @@
     </div>
     <div class='multi-node-set' v-if='editType === NODE_MULTI'>
       <div class='top'>
-        排列布局
+        <h3>排列布局</h3>
       </div>
       <div class='form-wrapper'>
         <el-form label-width="0.8rem" label-position='left' size='mini'>
@@ -117,6 +118,7 @@ export default {
       NODE_ELEMENT,
       NODE_MULTI,
       NODE_GROUP,
+      opend:true,
       aglinList: [
         { 
           type: 'top', 
@@ -163,7 +165,8 @@ export default {
       databoard:state => state.databoard,
       editNode:state => state.editNode,
       editChart:state => state.editChart,
-      editGroup:state => state.editGroup
+      editGroup:state => state.editGroup,
+      typetree:state => state.typetree
     }),
     layoutList(){
       return [
@@ -192,6 +195,19 @@ export default {
           hide: this.nodeNum < 3 
         }
       ]
+    },
+    chartTitle(){
+      if(!this.editChart || !this.typetree){
+        return ''
+      }
+      let category,chart
+      category = this.typetree.find((e) => {
+        chart = e.children.find((e) => {
+          return e.type === this.editChart.type
+        })
+        return !!chart
+      })
+      return `${category.title}-${chart.title}`
     }
   },
   watch: {},
@@ -232,11 +248,10 @@ export default {
     resizeGroupChild(w,h,node){
       const zW = w / node.w
       const zH = h / node.h
-
       n.w = n.w * zW
-            n.h = n.h * zH
-            n.x = node.x - (n.x - node.x) * zW
-            n.y = node.y - (n.y - node.y) * zH
+      n.h = n.h * zH
+      n.x = node.x - (n.x - node.x) * zW
+      n.y = node.y - (n.y - node.y) * zH
     },
     reLocationNode(cx,cy,node){
       node.x += cx
@@ -272,12 +287,20 @@ export default {
   height:100%;
   overflow-y: scroll;
   .top{
-    height:26px;
+    height:auto;
     background-color:#393c41;
-    font-size:.14rem;
-    line-height: 26px;
-    color: @Font_DataC_main;
-    text-align: center;
+    padding:8px 20px;
+    h3{
+      font-size:.14rem;
+      line-height: .14rem;
+      color: @Font_DataC_main;
+      margin-bottom:5px;
+    }
+    .sub-title{
+      font-size:.12rem;
+      line-height: .12rem;
+      color: @Font_DataC_main;
+    }
   }
   .form-wrapper{
     padding:.2rem;
@@ -305,8 +328,6 @@ export default {
       }
     }
   }
-  
-  
 }
 
 </style>

@@ -38,9 +38,7 @@ export default {
     }
   },
   methods: {
-   
     treeNodeClick(node) { 
-      clearTimeout(this.timeoutID)
       this.timeoutID = setTimeout(()=>{
         console.log("click",this.timeoutID)
         const nodeId = node.id
@@ -49,13 +47,11 @@ export default {
       
     },
     treeNodeDBLClick(data) {
-      console.log("dblclick",this.timeoutID)
       clearTimeout(this.timeoutID)
       const nodeId = data.id
       this.$set(data,'edit',true)
     },
     treeNodeNameChange(data,newName){
-      console.log("treeNodeNameChange",data,newName)
       const nodeId = data.id
       this.$set(data,'edit',false)
       if(data.name !== newName){
@@ -122,7 +118,8 @@ export default {
                 {
                   props: {
                     "value": data.name,
-                    "autofocus":true
+                    "autofocus":true,
+                    "placeholder":""
                   },
                   style: {
                     display: !data.edit ? 'none':'block'
