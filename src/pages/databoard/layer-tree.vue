@@ -65,7 +65,6 @@ export default {
       this.$emit('unlockNode', nodeId)
     },
     renderContent(h, { node, data, store }) {
-      console.log("renderContentrenderContentrenderContentrenderContent",node, data, store)
       if (this.listType === 'thumbnail') {
         if (data.type === 'element') {
           return h(

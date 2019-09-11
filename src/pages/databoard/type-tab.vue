@@ -58,9 +58,7 @@ export default {
     }
   },
   methods: {
-    contentdrag(e,item){
-     
-    
+    contentdrag(e,item){ 
       e.dataTransfer.setData("item",JSON.stringify(item))
      
     },
@@ -72,7 +70,7 @@ export default {
       this.thetypetree.forEach(n => {
         n.id === item.id ? (n.active = true) : (n.active = false)
       })
-      this.$emit('changeClick', this.thetypetree)
+      //this.$emit('changeClick', this.thetypetree)
     }
   },
   computed: {

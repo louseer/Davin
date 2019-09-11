@@ -333,7 +333,8 @@ export default {
       this.$emit('switchEditPanel')
     })
     handler.dropHandler(e => {
-      if (e.dataTransfer.getData('item')) {
+      debugger
+      if (e.dataTransfer.getData('item') !== null) {
         const item = JSON.parse(e.dataTransfer.getData('item'))
         const startX = e.clientX - this.GetPosition(this.$refs.stage).left
         const startY = e.clientY - this.GetPosition(this.$refs.stage).top

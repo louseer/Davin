@@ -30,7 +30,7 @@
               :height="tab.height"
               :listType="listType"
               :typetree="typetree"
-              @changeClick="changeClick"
+              
               @contentClick="contentClick"
             />
           </div>
