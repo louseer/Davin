@@ -170,8 +170,8 @@ export default {
             w:200,
             h:40,
             version: 1,
-            text:'自定义标题',
-            fontSize:20, //临时代码
+            // text:'自定义标题',
+            // fontSize:20, //临时代码
             id: '4-1'
           },
           // {

@@ -237,21 +237,26 @@ export default {
     updateDataboard(setting){
       const obj = objDeepMerge(this.databoard,setting)
       this.databoard = Object.assign({},obj)
+      //TODO:接口上报更新
     },
     updateChart(setting){
       this.editChart = objDeepMerge(this.editChart,setting)
-      this.editNode.chart = Object.assign({},this.editChart) //????
+      this.editNode.chart = Object.assign({},this.editChart)
+      //TODO:接口上报更新
     },
     updateNode(setting){
       this.editNode = objDeepMerge(this.editNode,setting)
+      //TODO:接口上报更新
     },
     updateGroup(setting){
       this.$refs.stage.configGroup(setting,this.editGroup)
+      //TODO:接口上报更新
     },
     setBarBtnClick(handler,param){
       if(handler && this[handler]){
         this[handler](param);
       }
+      //TODO：编辑栏收缩开关
     },
     multipleNodesAlign(type) {
       this.$refs.stage.domCavase.multipleNodesAlign(type)
@@ -270,6 +275,7 @@ export default {
           this.editGroup = rootNodes[0]
         }
       }
+      //TODO:接口上报更新
     },
     switchEditPanel(){ //TODO:考虑可以将这一层直接放在setbar组件中去？
       if(this.activeNodes.length === 0){
@@ -305,9 +311,7 @@ export default {
         id,
         type: item.type,
         name: item.title,
-        version: item.version,
-        text: item.text, //临时代码
-        fontSize: item.fontSize //临时代码
+        version: item.version
       }
       const obj={
         w:item.w || 200,

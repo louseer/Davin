@@ -1,5 +1,6 @@
 import { getuuid } from '@/utils/index'
 import Dcanvas from './dcanvas'
+import { timingSafeEqual } from 'crypto'
 export default class Node {
   constructor(node) {
     this.type=node.type || 'element'

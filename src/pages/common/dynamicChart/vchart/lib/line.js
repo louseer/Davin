@@ -1,4 +1,4 @@
-import Echart from './echart.js';
+import Echart from './EChart.js';
 import 'echarts/lib/chart/line'
 
 

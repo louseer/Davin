@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <div class='cutomize-chart'>
-    <component :is="chart" :config='theconfig' ></component>
+    <component :is="chart" :options='options' :data='chartData' v-if='options'></component>
   </div>
 </template>
 
@@ -9,7 +9,9 @@
 //import {组件名称} from '组件路径';
 import customTitle from './lib/title.vue'
 import customDecorate from './lib/decorate.vue'
-
+import { getChartTemp } from '@/chart-simples/index.js'
+import { objDeepMerge } from '@/utils/index.js'
+const noDataCharts = ['title','decorate']
 export default {
   props:{
     config:{
@@ -22,10 +24,18 @@ export default {
   },
   data() {
     return {
-      theconfig:this.config
+      chartData:null,
+      simple:null,
+      options:null
     };
   },
   computed: {
+    type() {
+      return this.config.type
+    },
+    nodata() {
+      return noDataCharts.includes(this.config.type)
+    },
     chart() {
       switch(this.config.type){
         case 'title':
@@ -36,15 +46,60 @@ export default {
           break;
         default:
       }
+    },
+    version() {
+      return this.config.version
+    },
+    apiUrl () {
+      return this.config.data && this.config.data.apiUrl || `/sampledata/${this.type}.json`;
     }
   },
-  watch: {},
+  watch: {
+    config(options){
+      debugger
+      this.combineConfig(options)
+    }
+  },
   methods: {
-  
+    combineConfig(config){
+      // if(this.options === null){
+      //   this.options = config.options
+      //   return
+      // }
+      this.options = objDeepMerge(this.options,config.options)
+    },
+    initOptions(){
+      const obj = objDeepMerge(this.simple,this.config.chart)
+      this.options = obj
+    },
+    getSimple () {
+      getChartTemp(this.type,this.version).then((val) => {
+        this.simple = val
+        this.initOptions();
+      }).catch(e=>{
+        console.log(`加载${this.version}版本${this.type}图opitions失败`)
+        console.log(e)
+      })
+    },
+    getData () {
+      if(this.nodata){
+         return;
+      }
+      getChartData(this.apiUrl).then(rsp => {
+      if(rsp.status == 0){
+          this.chartData = rsp.data
+          this.initOptions();
+        }
+      }).catch(e => {
+        console.log(`加载ID为${this.config.id}图表的数据失败`)
+        console.log(e)
+      })
+    }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
-  
+    this.getData();
+    this.getSimple();
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {

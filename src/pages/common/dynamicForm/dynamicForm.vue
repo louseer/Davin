@@ -51,13 +51,6 @@ export default {
     setting(){
       this.form && this.form.setSetting(this.setting)
     }
-    // setting:{
-    //   handler:function(){
-    //     console.log("dynamicForm 检测到新的setting",this.setting)
-    //     this.form && this.form.setSetting(this.setting)
-    //   },
-    //   deep:true
-    // }
   },
   methods: {
     //上抛表单数据更新
@@ -71,6 +64,7 @@ export default {
       }
       import(`./lib/${this.type}.js`).then((module) => {
         let editor = module.default;
+        console.log('##########settting',this.setting)
         this.form = new DynamicForm(editor.options,editor.handlers,this.setting,this.commitUpdate);
       }).catch(e=>{
         console.log(e)

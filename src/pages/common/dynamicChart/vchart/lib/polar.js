@@ -1,4 +1,4 @@
-import Echart from './echart.js';
+import Echart from './EChart.js';
 
 //V-chart极坐标依赖
 import 'echarts/lib/chart/line'

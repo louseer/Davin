@@ -209,7 +209,7 @@ export default {
       ]
     },
     chartid(){
-      const chartid = this.editChart.id || this.editNode.id
+      let chartid = this.editChart.id || this.editNode.id
       if(chartid === this.editNode.id){
         chartid = chartid + '_1'
       }
@@ -231,11 +231,6 @@ export default {
   },
   watch: {},
   methods: {
-    // ...mapActions('databoard',[
-    //   'updateNode',
-    //   'updateChart',
-    //   'updateDataboard'
-    // ]),
     updateDataboard(setting){
       this.$emit("updateDataboard",setting)
     },
@@ -259,7 +254,6 @@ export default {
     uploadCaver(){
       var uploader = document.querySelector("#caver-upload");
       uploader.click();
-      console.log('uploadCaver')
     },
     uploadCaverChange(e){
       const files = e.target.files
@@ -300,12 +294,7 @@ export default {
         }) 
       }
     },
-    
-  },
-  updated(){
-    console.log("setbar 更新了",this.editChart)
   }
-
 }
 </script>
 <style>
