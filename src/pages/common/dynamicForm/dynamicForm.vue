@@ -43,7 +43,6 @@ export default {
     };
   },
   computed: {
-
   },
   watch: {
     type () {
@@ -61,6 +60,7 @@ export default {
     // }
   },
   methods: {
+    //上抛表单数据更新
     commitUpdate(newSetting){
       this.$emit('update',newSetting)
     },
@@ -76,6 +76,7 @@ export default {
         console.log(e)
       })
     },
+    //上抛自定义事件
     popevent(emitTag){
       this.$emit(emitTag)
     }
@@ -83,8 +84,6 @@ export default {
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
     this.importConfig()
-  },
-  updated() {
   }
 }
 </script>

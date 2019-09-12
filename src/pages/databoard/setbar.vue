@@ -46,7 +46,7 @@
           :key='editNode.id'
           @update='updateNode'
         />
-        <DForm :type='editChart.type' :setting='editChart' @update='updateChart' key='chart'/>
+        <DForm :type='editChart.type' :setting='editChart' @update='updateChart' :key='chartid'/>
       </div>
     </div>
     <div class='single-group-set' v-if='editType === NODE_GROUP'>
@@ -54,7 +54,7 @@
         <h3>组内设置</h3>
       </div>
       <div class='form-wrapper' >
-        <DForm type='group' :setting='editGroup' @update='updateGroup' key='node'/>
+        <DForm type='group' :setting='editGroup' @update='updateGroup' :key='editGroup.id'/>
       </div>
     </div>
     <div class='multi-node-set' v-if='editType === NODE_MULTI'>
@@ -178,7 +178,6 @@ export default {
   computed: {
     ...mapState('databoard',{
       mode:state => state.mode,
-      
       typetree:state => state.typetree
     }),
     layoutList(){
@@ -208,6 +207,13 @@ export default {
           hide: this.nodeNum < 3 
         }
       ]
+    },
+    chartid(){
+      const chartid = this.editChart.id || this.editNode.id
+      if(chartid === this.editNode.id){
+        chartid = chartid + '_1'
+      }
+      return chartid
     },
     chartTitle(){
       if(!this.editChart || !this.typetree){
@@ -297,7 +303,7 @@ export default {
     
   },
   updated(){
-    console.log("setbar 更新了",this.editNode)
+    console.log("setbar 更新了",this.editChart)
   }
 
 }
