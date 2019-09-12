@@ -235,7 +235,8 @@ export default {
       this.databoard = obj
     },
     updateDataboard(setting){
-      this.databoard = objDeepMerge(this.databoard,setting)
+      const obj = objDeepMerge(this.databoard,setting)
+      this.databoard = Object.assign({},obj)
     },
     updateChart(setting){
       this.editChart = objDeepMerge(this.editChart,setting)
@@ -264,7 +265,7 @@ export default {
       })
       if(this.rootNodesLen === 1){
         if(rootNodes[0].type==='element'){
-          this.initEditNode(rootNodes[0])
+          this.editNode = rootNodes[0]
         }else if(rootNodes[0].type==='group'){
           this.editGroup = rootNodes[0]
         }
