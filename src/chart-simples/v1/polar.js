@@ -3,7 +3,7 @@ export default {
     data: ['line']
   },
   polar: {
-    center: ['60%', '54%']
+    center: ['50%', '54%']
   },
   tooltip: {
     trigger: 'axis',
