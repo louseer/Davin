@@ -792,7 +792,6 @@ export default {
       
     },
     newNode(node){
-      console.log(node)
       const newNode = new Dcanvas.Node(node)
       this.domCavase.addNode(newNode)
       this.$emit('switchEditPanel')

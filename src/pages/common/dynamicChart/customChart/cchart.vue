@@ -56,7 +56,6 @@ export default {
   },
   watch: {
     config(options){
-      debugger
       this.combineConfig(options)
     }
   },
