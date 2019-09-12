@@ -91,6 +91,12 @@ export default {
     GuideLine,
     EagleEye
   },
+  props:{
+    databoardID:{
+      type:String,
+      default:''
+    }
+  },
   data() {
     return {
       stageW: 0,
@@ -273,10 +279,7 @@ export default {
   computed: {
     multiple() {
       return this.domCavase.selectNodes.filter(n => n.pid === null)
-    },
-    ...mapState('databoard', {
-      databoardID: state => state.databoardID
-    })
+    }
   },
 
   mounted() {
@@ -333,7 +336,6 @@ export default {
       this.$emit('switchEditPanel')
     })
     handler.dropHandler(e => {
-      debugger
       if (e.dataTransfer.getData('item') !== null) {
         const item = JSON.parse(e.dataTransfer.getData('item'))
         const startX = e.clientX - this.GetPosition(this.$refs.stage).left
@@ -827,12 +829,11 @@ export default {
     },
     queryDataboard() {
       getDataBoardData(this.databoardID).then(rsp => {
-        console.log(rsp)
         if (rsp.status === 0) {
-          console.log(rsp.data)
           this.canvasConfig = rsp.data
           this.domCavase.createCanvas(this.canvasConfig)
-          this.initDataboard(this.domCavase.canvas)
+          this.$emit('initDataboard',this.domCavase.canvas)
+          //this.initDataboard(this.domCavase.canvas)
         } else {
           console.log('接口请求失败')
         }

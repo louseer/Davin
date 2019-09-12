@@ -4,7 +4,19 @@
     <Eheader :maintit="maintit" :toptools="toptools" />
     <div class="content">
       <div class="setbar">
-        <Setbar :editType='editType' :nodeNum='rootNodesLen' @btnClick='setBarBtnClick' @updateGroup='updateGroup'></Setbar>
+        <Setbar 
+          :editType='editType' 
+          :editNode='editNode'
+          :editChart='editChart'
+          :editGroup='editGroup'
+          :databoard='databoard'
+          :nodeNum='rootNodesLen'
+          @btnClick='setBarBtnClick' 
+          @updateGroup='updateGroup'
+          @updateDataboard='updateDataboard'
+          @updateChart='updateChart'
+          @updateNode='updateNode'
+        />
       </div>
       <div class="leftbar">
         <Dtab :tabs="leftTab">
@@ -19,7 +31,6 @@
               :listType="listType"
               :treenode="treenode"
               @treeNodeClick="treeNodeClick"
-              
               @unhideNode="unhideNode"
               @unlockNode="unlockNode"
             />
@@ -30,7 +41,6 @@
               :height="tab.height"
               :listType="listType"
               :typetree="typetree"
-              
               @contentClick="contentClick"
             />
           </div>
@@ -38,10 +48,12 @@
       </div>
       <div class="rightbar">
         <Stage 
+          :databoardID = 'databoardID'
           @nodelistChange="nodechange" 
           @zoomChange="zoomChange"
           @switchEditPanel='switchEditPanel'
           @updateNodeSetting = 'updateNodeSetting'
+          @initDataboard= 'initDataboard'
           ref="stage" 
         ></Stage>
         <ZoomSetter :zoomSize="zoom" @changeSize="changeSize" />
@@ -68,7 +80,7 @@ import Setbar from './setbar.vue'
 
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import { ELEMENT_SCREEN,NODE_ELEMENT,NODE_MULTI,NODE_GROUP } from "@/store/constants"
-
+import { objDeepMerge } from '@/utils/index.js'
 
 export default {
   components: {
@@ -92,9 +104,12 @@ export default {
       NODE_MULTI,
       NODE_GROUP,
       editType:ELEMENT_SCREEN,
+      editNode:null,
+      editChart:null,
+      editGroup:null,
+      databoard:null,
+      databoardID:'',
       rootNodesLen:0,
-      databoardConfig:null,
-     // maintit:'',
       zoom:0.5,
       showMmore: true,
       treenode: [],
@@ -195,10 +210,6 @@ export default {
   computed: {
     ...mapState('databoard',{
       mode:state => state.mode,
-      databoard:state => state.databoard,
-      editNode:state => state.editNode,
-      editChart:state => state.editChart,
-      editGroup:state => state.editGroup,
       typetree:state => state.typetree
     }),
     ...mapGetters ('databoard',[
@@ -209,32 +220,30 @@ export default {
         return this.$refs.stage.multiple
       }
     },
-    maintit(){
-      return this.databoard ? this.databoard.name : ''
-    },
     activeNodes(){
       return this.$refs.stage && this.$refs.stage.domCavase ? this.$refs.stage.domCavase.selectNodes : []
+    },
+    maintit(){
+      return this.databoard ? this.databoard.name : ''
     }
-
   },
-  // watch:{
-  //   databoard:{
-  //     handler:function(val){
-  //       console.log('edit监测到state databoard 更新',val)
-  //       this.maintit = this.databoard.name || ''
-  //     },
-  //     deep:true
-  //   }
-  // },
-
   methods: {
     ...mapMutations('databoard',[
       'openEditMode',
-      'initEditNode',
-      'initEditGroup',
-      'initEditChart',
-      'setDBID'
     ]),
+    initDataboard(obj){
+      this.databoard = obj
+    },
+    updateDataboard(setting){
+      this.databoard = objDeepMerge(this.databoard,setting)
+    },
+    updateChart(setting){
+      this.editChart = objDeepMerge(this.editChart,setting)
+      this.editNode.chart = Object.assign({},this.editChart) //????
+    },
+    updateNode(setting){
+      this.editNode = objDeepMerge(this.editNode,setting)
+    },
     updateGroup(setting){
       this.$refs.stage.configGroup(setting,this.editGroup)
     },
@@ -257,11 +266,11 @@ export default {
         if(rootNodes[0].type==='element'){
           this.initEditNode(rootNodes[0])
         }else if(rootNodes[0].type==='group'){
-          this.initEditGroup(rootNodes[0])
+          this.editGroup = rootNodes[0]
         }
       }
     },
-    switchEditPanel(){
+    switchEditPanel(){ //TODO:考虑可以将这一层直接放在setbar组件中去？
       if(this.activeNodes.length === 0){
         this.editType = ELEMENT_SCREEN;
         return;
@@ -273,11 +282,11 @@ export default {
       if(this.rootNodesLen === 1){
         if(rootNodes[0].type==='element'){
           this.editType = NODE_ELEMENT
-          this.initEditNode(rootNodes[0])
-          this.initEditChart(rootNodes[0].chart)
+          this.editNode = rootNodes[0]
+          this.editChart = rootNodes[0].chart
         }else if(rootNodes[0].type==='group'){
           this.editType = NODE_GROUP
-          this.initEditGroup(rootNodes[0])
+          this.editGroup = rootNodes[0]
         }
       }else{
         this.editType = NODE_MULTI
@@ -388,7 +397,7 @@ export default {
   created(){
     const id = this.$route.params.id  || getuuid();
     //理论上都会有值。新建在进来之前已经获取到ID。可以放在前一个页面上直接设置vuex值。
-    this.setDBID(id)
+    this.databoardID = id
     this.openEditMode()
   }
 }

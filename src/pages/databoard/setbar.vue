@@ -110,6 +110,22 @@ export default {
     nodeNum:{
       type:Number,
       default:0
+    },
+    databoard:{
+      type:Object,
+      default:() => {}
+    },
+    editNode:{
+      type:Object,
+      default:() => {}
+    },
+    editChart:{
+      type:Object,
+      default:() => {}
+    },
+    editGroup:{
+      type:Object,
+      default:() => {}
     }
   },
   data() {
@@ -162,10 +178,7 @@ export default {
   computed: {
     ...mapState('databoard',{
       mode:state => state.mode,
-      databoard:state => state.databoard,
-      editNode:state => state.editNode,
-      editChart:state => state.editChart,
-      editGroup:state => state.editGroup,
+      
       typetree:state => state.typetree
     }),
     layoutList(){
@@ -212,12 +225,23 @@ export default {
   },
   watch: {},
   methods: {
-    ...mapActions('databoard',[
-      'queryDataboard',
-      'updateNode',
-      'updateChart',
-      'updateDataboard'
-    ]),
+    // ...mapActions('databoard',[
+    //   'updateNode',
+    //   'updateChart',
+    //   'updateDataboard'
+    // ]),
+    updateDataboard(setting){
+      this.$emit("updateDataboard",setting)
+    },
+    updateChart(setting){
+      this.$emit("updateChart",setting)
+    },
+    updateNode(setting){
+      this.$emit("updateNode",setting)
+    },
+    updateGroup(setting){
+      this.$emit("updateGroup",setting)
+    },
     interceptCavas(){
       const canvas = document.querySelector("#canvas");
       html2canvas(document.querySelector("#canvas")).then(canvas => {
@@ -270,10 +294,12 @@ export default {
         }) 
       }
     },
-    updateGroup(setting){
-      this.$emit("updateGroup",setting)
-    }
+    
+  },
+  updated(){
+    console.log("setbar 更新了",this.editNode)
   }
+
 }
 </script>
 <style>
