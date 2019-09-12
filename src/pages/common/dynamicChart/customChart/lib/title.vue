@@ -26,7 +26,7 @@ export default {
       return this.options.text
     },
     fontSize() {
-      return this.options.fontSize 
+      return this.options.fontSize + 'px'
     },
     color() {
       return this.options.color
@@ -59,7 +59,11 @@ export default {
     //   fontWeight:this.options.fontWeight || '700',
     //   fontFamliy: this.options.fontWeight || '微软雅黑',
     // }
+  },
+  updated(){
+    console.log(this.options)
   }
+
 }
 </script>
 <style lang='less' scoped>

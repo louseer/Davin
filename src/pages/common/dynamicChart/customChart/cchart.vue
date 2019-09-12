@@ -8,7 +8,7 @@
 <script>
 //import {组件名称} from '组件路径';
 import customTitle from './lib/title.vue'
-import customDecorate from './lib/decorate.vue'
+import customFrame from './lib/framebox.vue'
 import { getChartTemp } from '@/chart-simples/index.js'
 import { objDeepMerge } from '@/utils/index.js'
 const noDataCharts = ['title','decorate']
@@ -36,13 +36,16 @@ export default {
     nodata() {
       return noDataCharts.includes(this.config.type)
     },
+    nosimpel() {
+      return noSimpelCharts.includes(this.config.type)
+    },
     chart() {
       switch(this.config.type){
         case 'title':
           return customTitle
           break;
         case 'decorate':
-          return customDecorate
+          return customFrame
           break;
         default:
       }
@@ -61,10 +64,6 @@ export default {
   },
   methods: {
     combineConfig(config){
-      // if(this.options === null){
-      //   this.options = config.options
-      //   return
-      // }
       this.options = objDeepMerge(this.options,config.options)
     },
     initOptions(){

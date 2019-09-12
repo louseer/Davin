@@ -205,6 +205,8 @@ export default {
           {
             type: 'decorate',
             title: '装饰',
+            w:430,
+            h:320,
             version: 1,
             id: '6-1'
           }
