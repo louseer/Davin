@@ -5,9 +5,9 @@ import {
 
 const options = {
   text:{
-    "name":"标题文本",
+    "name":"标题",
     "type":OPTIONTYPE.INPUT, //文字输入框
-    "defaultVal":"标题"
+    "defaultVal":"自定义标题"
   },
   fontSize:_fontSize()
 }

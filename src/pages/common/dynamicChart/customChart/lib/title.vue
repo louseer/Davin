@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div class='custom-title' :style="style">
+  <div class='custom-title' :style="{'fontSize':fontSize,'color':color,'fontWeight':fontWeight,'fontFamliy':fontFamliy}">
     <h1>{{text}}</h1>
   </div>
 </template>
@@ -25,6 +25,18 @@ export default {
     text(){
       return this.config.text || '自定义标题'
     },
+    fontSize() {
+      return this.config.fontSize + 'px' || 20+'px'
+    },
+    color() {
+      return this.config.color || "#8AB7CB"
+    },
+    fontWeight () {
+      return this.config.fontWeight || '700'
+    },
+    fontFamliy () {
+      return this.config.fontWeight || '微软雅黑'
+    }
   },
   watch:{
     config:{
@@ -52,5 +64,7 @@ export default {
 </script>
 <style lang='less' scoped>
 //@import url(); 引入公共css类
-
+.custom-title{
+  width:auto
+}
 </style>
