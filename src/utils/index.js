@@ -75,13 +75,14 @@ function getFixedLengthArray (originArr, length, ele) {
 function objDeepMerge(target, source) {
   for (var key in source) {
     if(target[key] && target[key].toString() === "[object Object]"){
-      deepObjectMerge(target[key], source[key])
+      objDeepMerge(target[key], source[key])
     }else{
       target[key] = source[key];
     }
   }
   return target;
 }
+
 
 export {
   getuuid,

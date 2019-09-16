@@ -451,8 +451,8 @@ export const _clockwise = () => {
     "type":OPTIONTYPE.RADIO,
     "defaultVal":false,
     "options":[
-      {lable:"逆时针",value:false},
-      {lable:"顺时针",value:true}
+      {label:"逆时针",value:false},
+      {label:"顺时针",value:true}
     ]
   }
 }
@@ -462,8 +462,11 @@ export const _center = (defaultVal = ['50%', '50%']) => {
     "name":"中心位置",
     "type":OPTIONTYPE.INPUTNUMBERS,
     defaultVal,
-    min:0,
-    max:100
+    unit:'%',
+    min:[0,0],
+    max:[100,100],
+    step:[5,5],
+    valueWithUnit:true
   }
 }
 

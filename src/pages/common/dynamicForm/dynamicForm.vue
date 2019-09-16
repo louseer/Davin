@@ -1,8 +1,8 @@
 <!--  -->
 <template>
   <div class='dynamic-form'>
-    <el-form label-width="0.8rem" v-if='form' >
-      <form-item :options='form.options'></form-item>
+    <el-form label-width="0.8rem" v-if='form' :label-position='labelPosition' :size='size'>
+      <form-item :options='form.options' @popevent='popevent'></form-item>
     </el-form>
   </div> 
 </template>
@@ -24,6 +24,14 @@ export default {
     setting:{
       type:Object,
       default:null
+    },
+    size:{
+      type:String,
+      default:'mini'
+    },
+    labelPosition:{
+      type:String,
+      default:'left'
     }
   },
   data() {
@@ -35,20 +43,17 @@ export default {
     };
   },
   computed: {
-
   },
   watch: {
     type () {
       this.importConfig();
     },
-    setting:{
-      handler:function(){
-        this.form && this.form.setOriginSetting(this.setting)
-      },
-      deep:true
+    setting(){
+      this.form && this.form.setSetting(this.setting)
     }
   },
   methods: {
+    //上抛表单数据更新
     commitUpdate(newSetting){
       this.$emit('update',newSetting)
     },
@@ -59,29 +64,21 @@ export default {
       }
       import(`./lib/${this.type}.js`).then((module) => {
         let editor = module.default;
+        console.log('##########settting',this.setting)
         this.form = new DynamicForm(editor.options,editor.handlers,this.setting,this.commitUpdate);
       }).catch(e=>{
         console.log(e)
       })
+    },
+    //上抛自定义事件
+    popevent(emitTag){
+      this.$emit(emitTag)
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
     this.importConfig()
-  },
-  //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {
-
-  },
-  beforeCreate() {}, //生命周期 - 创建之前
-  beforeMount() {}, //生命周期 - 挂载之前
-  beforeUpdate() {}, //生命周期 - 更新之前
-  updated() {
-    console.log("编辑栏切换为",this.type,this.setting)
-  }, //生命周期 - 更新之后
-  beforeDestroy() {}, //生命周期 - 销毁之前
-  destroyed() {}, //生命周期 - 销毁完成
-  activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
+  }
 }
 </script>
 <style lang='less' scoped>

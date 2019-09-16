@@ -4,46 +4,23 @@
     <Eheader :maintit="maintit" :toptools="toptools" />
     <div class="content">
       <div class="setbar">
-        <div v-if='editType===ELEMENT_NODE'>
-          <DForm type='node' :setting='editNode' @update='updateNode' key='node'/>
-          <DForm :type='editChart.type' :setting='editChart' @update='updateChart' key='chart'/>
-        </div>
-        <div v-if='editType===ELEMENT_SCREEN'>
-          <DForm type='databoard' :setting='databoard' @update='updateDataboard' key='databoard'/>
-        </div>
-        <div v-if='editType === ELEMENT_MULTI'>
-          <button
-            v-for="(btn,index) in  aglinList"
-            :key="index"
-            style="float:left"
-            @click="nodeAlign(btn.type)"
-          >{{btn.name}}</button>
-          <button 
-            style="float:left" 
-            v-if="multiple.length>=2" 
-            @click="$refs.stage.nodeAlign('Hline')"
-          >水平联排</button>
-          <button 
-            style="float:left" 
-            v-if="multiple.length>=2"
-            @click="$refs.stage.nodeAlign('Vline')"
-          >垂直联排</button>
-          <button
-            style="float:left"
-            v-if="multiple.length>=3"
-            @click="$refs.stage.multipleNodesAlign('VerticalAverage')"
-          >垂直均分</button>
-          <button
-            style="float:left"
-            v-if="multiple.length>=3"
-            @click="$refs.stage.multipleNodesAlign('HorizontalAverage')"
-          >水平均分</button>
-        </div>
+        <Setbar 
+          :editType='editType' 
+          :editNode='editNode'
+          :editChart='editChart'
+          :editGroup='editGroup'
+          :databoard='databoard'
+          :nodeNum='rootNodesLen'
+          @btnClick='setBarBtnClick' 
+          @updateGroup='updateGroup'
+          @updateDataboard='updateDataboard'
+          @updateChart='updateChart'
+          @updateNode='updateNode'
+        />
       </div>
       <div class="leftbar">
         <Dtab :tabs="leftTab">
           <Dswitch slot="tabsloat" :state="showMmore" @switchChange="switchChange" />
-
           <div slot="tab1">
             <div class="laysetbar">
               <b v-for="(bbtn,bbindex) in  laysets" :key="bbindex">
@@ -64,7 +41,6 @@
               :height="tab.height"
               :listType="listType"
               :typetree="typetree"
-              @changeClick="changeClick"
               @contentClick="contentClick"
             />
           </div>
@@ -72,10 +48,12 @@
       </div>
       <div class="rightbar">
         <Stage 
+          :databoardID = 'databoardID'
           @nodelistChange="nodechange" 
-          @zoomChange="zoomChange" 
-          @nodeClick='selectOneNode'
-          @selectNodes='selectNodes' 
+          @zoomChange="zoomChange"
+          @switchEditPanel='switchEditPanel'
+          @updateNodeSetting = 'updateNodeSetting'
+          @initDataboard= 'initDataboard'
           ref="stage" 
         ></Stage>
         <ZoomSetter :zoomSize="zoom" @changeSize="changeSize" />
@@ -98,9 +76,11 @@ import LayerTree from './layer-tree.vue'
 import TypeTab from './type-tab'
 import { getuuid } from '@/utils/index'
 import DForm from '../common/dynamicForm/dynamicForm.vue'
+import Setbar from './setbar.vue'
 
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import { ELEMENT_SCREEN,ELEMENT_NODE,ELEMENT_MULTI } from "@/store/constants"
+import { ELEMENT_SCREEN,NODE_ELEMENT,NODE_MULTI,NODE_GROUP } from "@/store/constants"
+import { objDeepMerge } from '@/utils/index.js'
 
 export default {
   components: {
@@ -114,22 +94,22 @@ export default {
     thumbnail,
     LayerTree,
     TypeTab,
-    DForm
+    DForm,
+    Setbar
   },
   data() {
     return {
       ELEMENT_SCREEN,
-      ELEMENT_NODE,
-      ELEMENT_MULTI,
-      aglinList: [
-        { type: 'top', name: '顶对齐' },
-        { type: 'right', name: '右对齐' },
-        { type: 'bottom', name: '底对齐' },
-        { type: 'left', name: '左对齐' },
-        { type: 'HCenter', name: '垂直居中' },
-        { type: 'VCenter', name: '水平居中' }
-      ],
-      maintit: '新建大屏',
+      NODE_ELEMENT,
+      NODE_MULTI,
+      NODE_GROUP,
+      editType:ELEMENT_SCREEN,
+      editNode:null,
+      editChart:null,
+      editGroup:null,
+      databoard:null,
+      databoardID:'',
+      rootNodesLen:0,
       zoom:0.5,
       showMmore: true,
       treenode: [],
@@ -226,230 +206,6 @@ export default {
           id: 2,
           active: true
         }
-      ],
-      typetree: [
-        {
-          name: 'charts',
-          title: '图表',
-          active: true,
-          id: '1',
-          children: [
-            {
-              type: 'bar',
-              title: '基础柱状图',
-              version: 1,
-              w:430,
-              h:320,
-              id: '1-1'
-            },
-            {
-              type: 'horizontalbar',
-              title: '横向柱状图',
-              version: 1,
-              w:430,
-              h:320,
-              id: '1-10'
-            },
-            {
-              type: 'pie',
-              title: '基础饼状图',
-              version: 1,
-              w:430,
-              h:320,
-              id: '1-2'
-            },
-            {
-              type: 'line',
-              title: '基础折线图',
-              version: 1,
-              w:430,
-              h:320,
-              id: '1-3'
-            },
-            {
-              type: 'line2y',
-              title: '双Y轴折线图',
-              version: 1,
-              w:430,
-              h:320,
-              id: '1-11'
-            },
-            {
-              type: 'doughnut',
-              title: '基础环图',
-              version: 1,
-              w:430,
-              h:320,
-              id: '1-4'
-            },
-            {
-              type: 'linebar',
-              title: '混合-线柱混搭',
-              version: 1,
-              w:430,
-              h:320,
-              id: '1-5'
-            },
-            {
-              type: 'scatter',
-              title: '基础散点图',
-              w:430,
-              h:320,
-              version: 1,
-              id: '1-6'
-            },
-            {
-              type: 'funnel',
-              title: '基础漏斗图',
-              w:430,
-              h:320,
-              version: 1,
-              id: '1-7'
-            },
-            // {
-            //   type: 'characters',
-            //   title: '基础字符云',
-            //   version: 1,
-            //   id: '1-8'
-            // },
-            {
-              type: 'polar',
-              title: '极坐标双数值轴',
-              w:430,
-              h:320,
-              version: 1,
-              id: '1-12'
-            },
-            {
-              type: 'radar',
-              title: '基础雷达图',
-              w:430,
-              h:320,
-              version: 1,
-              id: '1-9'
-            }
-          ]
-        },
-        // {
-        //   name: 'table',
-        //   title: '表格',
-        //   active: false,
-        //   id: '2',
-        //   children: [
-        //     {
-        //       type: 'basetable',
-        //       title: '基础表格',
-        //       w:530,
-        //       h:320,
-        //       version: 1,
-        //       id: '2-1'
-        //     }
-        //   ]
-        // },
-        // {
-        //   name: 'media',
-        //   title: '媒体',
-        //   active: false,
-        //   id: '3',
-        //   children: [
-        //     {
-        //       type: 'vedio',
-        //       title: '视频',
-        //       version: 1,
-        //       w:430,
-        //       h:320,
-        //       id: '3-1'
-        //     },
-        //     {
-        //       type: 'image',
-        //       title: '图片',
-        //       w:430,
-        //       h:320,
-        //       version: 1,
-        //       id: '3-2'
-        //     }
-        //   ]
-        // },
-        {
-          name: 'text',
-          title: '文本',
-          active: false,
-          id: '4',
-          children: [
-            {
-              type: 'title',
-              title: '标题',
-              w:200,
-              h:40,
-              version: 1,
-              text:'自定义标题',
-              fontSize:20, //临时代码
-              id: '4-1'
-            },
-            // {
-            //   type: 'text',
-            //   title: '文本',
-            //   version: 1,
-            //   id: '4-2'
-            // }
-          ]
-        },
-        // {
-        //   name: 'relationship',
-        //   title: '关系网络',
-        //   active: false,
-        //   id: '5',
-        //   children: [
-        //     {
-        //       type: 'relationship',
-        //       title: '关系网络',
-        //       version: 1,
-        //       id: '5-1'
-        //     }
-        //   ]
-        // },
-         {
-          name: 'material',
-          title: '素材',
-          active: false,
-          id: '6',
-          children: [
-            {
-              type: 'decorate',
-              title: '装饰',
-              version: 1,
-              id: '6-1'
-            }
-          ]
-        },
-        // {
-        //   name: 'other',
-        //   title: '其他',
-        //   active: false,
-        //   id: '7',
-        //   children: [
-        //     {
-        //       type: 'time',
-        //       title: '时间选择器',
-        //       version: 1,
-        //       id: '7-1'
-        //     }
-        //   ]
-        // },
-        // {
-        //   name: 'UE',
-        //   title: '交互',
-        //   active: false,
-        //   id: '8',
-        //   children: [
-        //     {
-        //       type: 'slide',
-        //       title: '轮播页面',
-        //       version: 1,
-        //       id: '8-1'
-        //     }
-        //   ]
-        // }
       ]
     }
   },
@@ -457,11 +213,7 @@ export default {
   computed: {
     ...mapState('databoard',{
       mode:state => state.mode,
-      databoard:state => state.databoard,
-      editNode:state => state.editNode,
-      editChart:state => state.editChart,
-      editType:state => state.editType,
-
+      typetree:state => state.typetree
     }),
     ...mapGetters ('databoard',[
       'isEditing'
@@ -470,45 +222,85 @@ export default {
       if(this.$refs.stage){
         return this.$refs.stage.multiple
       }
+    },
+    activeNodes(){
+      return this.$refs.stage && this.$refs.stage.domCavase ? this.$refs.stage.domCavase.selectNodes : []
+    },
+    maintit(){
+      return this.databoard ? this.databoard.name : ''
     }
-    
   },
-
   methods: {
     ...mapMutations('databoard',[
       'openEditMode',
-      'setEditType',
-      'setEditNode',
-      'setEditChart'
     ]),
-    ...mapActions('databoard',[
-      'updateNode',
-      'updateChart',
-      'updateDataboard',
-      'queryDataboard'
-    ]),
+    initDataboard(obj){
+      this.databoard = obj
+    },
+    updateDataboard(setting){
+      const obj = objDeepMerge(this.databoard,setting)
+      this.databoard = Object.assign({},obj)
+      //TODO:接口上报更新
+    },
+    updateChart(setting){
+      this.editChart = objDeepMerge(this.editChart,setting)
+      this.editNode.chart = Object.assign({},this.editChart)
+      //TODO:接口上报更新
+    },
+    updateNode(setting){
+      this.editNode = objDeepMerge(this.editNode,setting)
+      //TODO:接口上报更新
+    },
+    updateGroup(setting){
+      this.$refs.stage.configGroup(setting,this.editGroup)
+      //TODO:接口上报更新
+    },
+    setBarBtnClick(handler,param){
+      if(handler && this[handler]){
+        this[handler](param);
+      }
+      //TODO：编辑栏收缩开关
+    },
     multipleNodesAlign(type) {
       this.$refs.stage.domCavase.multipleNodesAlign(type)
     },
     nodeAlign(type) {
       this.$refs.stage.domCavase.nodesAlign(type)
     },
-    selectOneNode(nodes) {
-      const length = nodes.length;
-      if(length === 1){
-        this.setEditType(ELEMENT_NODE)
-        this.setEditNode(nodes[0])
-        this.setEditChart(nodes[0].chart)
+    updateNodeSetting(){
+      let rootNodes = this.activeNodes.filter(n => {
+        return n.pid === null
+      })
+      if(this.rootNodesLen === 1){
+        if(rootNodes[0].type==='element'){
+          this.editNode = rootNodes[0]
+        }else if(rootNodes[0].type==='group'){
+          this.editGroup = rootNodes[0]
+        }
       }
+      //TODO:接口上报更新
     },
-    selectNodes(nodes){
-      const length = nodes.length;
-      if( 2 <= length){
-        this.setEditType(ELEMENT_MULTI)
+    switchEditPanel(){ //TODO:考虑可以将这一层直接放在setbar组件中去？
+      if(this.activeNodes.length === 0){
+        this.editType = ELEMENT_SCREEN;
+        return;
       }
-    },
-    getEditType(){
-
+      let rootNodes = this.activeNodes.filter(n => {
+        return n.pid === null
+      })
+      this.rootNodesLen = rootNodes.length;
+      if(this.rootNodesLen === 1){
+        if(rootNodes[0].type==='element'){
+          this.editType = NODE_ELEMENT
+          this.editNode = rootNodes[0]
+          this.editChart = rootNodes[0].chart
+        }else if(rootNodes[0].type==='group'){
+          this.editType = NODE_GROUP
+          this.editGroup = rootNodes[0]
+        }
+      }else{
+        this.editType = NODE_MULTI
+      }
     },
     changeSize(val) {
       this.$refs.stage.setZoom(val)
@@ -522,9 +314,7 @@ export default {
         id,
         type: item.type,
         name: item.title,
-        version: item.version,
-        text: item.text, //临时代码
-        fontSize: item.fontSize //临时代码
+        version: item.version
       }
       const obj={
         w:item.w || 200,
@@ -582,7 +372,6 @@ export default {
     },
     toggleGrop() {
       console.log('编组')
-
       this.$refs.stage.toggleGrop()
     },
     public() {
@@ -604,6 +393,7 @@ export default {
     },
     treeNodeClick(nodeId) {
       this.$refs.stage.choiceNodeById(nodeId)
+      this.switchEditPanel()
     },
     unhideNode(nodeId) {
       this.$refs.stage.unhideNode(nodeId)
@@ -613,13 +403,15 @@ export default {
     }
   },
   created(){
+    const id = this.$route.params.id  || getuuid();
+    //理论上都会有值。新建在进来之前已经获取到ID。可以放在前一个页面上直接设置vuex值。
+    this.databoardID = id
     this.openEditMode()
-    this.queryDataboard()
   }
 }
 </script>
 <style lang='less' scoped>
-@import '../../assets/styles/base.less';
+@import url('~@/assets/styles/base.less');
 button {
   border: 1px white solid;
   font: 12px/1 '微软雅黑';
@@ -690,9 +482,9 @@ button {
       width: 3rem;
       background: @bg_Data_left;
       right: 0;
+      top: 25px;
       height: 100%;
-      padding:.2rem;
-      z-index: 999999;
+      z-index: 999;
     }
   }
 }

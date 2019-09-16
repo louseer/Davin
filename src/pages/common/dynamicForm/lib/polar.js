@@ -7,7 +7,7 @@ import {
   _animationDuration
 
 } from './echarts.js'
-
+//完整配置项，链接右侧表单和图表
 export const options = {
   id:{
     name:"id",
@@ -16,21 +16,27 @@ export const options = {
   },
   title:{
     name:"名称",
-    type:OPTIONTYPE.INPUT,
+    type:OPTIONTYPE.NOVIEW,
     defaultVal:"极坐标双数值轴",
   },
   type:{
     name:"id",
     type:OPTIONTYPE.NOVIEW,
-    defaultVal:"polar",//TODO:自动编号
+    defaultVal:"polar",
   },
-  options:{
+  options:{ //echarts官方配置项
     name:"图表配置",
     type:OPTIONTYPE.GROUP,
     noview:1,
     children:{
+      id:{
+        name:"id",
+        type:OPTIONTYPE.NOVIEW,
+        defaultVal:"",//TODO:自动编号
+      },
       polar: {
         type:OPTIONTYPE.GROUP,
+        name:'极坐标',
         noview:true,
         children:{
           center:_center(['50%', '54%'])

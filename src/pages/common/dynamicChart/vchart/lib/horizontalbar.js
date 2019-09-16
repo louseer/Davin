@@ -1,4 +1,4 @@
-import Echart from './echart.js';
+import Echart from './EChart.js';
 import 'echarts/lib/chart/bar'
 import 'echarts/lib/component/tooltip'
 const defaultOption = {
@@ -13,7 +13,6 @@ const defaultOption = {
 export default class Line extends Echart{
   constructor(config) {
     super(config);
-    this.initOpitions();
   }
 
   //设置图例
@@ -89,53 +88,6 @@ export default class Line extends Echart{
     
   }
 
-  setSample () {
-    this.options = {
-      tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-              type: 'shadow'
-          }
-      },
-      legend: {
-          data: ['2011年', '2012年']
-      },
-      grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-      },
-      xAxis: {
-          type: 'value',
-          boundaryGap: [0, 0.01]
-      },
-      yAxis: {
-          type: 'category',
-          data: ['巴西','印尼','美国','印度','中国','世界人口(万)']
-      },
-      series: [
-          {
-              name: '2011年',
-              type: 'bar',
-              data: [18203, 23489, 29034, 104970, 131744, 630230]
-          },
-          {
-              name: '2012年',
-              type: 'bar',
-              data: [19325, 23438, 31000, 121594, 134141, 681807]
-          }
-      ]
-    };
-  }
 
-  combineConfig() {
-     //TODO：结合接口this.config 继续整合options
-  }
-
-  initOpitions() {
-    this.setSample();
-    this.combineConfig();
-  }
 
 }

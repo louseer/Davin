@@ -7,11 +7,12 @@ import './plugins/element.js'
 import '@/assets/styles/base.less'
 import base from '@/mixins/base'
 import '@/assets/iconfont/iconfont.css'
-import 'element-ui/lib/theme-chalk/index.css'
+//import 'element-ui/lib/theme-chalk/index.css'
 import thumbnail from './components/thumbnail.vue'
+import '@/assets/styles/dark-element-ui.css'
 Vue.component('thumbnail', thumbnail)
 Vue.mixin(base)
-
+Vue.prototype.$bus = new Vue()
 document.oncontextmenu = () => {
   self.event.returnValue = false
 }

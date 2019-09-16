@@ -1,4 +1,4 @@
-import Echart from './echart.js';
+import Echart from './EChart.js';
 import 'echarts/lib/chart/bar'
 const defaultOption = {
   grid: {
@@ -12,7 +12,6 @@ const defaultOption = {
 export default class Line extends Echart{
   constructor(config) {
     super(config);
-    this.initOpitions();
   }
 
   //设置图例
@@ -86,48 +85,6 @@ export default class Line extends Echart{
     //this.setLegend(categories);
     //this.setSeries(data);
     
-  }
-
-  setSample () {
-    this.options = {
-      tooltip : {
-          trigger: 'axis',
-          axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-              type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-          }
-      },
-      xAxis : [
-          {
-              type : 'category',
-              data : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-              axisTick: {
-                  alignWithLabel: true
-              }
-          }
-      ],
-      yAxis : [
-          {
-              type : 'value'
-          }
-      ],
-      series : [
-          {
-              name:'直接访问',
-              type:'bar',
-              barWidth: '60%',
-              data:[10, 52, 200, 334, 390, 330, 220]
-          }
-      ]
-    }
-  }
-
-  combineConfig() {
-     //TODO：结合接口this.config 继续整合options
-  }
-
-  initOpitions() {
-    this.setSample();
-    this.combineConfig();
   }
 
 }

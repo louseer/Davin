@@ -1,15 +1,15 @@
 <template>
-  <router-view/>
+  <router-view />
 </template>
 <script>
+import { debuglog } from 'util'
 export default {
   name: 'App',
-  mounted () {
-    window.onresize = () => { }//this.$bus.$emit('resizeChart') 
-  }
+
 }
 </script>
 
 <style lang='less' scoped>
 @import '~styles/reset.css';
+@import '~styles/ui-element.css';
 </style>

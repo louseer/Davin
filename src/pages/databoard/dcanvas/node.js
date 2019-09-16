@@ -1,5 +1,6 @@
 import { getuuid } from '@/utils/index'
 import Dcanvas from './dcanvas'
+import { timingSafeEqual } from 'crypto'
 export default class Node {
   constructor(node) {
     this.type=node.type || 'element'
@@ -17,6 +18,7 @@ export default class Node {
     this.name=node.name || (this.type ==='group' ? '组' : '元素')
     this.hide=node.hide || false
     this.chart=node.chart || null
+    this.opacity = node.opacity || 100
   }
  
  

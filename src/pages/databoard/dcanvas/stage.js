@@ -13,11 +13,20 @@ export default class Stage {
     this.eventCrash = false
     this.mode = 'select'
     this.canvas = {}
-    this._offset = 15
+    this._offsetx =300
+    this._offsety =300
     this.grid = 10
     this.bassIndex = 9000
-    this.maxZoom = 1
+    this.maxZoom = 1.5
     this.minZoom = 0.1
+    this.previewLine=null
+    this.lineList=[]    
+  }
+  get width(){
+    return this.canvas.width/this.minZoom
+  }
+  get height(){
+    return this.canvas.height/this.minZoom
   }
   get indexList() {
     return this.nodeList.sort((a, b) => a.zindex - b.zindex)
@@ -37,23 +46,56 @@ export default class Stage {
       this.canvas.zoomSize = val
     }
   }
-  get offset() {
-    return this._offset
+  get offsetx() {
+    return this._offsetx
   }
-  set offset(val) {
-    this._offset = val
-    this.canvas.offset = val
+  set offsetx(val) {
+    this._offsetx = val
+    this.canvas.offsetx = val
   }
+  get offsety() {
+    return this._offsety
+  }
+  set offsety(val) {
+    this._offsety = val
+    this.canvas.offsety = val
+  }
+  removeGuideLineById(id){
+    this.lineList=this.lineList.filter(l=>l.id !== id)
+  }
+  clearGuideLine(){
+    this.lineList=[]
+  }
+  createGuideLine(positon,type){
+    const obj={
+      type:type === "xRuler" ? "yline" :"xline",
+      pos:positon,      
+    }
+    const line= new Dcanvas.GuideLine(obj)
+    this.lineList.push(line)
+  }
+  createPreviewLine(positon,type,id){
+   if(type){
+    this.previewLine=null
+    const obj={
+      type:type === "xRuler" ? "yline" :"xline",
+      pos:positon,
+      id:id||getuuid()
+    }
+    this.previewLine=new Dcanvas.GuideLine(obj)
+   }
+   else{
+    this.previewLine=null
+   }
 
+   }
   createCanvas(config) {
     const _this = this
-    const obj = {
-      id: getuuid(),
-      zoomSize: _this.zoomSize,
-      width: 1920,
-      height: 1080,
-      offset: _this.offset
-    }
+    const obj = Object.assign({
+      zoomSize: _this.zoomSize,     
+      offsetx: _this.offsetx,
+      offsety: _this.offsety,
+    },config);
     this.canvas = new Dcanvas.Canvas(obj)
     console.log('tag', this.canvas)
   }
@@ -100,8 +142,17 @@ export default class Stage {
           this.selectNodes = [n]
         }
       }
-    })
+    });
   }
+  getNodesById(nodeId){
+    const choiceNodes=[]
+    const  inNode = this.nodeList.find(n=> n.id === nodeId )
+    inNode.cid ? choiceNodes.push(this.nodeList.filter(n=> inNode.cid.includes(n.id))) : choiceNodes.push(inNode)
+    const noGroupNodes=choiceNodes.filter(n => n.type === "element")
+    return { choiceNodes , noGroupNodes}
+  }
+
+
   lockNode() {
     this.selectNodes.forEach(n => {
       n.disable = true
@@ -129,6 +180,13 @@ export default class Stage {
         } else {
           return
         }
+      }
+    })
+  }
+  editNodeName(tag) {
+    this.nodeList.forEach(n => {
+      if (n.id === id) {
+        n.edit = tag
       }
     })
   }
@@ -369,14 +427,15 @@ export default class Stage {
   filterNode(rect) {
     console.log(rect)
     const { x, y, w, h } = rect
-    const offset = this.offset
+    const offsetx = this.offsetx
+    const offsety = this.offsety
     //最小包围和
     const choiceNodes = this.nodeList.filter(
       node =>
-        (node.x + node.w) * this.zoomSize + offset >= x &&
-        (node.y + node.h) * this.zoomSize + offset >= y &&
-        x + w >= node.x * this.zoomSize + offset &&
-        y + h >= node.y * this.zoomSize + offset
+        (node.x + node.w) * this.zoomSize + offsetx >= x &&
+        (node.y + node.h) * this.zoomSize + offsety >= y &&
+        x + w >= node.x * this.zoomSize + offsetx &&
+        y + h >= node.y * this.zoomSize + offsety
     )
 
     const nodesInGroup = []
@@ -565,6 +624,7 @@ export default class Stage {
       mIndex--
     })
   }
+
   nodesMaxArea(nodes) {
     const minX = Math.min.apply(null, nodes.map(n => n.x))
     const minY = Math.min.apply(null, nodes.map(n => n.y))
@@ -572,13 +632,13 @@ export default class Stage {
     const maxY = Math.max.apply(null, nodes.map(n => n.y))
     const maxW = Math.max.apply(null, nodes.map(n => n.x + n.w)) - minX
     const maxH = Math.max.apply(null, nodes.map(n => n.y + n.h)) - minY
-
     return { minX, minY, maxX, maxY, maxW, maxH }
   }
-
+ 
   checkInStage(e) {
     const [x, y] = [e.target.offsetX, e.target.offsetY]
   }
+  
   Handler(ele) {
     const _this = this
     return {
@@ -590,9 +650,19 @@ export default class Stage {
           callback && typeof callback === 'function' && callback(event)
         }
       },
+    
+      dropHandler(callback) {        
+        ele.ondrop = e => {   
+              
+          clearEventBubble(e)
+          const event = e || window.event
+          event.preventDefault()    
+          callback && typeof callback === 'function' && callback(event)
+        }
+      },
       mousedownHandler(callback) {
         ele.onmousedown = e => {
-          clearEventBubble(e)
+         // clearEventBubble(e)
           const event = e || window.event
           callback && typeof callback === 'function' && callback(event)
         }
@@ -641,48 +711,73 @@ export default class Stage {
       reNameNode(node, newname) {
         node.name = newname
       },
-      selectNodes(callback) {
+   
+      selectNodes(callback) {       
         let startX = 0
         let startY = 0
         this.mousedownHandler(e => {
-          const mouseStopId = setTimeout(() => {
+         
+          if(_this.mode === "select") {
+            
+            const mouseStopId = setTimeout(() => {
+              this.mouseOn = true               
+              startX = e.clientX - GetPosition(ele).left + ele.scrollLeft
+              startY = e.clientY - GetPosition(ele).top + ele.scrollTop
+              let selDiv = document.createElement('div')
+              selDiv.style.cssText =
+                'position:absolute;width:0;height:0;margin:0;padding:0;border:1px dashed #eee;z-index:1000;opacity:0.6;display:none;'
+              selDiv.id = 'selectDiv'
+              ele.appendChild(selDiv)
+              selDiv.style.left = startX + 'px'
+              selDiv.style.top = startY + 'px'
+            }, 50)
+          }
+          else{
             this.mouseOn = true
-
-            startX = e.clientX - GetPosition(ele).left + ele.scrollLeft
-            startY = e.clientY - GetPosition(ele).top + ele.scrollTop
-            let selDiv = document.createElement('div')
-            selDiv.style.cssText =
-              'position:absolute;width:0;height:0;margin:0;padding:0;border:1px dashed #eee;z-index:1000;opacity:0.6;display:none;'
-            selDiv.id = 'selectDiv'
-            ele.appendChild(selDiv)
-            selDiv.style.left = startX + 'px'
-            selDiv.style.top = startY + 'px'
-          }, 50)
+            startX= e.clientX
+            startY= e.clientY
+            
+          }
+          
         })
         this.mousemoveHandler(e => {
-          let _x = e.clientX - GetPosition(ele).left + ele.scrollLeft
-          let _y = e.clientY - GetPosition(ele).top + ele.scrollTop
-          let _H = ele.clientHeight
-
-          if (_y >= _H && ele.scrollTop <= _H) {
-            ele.scrollTop += _y - _H
-          }
-          // 向上拖拽
-          if (e.clientY <= GetPosition(ele).top && ele.scrollTop > 0) {
-            ele.scrollTop = Math.abs(e.clientY - GetPosition(ele).top)
-          }
-
-          let selDiv = document.getElementById('selectDiv')
-          selDiv.style.display = 'block'
-          selDiv.style.left = Math.min(_x, startX) + 'px'
-          selDiv.style.top = Math.min(_y, startY) + 'px'
-          selDiv.style.width = Math.abs(_x - startX) + 'px'
-          selDiv.style.height = Math.abs(_y - startY) + 'px'
-          selDiv.style.cursor = 'crosshair'
+            if(_this.mode  === "select") {
+              let _x = e.clientX - GetPosition(ele).left + ele.scrollLeft
+              let _y = e.clientY - GetPosition(ele).top + ele.scrollTop
+              let _H = ele.clientHeight
+    
+              if (_y >= _H && ele.scrollTop <= _H) {
+                ele.scrollTop += _y - _H
+              }
+              // 向上拖拽
+              if (e.clientY <= GetPosition(ele).top && ele.scrollTop > 0) {
+                ele.scrollTop = Math.abs(e.clientY - GetPosition(ele).top)
+              }
+    
+              let selDiv = document.getElementById('selectDiv')
+             
+              selDiv.style.display = 'block'
+              selDiv.style.left = Math.min(_x, startX) + 'px'
+              selDiv.style.top = Math.min(_y, startY) + 'px'
+              selDiv.style.width = Math.abs(_x - startX) + 'px'
+              selDiv.style.height = Math.abs(_y - startY) + 'px'
+              selDiv.style.cursor = 'crosshair'
+            }
+            else{
+              const dx = e.clientX - startX
+              const dy = e.clientY - startY
+              _this.offsetx += parseInt (dx)
+              _this.offsety += parseInt (dy)
+             startX= e.clientX
+              startY=e.clientY
+            }
+         
+         
         })
         this.mouseupHandler(e => {
           this.mouseOn = false
-          let selDiv = document.getElementById('selectDiv')
+          if(_this.mode === "select") {
+            let selDiv = document.getElementById('selectDiv')
           const rect = {
             x: +selDiv.style.left.substring(0, selDiv.style.left.length - 2),
             y: +selDiv.style.top.substring(0, selDiv.style.top.length - 2),
@@ -693,6 +788,9 @@ export default class Stage {
           selDiv.style.display = 'none'
           selDiv.remove()
           callback && typeof callback === 'function' && callback(event)
+          }
+         
+          
         })
       }
     }
@@ -717,12 +815,14 @@ function checkCrash(point, node) {
     (a > 0 && b > 0 && c > 0 && d > 0) || (a < 0 && b < 0 && c < 0 && d < 0)
   )
 }
+//阻止冒泡
 function clearEventBubble(e) {
   if (e.stopPropagation) e.stopPropagation()
   else e.cancelBubble = true
   if (e.preventDefault) e.preventDefault()
   else e.returnValue = false
 }
+//获取样式
 function getStyle(obj, styleName) {
   if (obj.currentStyle) {
     return obj.currentStyle[styleName]
@@ -730,6 +830,7 @@ function getStyle(obj, styleName) {
     return getComputedStyle(obj, null)[styleName]
   }
 }
+//顶层边距
 function GetPosition(obj) {
   let left = 0
   let top = 0

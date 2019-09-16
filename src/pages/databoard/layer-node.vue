@@ -3,19 +3,20 @@
     <div
       @mousedown.stop="nodeMousedown($event) "
       :draggable="candrage"
-      @dragover="dragover"
+      @dragover.stop="dragover"
       @dragstart="dragStart($event)"
-      :class="rnode.type === 'element' ? 'node' : 'group'"
-      :id="rnode.id"
+      @dragend.stop="dragEnd($event)"
+      :class="node.type === 'element' ? 'node' : 'group'"
+      :id="node.id"
       :style="style"
       @drag.stop="nodeDrag($event)"
       @click.stop="nodeClick($event)"
       @drop.stop="nodeDrop"
       @dragenter="dragenter"
-      v-show="!rnode.hide"
-      :key="rnode.id"
+      v-show="!node.hide"
+      :key="node.id"
     >
-      <div class="select-mask" v-if="rnode.active && !rnode.disable">
+      <div class="select-mask" v-if="node.active && !node.disable">
         <i
           v-for="(p,pindex) in Control"
           :class="p.name"
@@ -23,7 +24,7 @@
           draggable
           @dragover.prevent
           @drop.prevent
-          @dragend.prevent
+          @dragend.stop="dragendresizeNode(p.event,$event)"
           @mousedown="resizeMousedown"
           @drag.stop="resizeNode(p.event,$event)"
           :style="p.type==='circle'? ' border-radius: 50% 50%;':''"
@@ -38,8 +39,11 @@
             <li>id:{{node.id}}</li>
              <li>type:{{node.elType}}</li>
             <li>{{node.disable ? 'lock' :''}}</li>
-      </ul>-->
-      <d-chart :config="rnode.chart" v-if="rnode.chart" />
+      </ul> -->
+      <div class='d-chart-wrapper' v-if="rnode.chart"  :style="{opacity:rnode.opacity / 100}">
+        <d-chart :config="rnode.chart" />
+      </div>
+      
     </div>
   </div>
 </template>
@@ -66,7 +70,6 @@ export default {
     node: {
       handler: function(val) {
         this.rnode = val
-        console.log(val)
       },
       deep: true
     }
@@ -124,7 +127,16 @@ export default {
 
   computed: {
     style() {
-      return `z-index:${this.rnode.zindex};transform-origin:0 0;transform:translate(${this.rnode.x}px,${this.rnode.y}px);width:${this.rnode.w}px;height:${this.rnode.h}px`
+      return `z-index:${
+        this.rnode.zindex
+      };transform-origin:0 0;transform:translate(${this.rnode.x}px,${
+        this.rnode.y
+      }px);width:${this.rnode.w}px;height:${this.rnode.h}px;pointer-events: ${
+        this.rnode.disable ? 'none' : 'auto'
+      };`
+    },
+    opacity() {
+      return this.rnode.opacity
     }
   },
 
@@ -142,9 +154,15 @@ export default {
       e.dataTransfer.effectAllowed = 'move'
       this.$emit('nodeDragStart', e)
     },
+    dragEnd(e) {
+      this.$emit('nodeDrag', e, this.rnode)
+    },
     resizeMousedown(e) {
       this.candrage = false
       this.$emit('nodeResizeMousedown', e, this.rnode)
+    },
+    dragendresizeNode(type, e) {
+      this.$emit('nodeResizeNode', type, e, this.rnode)
     },
     resizeNode(type, e) {
       this.$emit('nodeResizeNode', type, e, this.rnode)
@@ -185,7 +203,7 @@ export default {
   position: absolute;
   //  background: rgba(255, 0, 0, 0.2);
   cursor: pointer;
-  border: 1px #ffffff dashed;
+  //border: 1px #ffffff dashed;
 }
 .select-mask {
   width: 100%;
@@ -195,6 +213,7 @@ export default {
   position: absolute;
   z-index: 999;
   border: @border_Data_red50;
+  box-sizing: border-box;
   i {
     width: 10px;
     height: 10px;
@@ -247,5 +266,9 @@ export default {
     bottom: -5px;
     cursor: se-resize;
   }
+}
+.d-chart-wrapper{
+   width: 100%;
+   height: 100%; 
 }
 </style>

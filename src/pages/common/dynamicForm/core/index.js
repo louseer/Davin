@@ -9,7 +9,7 @@ export class Option {
     this._oldvalue = option.defaultVal
     this._value = option.defaultVal
     this.hide = option.hide || false;
-    this._form = form; //值变化时的回调函数
+    this._form = form; //所在表单实例
   }
 
   set value (val){
@@ -114,10 +114,10 @@ export class List {
 /**
  * 生成用于表单视图渲染的{form表单项}，这个json规定了每个控件的默认值和change回调
  * @param {Object/Array} configurer 表单项配置器对象：普通对象或者json
- * @param {Function} callback 所有表单项值发生改变都会触发的通用回调，一般是提交动作
+ * @param {Object} form 所在表单实例
  * @param {String} nameprefix 当configurer是一个Array时，子配置组名字的统一前缀。
  */
-export const generateOptions = (configurer,callback,nameprefix='') => {
+export const generateOptions = (configurer,form,nameprefix='') => {
   let islist = Array.isArray(configurer)
   let options = islist ? []:{}
   for(var k in configurer){
@@ -126,13 +126,13 @@ export const generateOptions = (configurer,callback,nameprefix='') => {
     if(configurer[k].children){
       if(configurer[k].type === OPTIONTYPE.GROUP){
         options[k] = new Group(configurer[k])
-        options[k].children = generateOptions(configurer[k].children,callback,nameprefix)
+        options[k].children = generateOptions(configurer[k].children,form,nameprefix)
       }else if(configurer[k].type === OPTIONTYPE.LIST){
         options[k] = new List(configurer[k])
-        options[k].children = generateOptions(configurer[k].children,callback,configurer[k].name)
+        options[k].children = generateOptions(configurer[k].children,form,configurer[k].name)
       }
     }else{
-      options[k] = new Option(configurer[k],callback)
+      options[k] = new Option(configurer[k],form)
     }
   }
   return options;
@@ -221,26 +221,26 @@ export const snapshot = (target,source) => {
  * @param {Option / Group 对象组合的对象} options form表单项
  * @param {Object} setting 设置值。普通对象
  */
-// export const assignValue = (options,setting) => {
-//   for(var k in setting){
-//     if("[object Object]" === Object.prototype.toString.call(setting[k])){
-//       assignValue(options[k].children,setting[k])
-//     }else{
-//       if(options[k]){
-//         options[k]._value =  Array.isArray(setting[k]) ? [...setting[k]]:setting[k]
-//       }
-//     }
-//   }
-// }
+export const assignValue = (options,setting) => {
+  for(var k in setting){
+    if(options[k]){
+      if("[object Object]" === Object.prototype.toString.call(setting[k])){
+        assignValue(options[k].children,setting[k])
+      }else{
+        options[k]._value =  Array.isArray(setting[k]) ? [...setting[k]]:setting[k]
+      }
+    }
+  }
+}
 
 
 export class DynamicForm {
   constructor(configurer,handlers,setting=null,callback){
     this.handlers = handlers; //表单项独立回调
-    this.options = generateOptions(configurer,this,setting);
+    this.options = generateOptions(configurer,this);
     this.callback = callback;
     if(setting){
-      this.setOriginSetting(setting);
+      this.setSetting(setting);
     }
     this.step = -1;
     this.recording = true;
@@ -259,8 +259,8 @@ export class DynamicForm {
     this.snapshot.push(snapshot(this.previousSetting,newSetting))
   }
 
-  setOriginSetting(setting) {
-    this.assignValue(setting)
+  setSetting(setting) {
+    assignValue(this.options,setting)
     setting = getValues(this.options)
     this.originSetting = setting
     this.previousSetting = setting
@@ -268,34 +268,17 @@ export class DynamicForm {
 
   back(){
     let backSetting = this.snapshot[this.step].back;
-    this.assignValue(backSetting)
+    assignValue(this.options,backSetting)
     this.step--;
   }
 
   redo(){
     this.step++
     let redoSetting = this.snapshot[this.step].redo;
-    this.assignValue(redoSetting)
+    assignValue(this.options,redoSetting)
   }
 
-  /**
-   * 将确定的值合入表单项
-   * @param {Option / Group 对象组合的对象} options form表单项
-   * @param {Object} setting 设置值。普通对象
-   */
-  assignValue (setting) {
-    for(var k in setting){
-      if(this.options[k]){
-        if("[object Object]" === Object.prototype.toString.call(setting[k])){
-          this.assignValue(setting[k])
-        }else{
-          this.options[k]._value =  Array.isArray(setting[k]) ? [...setting[k]]:setting[k]
-          this.execHandler(this.options[k])
-        }
-      }
-    }
-  }
-  
+
   execHandler(option){
     if(option.handle && 'function' === typeof(this.handlers[option.handle])){
       const {value,oldvalue} = option;
@@ -308,7 +291,6 @@ export class DynamicForm {
     this.execHandler(option)
     let newSetting = getValues(this.options);
     this.setHistory(newSetting)
-    console.log("updated:",newSetting)
     this.callback && this.callback(newSetting)
   }
 }

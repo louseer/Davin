@@ -1,5 +1,5 @@
 {
-  "name": "mydemo",
+  "name": "DVAAP",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,11 +12,13 @@
     "core-js": "^2.6.5",
     "echarts": "^4.2.1",
     "element-ui": "^2.4.5",
+    "html2canvas": "^1.0.0-rc.3",
     "iview": "^3.4.2",
     "vue": "^2.6.10",
     "vue-echarts": "^4.0.3",
     "vue-grid-layout": "^2.3.4",
     "vue-router": "^3.0.6",
+    "vue-styled-components": "^1.4.9",
     "vue-uuid": "^1.1.1",
     "vuex": "^3.0.1"
   },

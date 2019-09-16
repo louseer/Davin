@@ -14,7 +14,7 @@
     <div v-for="(type,tindex) in typetree">
       <div v-if="type.active" class="rightcontent" :style="`height:${height}px`">
         <template v-if="listType === 'thumbnail' ">
-          <ol v-for="(subtype,sindex) in type.children" @click="contentClick(subtype)">
+          <ol v-for="(subtype,sindex) in type.children" draggable @click="contentClick(subtype)" @dragstart="contentdrag($event,subtype)">
             <h1>
               <Thumbnail :nodeEltype="subtype.type" />
             </h1>
@@ -26,6 +26,7 @@
             class="line"
             v-for="(subtype,sindex) in type.children"
             @click="contentClick(subtype)"
+            @dragstart="contentdrag(subtype)"
           ><i :class="`iconfont icon-ico_db_laycom_${subtype.type}`"></i>{{subtype.title}}</span>
         </template>
       </div>
@@ -57,14 +58,19 @@ export default {
     }
   },
   methods: {
+    contentdrag(e,item){ 
+      e.dataTransfer.setData("item",JSON.stringify(item))
+     
+    },
     contentClick(item) {
+    
       this.$emit('contentClick', item)
     },
     changeClick(item) {
       this.thetypetree.forEach(n => {
         n.id === item.id ? (n.active = true) : (n.active = false)
       })
-      this.$emit('changeClick', this.thetypetree)
+      //this.$emit('changeClick', this.thetypetree)
     }
   },
   computed: {

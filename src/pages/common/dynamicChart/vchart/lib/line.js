@@ -1,11 +1,10 @@
-import Echart from './echart.js';
+import Echart from './EChart.js';
 import 'echarts/lib/chart/line'
 
 
 export default class Line extends Echart{
   constructor(config) {
     super(config);
-    this.initOpitions();
   }
 
   //设置图例
@@ -90,29 +89,5 @@ export default class Line extends Echart{
     this.setSeries(data);   
   }
 
-  setSample () {
-    this.options = {
-        xAxis: {
-            type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [{
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
-            type: 'line'
-        }]
-    };
-  }
-
-  combineConfig() {
-     //TODO：结合接口this.config 继续整合options
-  }
-
-  initOpitions() {
-    this.setSample();
-    this.combineConfig();
-  }
 
 }

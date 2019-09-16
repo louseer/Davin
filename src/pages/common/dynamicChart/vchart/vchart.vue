@@ -5,12 +5,6 @@
 
 <script>
 //import {组件名称} from '组件路径';
-import 'echarts/lib/chart/bar'
-import 'echarts/lib/chart/line'
-import 'echarts/lib/chart/pie'
-import 'echarts/lib/chart/map'
-import 'echarts/lib/chart/radar'
-import 'echarts/lib/chart/scatter'
 import 'echarts/lib/chart/effectScatter'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/polar'
@@ -48,12 +42,12 @@ export default {
     return {
       instance:null,
       chartData:null,
-      options:'',
-      simple:null
+      simple:null,
+      options:null
     }
   },
   computed: {
-    type () {  
+    type () {
       return this.config.type;
     },
     version() {
@@ -63,20 +57,37 @@ export default {
       return this.config.data && this.config.data.apiUrl || `/sampledata/${this.type}.json`;
     }
   },
+  watch:{
+    config(v){
+      this.combineConfig(v.options)
+    }
+  },
   methods: {
-    refreshData () {
-      if(!this.instance || !this.chartData){
+    // refreshData () {
+    //   if(!this.instance || !this.chartData){
+    //     return;
+    //   }
+    //   this.instance.setData( this.chartData );
+    //   let options =  JSON.parse(JSON.stringify( this.instance.options))
+    //   this.options = options
+    // },
+    initOpitions(){
+      if(!this.instance || !this.chartData || !this.simple){
         return;
       }
-      this.instance.setData( this.chartData );
-      let options =  JSON.parse(JSON.stringify( this.instance.options))
-      this.options = options
+      this.instance.initOpitions(this.simple)
+      this.instance.setData(this.chartData)
+      this.options = this.instance.options
     },
-    getInstance () {
+    combineConfig(options){
+      this.instance.combineConfig(options)
+      this.options = this.instance.options
+    },
+    initInstance () {
       import(`./lib/${this.type}.js`).then((module) => {
         let chart = module.default;
         this.instance = new chart(this.config);
-        this.refreshData();
+        this.initOpitions();
       }).catch(e=>{
         console.log(`加载./lib/${this.type}.js失败`)
         console.log(e)
@@ -85,31 +96,34 @@ export default {
     getSimple () {
       getChartTemp(this.type,this.version).then((val) => {
         this.simple = val
+         this.initOpitions();
+      }).catch(e=>{
+        console.log(`加载${this.version}版本${this.type}图opitions失败`)
+        console.log(e)
       })
     },
     getData () {
       getChartData(this.apiUrl).then(rsp => {
       if(rsp.status == 0){
           this.chartData = rsp.data
-          this.refreshData();
+          this.initOpitions();
         }
       }).catch(e => {
-
+        console.log(`加载ID为${this.config.id}图表的数据失败`)
+        console.log(e)
       })
-    }
-  },
-  watch:{
-    options(v){
-      console.log("chart options update",v)
     }
   },
   created () {
     this.getData();
-    this.getInstance();
+    this.getSimple();
+    this.initInstance();
   },
   mounted() {
 
   },
+  updated(){
+  }
 }
 </script>
 <style lang='less' scoped>

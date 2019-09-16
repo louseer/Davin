@@ -1,6 +1,19 @@
 <template>
   <div>
-    <div class="btn" v-if="!btn.hide" :title="btn.name"><i v-if="btn.type === 'icon' " class="iconfont"  :class="btn.icon ? btn.icon : ''" @click="btn.event"></i><slot/></div>
+    <div 
+      class="btn"
+      :title="btn.name"
+      v-if='!btn.hide'
+    >
+      <i 
+        v-if="btn.icon" 
+        class="iconfont"  
+        :class="btn.icon" 
+        @click="btn.event"
+        :style="`font-size:${iconSize}px`"
+      ></i>
+      <slot/>
+    </div>
   </div>
 </template>
 
@@ -11,6 +24,10 @@
         type: Object,
         default: ()=>{}
       },
+      iconSize:{
+        type:Number,
+        default:16,     
+      }
     }
   }
 </script>

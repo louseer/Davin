@@ -4,11 +4,11 @@
     <div class='img-select' @click='handleClick'>
       <img v-if="imgsrc" :src='imgsrc' height="100%" />
     </div>
-    <el-dialog :title="title" :visible.sync="dialogVisible">
+    <el-dialog :title="title" :visible.sync="dialogVisible" class='select-dialog' :modal-append-to-body='false'>
       <div class="slideimg">
         <li v-for="(item,index) in list" :key="index" @click="imgClick(item,index)" :class="{'selected':selected === index}">
-            <img :src="item.url" width="100%" height="100%" />
-          </li>
+            <img :src="item.url" width="100%" height="100%" class='img-item'/>
+        </li>
       </div>
     </el-dialog>
   </div>
@@ -45,7 +45,6 @@ export default {
       if(this.imgsrc === item.url){
         return;
       }
-      console.log(item,index)
       this.selected = index
       this.imgsrc = item.url
       this.dialogVisible = false
@@ -63,10 +62,13 @@ export default {
   width:100%;
   height:1rem;
   border:1px dashed #efefef;
-  border-radius: 5px;
-  img {
+  box-sizing: border-box;
+  .img-item {
     margin:0 auto;
   }
+}
+.select-dialog{
+  z-index:3000;
 }
 .slideimg {
   margin-top: 0.2rem;

@@ -7,59 +7,43 @@
       :rightMenu="rightMenu"
       @hide="contextmenuHide"
     />
-    <!--<div class="ex">
-      <input type="text" v-model="domCavase.canvas.width" placeholder="请输入宽度" />
-      <input type="text" v-model="domCavase.canvas.height" />
-      <input type="text" v-model="domCavase.zoomSize" placeholder="请输入放大值" />
-      <input type="text" placeholder="请输入透明度" />
-      <input type="select" placeholder="请输入背景色" />
-      <select>
-        <option value="black">黑色</option>
-        <option value="red">红色</option>
-        <option value="yellow">黄色</option>
-        <option value="blue">蓝色</option>
-      </select>
-
-      <div style="clear:both;padding:10px">
-        <div style="margin:0 auto; width:100%">
-         <button
-            v-for="(btn,index) in  aglinList"
-            :key="index"
-            style="float:left"
-            @click="nodeAlign(btn.type)"
-          >{{btn.name}}</button>
-
-          <button @click="fillNode">添加</button>
-          <button @click="toGroup">编组</button>
-          <button @click="outGroup">解除编组</button>
-          <button @click="clear">清空</button>
-          <button @click="deleteNode">删除</button>
-          <button @click="selectAll">全选</button>
-          <button @click="lockNode">锁定</button>
-          <button @click="hideNode">隐藏</button>
-
-          <button @click="downLayer">下移一层</button>
-
-          <button @click="upLayer">上移一层</button>
-          <button @click="toBottomLayer">置于底层</button>
-          <button @click="toTopLayer">置于顶层</button>
-          <button
-            style="float:left"
-            v-if="multiple.length>=3"
-            @click="multipleNodesAlign('VerticalAverage')"
-          >垂直均分</button>
-          <button
-            style="float:left"
-            v-if="multiple.length>=3"
-            @click="multipleNodesAlign('HorizontalAverage')"
-          >水平均分</button>
-          <button style="float:left" v-if="multiple.length>=2" @click="nodeAlign('Hline')">水平联排</button>
-          <button style="float:left" v-if="multiple.length>=2" @click="nodeAlign('Vline')">垂直联排</button>
-        </div>
-      </div>
-    </div> -->
-    <div class="stage" ref="stage">
-      <!-- <ruler :zoomSize="domCavase.zoomSize" /> -->
+    <div
+      class="stage"
+      ref="stage"
+      @dragover.prevent
+      :style="domCavase.mode === 'select' ? ' cursor: crosshair;':' cursor: move	;'"
+    >
+      <eagle-eye
+        :canvasObj="domCavase.canvas"
+        :zoomSize="domCavase.zoomSize"
+        :stageW="stageW"
+        :stageH="stageH"
+        :offSetx="domCavase.offsetx"
+        :offSety="domCavase.offsety"
+        :nodeList="domCavase.nodeList"
+        @changeView="changeView"
+      />
+      <guide-line
+        v-if="showline"
+        ref="line"
+        :previewLine="domCavase.previewLine"
+        :lineList="domCavase.lineList"
+        :zoomSize="domCavase.zoomSize"
+        :offSetx="domCavase.offsetx"
+        :offSety="domCavase.offsety"
+        @removeLine="removeLine"
+        @moveline="moveline"
+      />
+      <ruler-zoom
+        :w="stageW"
+        :h="stageH"
+        :zoomSize="domCavase.zoomSize"
+        :offSetx="domCavase.offsetx"
+        :offSety="domCavase.offsety"
+        @previewLine="previewLine"
+        @addLine="addLine"
+        @hideline="hideline"
+      />
       <Cav :canvasConfig="domCavase.canvas">
         <Node
           class="layernode"
@@ -84,22 +68,43 @@
 import Dcanvas from './dcanvas/dcanvas'
 import Cav from './canvas.vue'
 import Node from './layer-node.vue'
+import GuideLine from './guideline.vue'
 import Contextmenu from './contextmenu.vue'
-import { mapMutations } from 'vuex';
-import { ELEMENT_SCREEN,ELEMENT_MULTI,ELEMENT_NODE } from "@/store/constants.js"
-import Ruler from './ruler.vue'
+import EagleEye from './eagle-eye.vue'
+import { mapState, mapMutations } from 'vuex'
+import {
+  ELEMENT_SCREEN,
+  ELEMENT_MULTI,
+  ELEMENT_NODE
+} from '@/store/constants.js'
+import RulerZoom from './rulerzoom.vue'
+import { debuglog } from 'util'
+import { getDataBoardData } from '@/api/api.js'
+import { getuuid } from '@/utils/index'
+import { getChartTemp } from '@/chart-simples/index.js'
 
 export default {
   components: {
     Node,
     Cav,
     Contextmenu,
-    Ruler
+    RulerZoom,
+    GuideLine,
+    EagleEye
+  },
+  props:{
+    databoardID:{
+      type:String,
+      default:''
+    }
   },
   data() {
     return {
+      stageW: 0,
+      stageH: 0,
+      stop: false,
+      showline: true,
       domCavase: '',
-      canvasConfig: '',
       rightClick: false,
       mode: 'edit',
       startX: 0,
@@ -278,12 +283,40 @@ export default {
     }
   },
 
-
   mounted() {
+    this.stageW = this.$refs.stage.clientWidth
+    this.stageH = this.$refs.stage.clientHeight
+
+    window.onresize = () => {
+      let resizeTimer = null
+      return (() => {
+        if (resizeTimer) clearTimeout(resizeTimer)
+        resizeTimer = setTimeout(() => {
+          this.stageW = this.$refs.stage.clientWidth
+          this.stageH = this.$refs.stage.clientHeight
+          const size = this.domCavase.zoomSize
+          const cw = this.domCavase.canvas.width
+          const ch = this.domCavase.canvas.height
+          const [cwReal, chReal] = [cw * size, ch * size]
+
+          const xVal = this.stageW / cwReal
+          const yVal = this.stageH / chReal
+          xVal < yVal
+            ? this.setZoom((this.stageW - 20 - this.domCavase.offsetx) / cw)
+            : this.setZoom((this.stageH - 30 - this.domCavase.offsety) / ch)
+        }, 200)
+      })()
+    }
+
     let _this = this
     window.document.onkeydown = function(e) {
       const keynum = window.event ? e.keyCode : e.which
-
+      if (keynum === 32) {
+        if (_this.domCavase.mode === 'move') return
+        _this.domCavase.mode = 'move'
+        console.log(_this.domCavase.mode)
+        return
+      }
       if (keynum === 17) {
         if (this.ctrlDown) return
         _this.ctrlDown = true
@@ -293,18 +326,44 @@ export default {
     }
     window.document.onkeyup = function(e) {
       const keynum = window.event ? e.keyCode : e.which
+      _this.domCavase.mode = 'select'
       _this.ctrlDown = false
       console.log(_this.ctrlDown)
+      console.log(_this.domCavase.mode)
     }
 
     const handler = this.domCavase.Handler(this.$refs.stage)
     handler.clickHandler(e => {
-      this.setEditType(ELEMENT_SCREEN)
+      this.$emit('switchEditPanel')
+    })
+    handler.dropHandler(e => {
+      if (e.dataTransfer.getData('item') !== null) {
+        const item = JSON.parse(e.dataTransfer.getData('item'))
+        const startX = e.clientX - this.GetPosition(this.$refs.stage).left
+        const startY = e.clientY - this.GetPosition(this.$refs.stage).top
+
+        const id = getuuid()
+        const chart = {
+          id,
+          type: item.type,
+          name: item.title,
+          version: item.version,
+        }
+        const obj = {
+          w: item.w || 200,
+          h: item.h || 200,
+          x: startX,
+          y: startY,
+          elType: item.type,
+          name: item.title,
+          chart
+        }
+        this.addNode(obj)
+      }
     })
     handler.selectNodes(e => {
       this.rightClick = false
-      this.$emit('selectNodes', this.domCavase.selectNodes)
-      console.log('##@@@sdfsdfsfdsdf', this.domCavase.selectNodes)
+      this.$emit('switchEditPanel')
       //this.$emit('nodelistChange', this.domCavase.nodeList)
     })
     handler.onmousewheelHandler(e => {
@@ -345,7 +404,32 @@ export default {
     })
   },
   methods: {
-    ...mapMutations('databoard', ['setDataboard', 'setEditType']),
+    ...mapMutations('databoard', ['initDataboard', 'setEditType', '_updateDB']),
+
+    changeView(x, y) {
+      this.domCavase.offsetx = x
+      this.domCavase.offsety = y
+    },
+    moveline(id, pos) {
+      this.domCavase.lineList.forEach(l => {
+        l.id === id && (l.pos = pos)
+      })
+    },
+    hideline() {
+      this.showline = !this.showline
+    },
+    removeLine(id) {
+      this.domCavase.removeGuideLineById(id)
+    },
+    clearLine() {
+      this.domCavase.clearGuideLine()
+    },
+    addLine(pos, type) {
+      this.domCavase.createGuideLine(pos, type)
+    },
+    previewLine(pos, type) {
+      this.domCavase.createPreviewLine(pos, type)
+    },
     getNodeLlist(callback) {
       callback &&
         typeof callback === 'function' &&
@@ -369,6 +453,7 @@ export default {
     hideNode() {
       this.domCavase.hideNode()
       this.$emit('nodelistChange', this.domCavase.nodeList)
+      this.$emit('switchEditPanel')
     },
     unhideNode(id) {
       this.domCavase.unhideNode(id)
@@ -377,6 +462,7 @@ export default {
     lockNode() {
       this.domCavase.lockNode()
       this.$emit('nodelistChange', this.domCavase.nodeList)
+      this.$emit('switchEditPanel')
     },
     unlockNode(id) {
       this.domCavase.unlockNode(id)
@@ -389,11 +475,38 @@ export default {
         Object.assign(n, { active: true })
       )
     },
+
+    configGroup(setting, node) {
+      console.log('setting', node)
+      const cx = setting.x - node.x
+      const cy = setting.y - node.y
+      const zW = setting.w / node.w
+      const zH = setting.h / node.h
+      if (node.cid === null) return
+      const chilrenlist = node.cid
+      this.domCavase.nodeList.forEach(n => {
+        if (chilrenlist.includes(n.id)) {
+          n.x = setting.x + (n.x - node.x) * zW
+          n.y = setting.y + (n.y - node.y) * zH
+          n.w = n.w * zW
+          n.h = n.h * zH
+          n.opacity = setting.opacity
+        }
+      })
+      node.x = setting.x
+      node.y = setting.y
+      node.w = setting.w
+      node.h = setting.h
+      node.opacity = setting.opacity
+    },
     nodeResizeNode(type, e, node) {
+      let resizeTimer = null
+
       e.target.style.opacity = '1'
       const event = e || window.event
       const _x = e.clientX - this.dx
       const _y = e.clientY - this.dy
+      this.dnode = JSON.parse(JSON.stringify(node))
       switch (type) {
         case 'mr':
           node.w = node.w + _x / this.domCavase.zoomSize
@@ -405,23 +518,55 @@ export default {
         case 'mb':
           node.h = node.h + _y / this.domCavase.zoomSize
           break
+        case 'rt':
+          node.w = node.w + _x / this.domCavase.zoomSize
+          node.h = node.h - _y / this.domCavase.zoomSize
+          node.y = node.y + _y / this.domCavase.zoomSize
+          break
+        case 'mt':
+          node.h = node.h - _y / this.domCavase.zoomSize
+          node.y = node.y + _y / this.domCavase.zoomSize
+          break
+        case 'lt':
+          node.w = node.w - _x / this.domCavase.zoomSize
+          node.h = node.h - _y / this.domCavase.zoomSize
+          node.y = node.y + _y / this.domCavase.zoomSize
+          node.x = node.x + _x / this.domCavase.zoomSize
+          break
+        case 'ml':
+          node.w = node.w - _x / this.domCavase.zoomSize
+          node.x = node.x + _x / this.domCavase.zoomSize
+          break
+        case 'lb':
+          node.w = node.w - _x / this.domCavase.zoomSize
+          node.x = node.x + _x / this.domCavase.zoomSize
+          node.h = node.h + _y / this.domCavase.zoomSize
+          break
         default:
           break
       }
       this.dx = e.clientX
       this.dy = e.clientY
-      const { zW, zH, zX, zY } = this.nodeResizeZoom(this.dnode, node)
+      const { zW, zH, zX, zY, cX, cY } = this.nodeResizeZoom(this.dnode, node)
 
       if (node.cid === null) return
       const chilrenlist = node.cid
       this.domCavase.nodeList.forEach(n => {
         if (chilrenlist.includes(n.id)) {
-          n.x = node.x + (n.x - node.x) * zW
-          n.y = node.y + (n.y - node.y) * zH
-          n.w = n.w * zW
-          n.h = n.h * zH
+          if (zX === 1 && zY === 1) {
+            n.x = node.x + (n.x - node.x) * zW
+            n.y = node.y + (n.y - node.y) * zH
+            n.w = n.w * zW
+            n.h = n.h * zH
+          } else {
+            n.w = n.w * zW
+            n.h = n.h * zH
+            n.x = node.x + (n.x - this.dnode.x) * zW
+            n.y = node.y + (n.y - this.dnode.y) * zH
+          }
         }
       })
+
       this.dnode = JSON.parse(JSON.stringify(node))
     },
     nodeResizeZoom(oldNode, newNode) {
@@ -429,7 +574,9 @@ export default {
       const zH = newNode.h / oldNode.h
       const zX = newNode.x / oldNode.x
       const zY = newNode.y / oldNode.y
-      return { zW, zH, zX, zY }
+      const cX = newNode.x - oldNode.x
+      const cY = newNode.y - oldNode.y
+      return { zW, zH, zX, zY, cX, cY }
     },
     nodeResizeMousedown(e, node) {
       this.dx = e.clientX
@@ -437,7 +584,7 @@ export default {
       this.dnode = JSON.parse(JSON.stringify(node))
       console.log(this.dnode.w, '')
     },
-    downLayer(){
+    downLayer() {
       this.domCavase.LayerToDown()
       this.$emit('nodelistChange', this.domCavase.nodeList)
     },
@@ -456,14 +603,17 @@ export default {
     deleteNode() {
       this.domCavase.removeNodes()
       this.$emit('nodelistChange', this.domCavase.nodeList)
+      this.$emit('switchEditPanel')
     },
     outGroup() {
       this.domCavase.outGroup()
       this.$emit('nodelistChange', this.domCavase.nodeList)
+      this.$emit('switchEditPanel')
     },
     clear() {
       this.domCavase.clear()
       this.$emit('nodelistChange', this.domCavase.nodeList)
+      this.$emit('switchEditPanel')
     },
     nodeAlign(type) {
       this.domCavase.nodesAlign(type)
@@ -474,6 +624,7 @@ export default {
     toGroup() {
       this.domCavase.toGroup()
       this.$emit('nodelistChange', this.domCavase.nodeList)
+      this.$emit('switchEditPanel')
     },
     nodeDragStart(e) {
       this.startX = this.domCavase.eventZoom(e).clientX
@@ -504,15 +655,14 @@ export default {
       }
       if (node.type === 'group') {
         if (this.ctrlDown) {
-          this.domCavase.selectNodes.push(...
-            this.domCavase.nodeList.filter(
+          this.domCavase.selectNodes.push(
+            ...this.domCavase.nodeList.filter(
               n => node.cid.includes(n.id) || node.id === n.id
             )
           )
           this.domCavase.nodeList.forEach(n => {
-            n.id === node.id && (n.active = true) 
+            n.id === node.id && (n.active = true)
           })
-          
         } else {
           this.domCavase.selectNodes = this.domCavase.nodeList.filter(
             n => node.cid.includes(n.id) || node.id === n.id
@@ -522,36 +672,101 @@ export default {
           })
         }
       }
+      this.$emit('switchEditPanel')
     },
     resizeNode(e, node) {
       this.domCavase.refreshNode(node)
     },
     nodeDrag(e, node) {
+      const yline = this.domCavase.lineList
+        .filter(n => n.type === 'xline')
+        .map(n => n.pos)
+
+      const xline = this.domCavase.lineList
+        .filter(n => n.type === 'yline')
+        .map(n => n.pos)
+      const selectId = this.domCavase.selectNodes.map(n => n.id)
+      const nodeXPos = this.domCavase.nodeList
+        .filter(n => !selectId.includes(n.id))
+        .map(n => n.x)
+      const nodeYPos = this.domCavase.nodeList
+        .filter(n => !selectId.includes(n.id))
+        .map(n => n.y)
+      const nodeRPos = this.domCavase.nodeList
+        .filter(n => !selectId.includes(n.id))
+        .map(n => n.x + n.w)
+      const nodeBPos = this.domCavase.nodeList
+        .filter(n => !selectId.includes(n.id))
+        .map(n => n.y + n.h)
+      const yArray = [...yline, ...nodeYPos, ...nodeBPos]
+      const xArray = [...xline, ...nodeXPos, ...nodeRPos]
+
       const _x = this.domCavase.eventZoom(e).clientX
       const _y = this.domCavase.eventZoom(e).clientY
       const dx = _x - this.startX
       const dy = _y - this.startY
+      let stop = false
+      let offset = [0, 0, 0, 0]
       const idList = this.domCavase.selectNodes.map(n => n.id)
-      if (node.type === 'element') {
-        this.domCavase.nodeList.forEach(n => {
-          if (idList.includes(n.id)) {
-            n.x = n.x + dx
-            n.y = n.y + dy
-            this.startX = this.domCavase.eventZoom(e).clientX
-            this.startY = this.domCavase.eventZoom(e).clientY
-          }
-        })
+      for (let i = 0; i < this.domCavase.selectNodes.length; i++) {
+        let nd = this.domCavase.selectNodes[i]
+        const l = xArray.find(v => Math.abs(nd.x + dx - v) < 5)
+        const t = yArray.find(v => Math.abs(nd.y + dy - v) < 5)
+        const r = xArray.find(v => Math.abs(nd.x + nd.w + dx - v) < 5)
+        const b = yArray.find(v => Math.abs(nd.y + nd.h + dy - v) < 5)
+        const check = [l, t, r, b]
+        if (check.every(v => v === undefined)) {
+          stop = false
+        } else {
+          const [_l, _t, _r, _b] = [
+            nd.x + dx - l,
+            nd.y + dy - t,
+            nd.x + nd.w + dx - r,
+            nd.y + nd.h + dy - b
+          ]
+          offset = [_l, _t, _r, _b]
+          offset = offset.map(v => (v ? v : 0))
+          console.log(offset)
+          check.forEach((n, i) => {
+            if (n !== undefined) {
+              const id = getuuid()
+              if (i === 0 || i === 2) {
+                this.domCavase.createPreviewLine(parseInt(n), 'xRuler', id)
+                setTimeout(() => {
+                  this.domCavase.previewLine = null
+                }, 50)
+              } else {
+                this.domCavase.createPreviewLine(parseInt(n), 'yRuler', id)
+                setTimeout(() => {
+                  this.domCavase.previewLine = null
+                }, 50)
+              }
+            }
+          })
+          stop = true
+          break
+        }
       }
-      if (node.type === 'group') {
-        this.domCavase.nodeList.forEach(n => {
-          if (node.cid.includes(n.id) || idList.includes(n.id)) {
-            n.x = n.x + dx
-            n.y = n.y + dy
-            this.startX = this.domCavase.eventZoom(e).clientX
-            this.startY = this.domCavase.eventZoom(e).clientY
-          }
-        })
+      const [_l, _t, _r, _b] = offset
+      if (!stop) {
+        this.domCavase.selectNodes.map(n =>
+          Object.assign(n, {
+            x: n.x + dx,
+            y: n.y + dy
+          })
+        )
+        stop = false
+      } else {
+        this.domCavase.selectNodes.map(n =>
+          Object.assign(n, {
+            x: n.x - _l - _r + dx,
+            y: n.y - _t - _b + dy
+          })
+        )
       }
+      this.startX = this.domCavase.eventZoom(e).clientX
+      this.startY = this.domCavase.eventZoom(e).clientY
+      this.$emit('updateNodeSetting')
     },
     toggleGrop() {
       const rootLIst = this.domCavase.selectNodes.filter(n => n.pid === null)
@@ -562,52 +777,55 @@ export default {
       }
       this.$emit('nodelistChange', this.domCavase.nodeList)
     },
-
-    fillNode() {
-      const nodes = [
-        { x: 0, y: 0, w: 200, h: 200, name: '1基本饼图' },
-        { x: 250, y: 0, w: 200, h: 200, name: '2基本什么图' },
-        { x: 450, y: 0, w: 200, h: 200, name: '3ZZZZXXX图' },
-        { x: 650, y: 0, w: 200, h: 200, name: '4各种图' },
-        {
-          x: 850,
-          y: 0,
-          w: 200,
-          h: 200,
-          elType: 'title',
-          disable: true,
-          name: '中华锁王'
-        },
-        {
-          x: 1050,
-          y: 0,
-          w: 200,
-          h: 200,
-          elType: 'pie',
-          name: '小透明',
-          hide: true
-        }
-      ]
-      nodes.forEach(node => {
-        this.addNode(node)
-      })
-
-      console.log('tag', this.domCavase.nodeList)
-    },
     addNode(node) {
+      if(!node.options){
+        getChartTemp(node.chart.type,node.chart.version).then((val) => {
+          node.chart.options = val
+          this.newNode(node)
+        }).catch(e=>{
+          console.log(`加载${this.version}版本${this.type}图opitions失败`)
+          console.log(e)
+        })
+      }else{
+        this.newNode(node)
+      }
+      
+    },
+    newNode(node){
       const newNode = new Dcanvas.Node(node)
       this.domCavase.addNode(newNode)
+      this.$emit('switchEditPanel')
       this.$emit('nodelistChange', this.domCavase.nodeList)
     },
     eventZoom(e) {
       this.domCavase.eventZoom(e)
+    },
+    GetPosition(obj) {
+      let left = 0
+      let top = 0
+      while (obj.offsetParent) {
+        left += obj.offsetLeft
+        top += obj.offsetTop
+        obj = obj.offsetParent
+      }
+      return { left, top }
+    },
+    queryDataboard() {
+      getDataBoardData(this.databoardID).then(rsp => {
+        if (rsp.status === 0) {
+          this.canvasConfig = rsp.data
+          this.domCavase.createCanvas(this.canvasConfig)
+          this.$emit('initDataboard',this.domCavase.canvas)
+          //this.initDataboard(this.domCavase.canvas)
+        } else {
+          console.log('接口请求失败')
+        }
+      })
     }
   },
   created() {
     this.domCavase = new Dcanvas.Stage()
-    this.domCavase.createCanvas()
-    this.setDataboard(this.domCavase.canvas)
-    console.log('@@@@@@@@', this.domCavase.canvas)
+    this.queryDataboard()
     this.nodelist = this.domCavase.nodeList
     if (JSON.parse(window.localStorage.getItem('saveNode'))) {
       JSON.parse(window.localStorage.getItem('saveNode'))
@@ -663,6 +881,7 @@ select {
   background: url(~images/pointe.png) repeat #27272b;
   position: relative;
   overflow: hidden;
+
   // perspective: 1920px;
   // perspective-origin: 0% 0%;
 }

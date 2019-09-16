@@ -1,0 +1,22 @@
+{
+  "status": 0,
+  "msg": "",
+  "data": {
+    "width": 1920,
+    "height": 1080,
+    "id": "503d7180-c4cb-11e9-bbae-371f868e3c9a",
+    "brief": "",
+    "name":"新建大屏",
+    "adaptive": 0,
+    "background": {
+      "imgSouce": 0,
+      "systemImg": "/mock/bgImages/bgimg1.png",
+      "uploadImg": "",
+      "imgRepeat": 0,
+      "imgBlur": 5,
+      "imgOpacity": 80,
+      "bgcolor": "#464a4e"
+    },
+    "thumbnail": ""
+  }
+}
