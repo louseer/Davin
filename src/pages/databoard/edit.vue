@@ -118,19 +118,22 @@ export default {
           name: '发布',
           icon: 'icon-ico_db_public',
           event: this.public,
-          type: 'icon'
+          type: 'icon',
+          hide:true
         },
         {
           name: '预览',
           icon: 'icon-ico_db_view',
           event: this.view,
-          type: 'icon'
+          type: 'icon',
+          hide:true
         },
         {
           name: '保存',
           icon: 'icon-ico_db_save',
           event: this.save,
-          type: 'icon'
+          type: 'icon',
+          hide:true
         },
         {
           name: '退出',

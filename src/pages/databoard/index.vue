@@ -158,10 +158,10 @@ export default {
           name: '重命名',
           event: this.reNameNode
         },
-        {
-          name: '复制',
-          event: this.copyNode
-        },
+        // {
+        //   name: '复制',
+        //   event: this.copyNode
+        // },
         {
           name: '删除',
           event: this.deleteNode
@@ -244,12 +244,12 @@ export default {
             this.toExcel()
           }
         },
-        {
-          name: '粘贴',
-          event: () => {
-            this.paste()
-          }
-        },
+        // {
+        //   name: '粘贴',
+        //   event: () => {
+        //     this.paste()
+        //   }
+        // },
         {
           name: '全选',
           event: () => {
