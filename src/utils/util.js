@@ -8,7 +8,33 @@ function padding(s, len) {
     }
     return s;
 }
-
+//阻止冒泡
+export function clearEventBubble(e) {
+    if (e.stopPropagation) e.stopPropagation()
+    else e.cancelBubble = true
+    if (e.preventDefault) e.preventDefault()
+    else e.returnValue = false
+  }
+  //获取样式
+  export function getStyle(obj, styleName) {
+    if (obj.currentStyle) {
+      return obj.currentStyle[styleName]
+    } else {
+      return getComputedStyle(obj, null)[styleName]
+    }
+  }
+  //顶层边距
+  export function GetPosition(obj) {
+    let left = 0
+    let top = 0
+    while (obj.offsetParent) {
+      left += obj.offsetLeft
+      top += obj.offsetTop
+      obj = obj.offsetParent
+    }
+    return { left, top }
+  }
+  
 
 export const getQueryStringByName = function(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
