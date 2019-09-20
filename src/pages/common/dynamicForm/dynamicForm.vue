@@ -43,7 +43,6 @@ export default {
     };
   },
   computed: {
-
   },
   watch: {
     type () {
@@ -52,15 +51,9 @@ export default {
     setting(){
       this.form && this.form.setSetting(this.setting)
     }
-    // setting:{
-    //   handler:function(){
-    //     console.log("dynamicForm 检测到新的setting",this.setting)
-    //     this.form && this.form.setSetting(this.setting)
-    //   },
-    //   deep:true
-    // }
   },
   methods: {
+    //上抛表单数据更新
     commitUpdate(newSetting){
       this.$emit('update',newSetting)
     },
@@ -71,11 +64,13 @@ export default {
       }
       import(`./lib/${this.type}.js`).then((module) => {
         let editor = module.default;
+        console.log('##########settting',this.setting)
         this.form = new DynamicForm(editor.options,editor.handlers,this.setting,this.commitUpdate);
       }).catch(e=>{
         console.log(e)
       })
     },
+    //上抛自定义事件
     popevent(emitTag){
       this.$emit(emitTag)
     }
@@ -83,8 +78,6 @@ export default {
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
     this.importConfig()
-  },
-  updated() {
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="edinput">
-    <el-input :placeholder="placeholder" v-model="currentValue" @input="handleModelInput"></el-input>
+    <el-input :placeholder="placeholder" :autofocus='autofocus' v-model="currentValue" @input="handleModelInput" @blur='handleModelBlur'></el-input>
   </div>
 </template>
 
@@ -14,6 +14,10 @@ export default {
     placeholder:{
       type:String,
       default:'请输入搜索内容'
+    },
+    autofocus:{
+      type:Boolean,
+      default:false
     }
   },
   data() {
@@ -22,9 +26,12 @@ export default {
     }
   },
   methods: {
-  handleModelInput() {
-    this.$emit('input', this.currentValue)
-  },
+    handleModelInput() {
+      this.$emit('input', this.currentValue)
+    },
+    handleModelBlur() {
+      this.$emit('blur', this.currentValue)
+    }
   },
   watch: {
     value(newValue) {

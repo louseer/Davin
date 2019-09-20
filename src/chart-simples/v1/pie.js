@@ -4,7 +4,6 @@ export default {
       "formatter": "{a} <br/>{b} : {c} ({d}%)"
   },
   "legend": {
-      "orient": "vertical",
       "left": "left",
       "data": [
           "直接访问",

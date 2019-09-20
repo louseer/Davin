@@ -4,7 +4,19 @@
     <Eheader :maintit="maintit" :toptools="toptools" />
     <div class="content">
       <div class="setbar">
-        <Setbar :editType='editType' :nodeNum='rootNodesLen' @btnClick='setBarBtnClick' @updateGroup='updateGroup'></Setbar>
+        <Setbar 
+          :editType='editType' 
+          :editNode='editNode'
+          :editChart='editChart'
+          :editGroup='editGroup'
+          :databoard='databoard'
+          :nodeNum='rootNodesLen'
+          @btnClick='setBarBtnClick' 
+          @updateGroup='updateGroup'
+          @updateDataboard='updateDataboard'
+          @updateChart='updateChart'
+          @updateNode='updateNode'
+        />
       </div>
       <div class="leftbar">
         <Dtab :tabs="leftTab">
@@ -29,7 +41,6 @@
               :height="tab.height"
               :listType="listType"
               :typetree="typetree"
-              @changeClick="changeClick"
               @contentClick="contentClick"
             />
           </div>
@@ -37,10 +48,12 @@
       </div>
       <div class="rightbar">
         <Stage 
+          :databoardID = 'databoardID'
           @nodelistChange="nodechange" 
           @zoomChange="zoomChange"
           @switchEditPanel='switchEditPanel'
           @updateNodeSetting = 'updateNodeSetting'
+          @initDataboard= 'initDataboard'
           ref="stage" 
         ></Stage>
         <ZoomSetter :zoomSize="zoom" @changeSize="changeSize" />
@@ -67,7 +80,7 @@ import Setbar from './setbar.vue'
 
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import { ELEMENT_SCREEN,NODE_ELEMENT,NODE_MULTI,NODE_GROUP } from "@/store/constants"
-
+import { objDeepMerge } from '@/utils/index.js'
 
 export default {
   components: {
@@ -91,9 +104,12 @@ export default {
       NODE_MULTI,
       NODE_GROUP,
       editType:ELEMENT_SCREEN,
+      editNode:null,
+      editChart:null,
+      editGroup:null,
+      databoard:null,
+      databoardID:'',
       rootNodesLen:0,
-      databoardConfig:null,
-     // maintit:'',
       zoom:0.5,
       showMmore: true,
       treenode: [],
@@ -102,19 +118,22 @@ export default {
           name: '发布',
           icon: 'icon-ico_db_public',
           event: this.public,
-          type: 'icon'
+          type: 'icon',
+          hide:true
         },
         {
           name: '预览',
           icon: 'icon-ico_db_view',
           event: this.view,
-          type: 'icon'
+          type: 'icon',
+          hide:true
         },
         {
           name: '保存',
           icon: 'icon-ico_db_save',
           event: this.save,
-          type: 'icon'
+          type: 'icon',
+          hide:true
         },
         {
           name: '退出',
@@ -187,230 +206,6 @@ export default {
           id: 2,
           active: true
         }
-      ],
-      typetree: [
-        {
-          name: 'charts',
-          title: '图表',
-          active: true,
-          id: '1',
-          children: [
-            {
-              type: 'bar',
-              title: '基础柱状图',
-              version: 1,
-              w:430,
-              h:320,
-              id: '1-1'
-            },
-            {
-              type: 'horizontalbar',
-              title: '横向柱状图',
-              version: 1,
-              w:430,
-              h:320,
-              id: '1-10'
-            },
-            {
-              type: 'pie',
-              title: '基础饼状图',
-              version: 1,
-              w:430,
-              h:320,
-              id: '1-2'
-            },
-            {
-              type: 'line',
-              title: '基础折线图',
-              version: 1,
-              w:430,
-              h:320,
-              id: '1-3'
-            },
-            {
-              type: 'line2y',
-              title: '双Y轴折线图',
-              version: 1,
-              w:430,
-              h:320,
-              id: '1-11'
-            },
-            {
-              type: 'doughnut',
-              title: '基础环图',
-              version: 1,
-              w:430,
-              h:320,
-              id: '1-4'
-            },
-            {
-              type: 'linebar',
-              title: '混合-线柱混搭',
-              version: 1,
-              w:430,
-              h:320,
-              id: '1-5'
-            },
-            {
-              type: 'scatter',
-              title: '基础散点图',
-              w:430,
-              h:320,
-              version: 1,
-              id: '1-6'
-            },
-            {
-              type: 'funnel',
-              title: '基础漏斗图',
-              w:430,
-              h:320,
-              version: 1,
-              id: '1-7'
-            },
-            // {
-            //   type: 'characters',
-            //   title: '基础字符云',
-            //   version: 1,
-            //   id: '1-8'
-            // },
-            {
-              type: 'polar',
-              title: '极坐标双数值轴',
-              w:430,
-              h:320,
-              version: 1,
-              id: '1-12'
-            },
-            {
-              type: 'radar',
-              title: '基础雷达图',
-              w:430,
-              h:320,
-              version: 1,
-              id: '1-9'
-            }
-          ]
-        },
-        // {
-        //   name: 'table',
-        //   title: '表格',
-        //   active: false,
-        //   id: '2',
-        //   children: [
-        //     {
-        //       type: 'basetable',
-        //       title: '基础表格',
-        //       w:530,
-        //       h:320,
-        //       version: 1,
-        //       id: '2-1'
-        //     }
-        //   ]
-        // },
-        // {
-        //   name: 'media',
-        //   title: '媒体',
-        //   active: false,
-        //   id: '3',
-        //   children: [
-        //     {
-        //       type: 'vedio',
-        //       title: '视频',
-        //       version: 1,
-        //       w:430,
-        //       h:320,
-        //       id: '3-1'
-        //     },
-        //     {
-        //       type: 'image',
-        //       title: '图片',
-        //       w:430,
-        //       h:320,
-        //       version: 1,
-        //       id: '3-2'
-        //     }
-        //   ]
-        // },
-        {
-          name: 'text',
-          title: '文本',
-          active: false,
-          id: '4',
-          children: [
-            {
-              type: 'title',
-              title: '标题',
-              w:200,
-              h:40,
-              version: 1,
-              text:'自定义标题',
-              fontSize:20, //临时代码
-              id: '4-1'
-            },
-            // {
-            //   type: 'text',
-            //   title: '文本',
-            //   version: 1,
-            //   id: '4-2'
-            // }
-          ]
-        },
-        // {
-        //   name: 'relationship',
-        //   title: '关系网络',
-        //   active: false,
-        //   id: '5',
-        //   children: [
-        //     {
-        //       type: 'relationship',
-        //       title: '关系网络',
-        //       version: 1,
-        //       id: '5-1'
-        //     }
-        //   ]
-        // },
-         {
-          name: 'material',
-          title: '素材',
-          active: false,
-          id: '6',
-          children: [
-            {
-              type: 'decorate',
-              title: '装饰',
-              version: 1,
-              id: '6-1'
-            }
-          ]
-        },
-        // {
-        //   name: 'other',
-        //   title: '其他',
-        //   active: false,
-        //   id: '7',
-        //   children: [
-        //     {
-        //       type: 'time',
-        //       title: '时间选择器',
-        //       version: 1,
-        //       id: '7-1'
-        //     }
-        //   ]
-        // },
-        // {
-        //   name: 'UE',
-        //   title: '交互',
-        //   active: false,
-        //   id: '8',
-        //   children: [
-        //     {
-        //       type: 'slide',
-        //       title: '轮播页面',
-        //       version: 1,
-        //       id: '8-1'
-        //     }
-        //   ]
-        // }
       ]
     }
   },
@@ -418,10 +213,7 @@ export default {
   computed: {
     ...mapState('databoard',{
       mode:state => state.mode,
-      databoard:state => state.databoard,
-      editNode:state => state.editNode,
-      editChart:state => state.editChart,
-      editGroup:state => state.editGroup
+      typetree:state => state.typetree
     }),
     ...mapGetters ('databoard',[
       'isEditing'
@@ -431,39 +223,43 @@ export default {
         return this.$refs.stage.multiple
       }
     },
-    maintit(){
-      return this.databoard ? this.databoard.name : ''
-    },
     activeNodes(){
       return this.$refs.stage && this.$refs.stage.domCavase ? this.$refs.stage.domCavase.selectNodes : []
+    },
+    maintit(){
+      return this.databoard ? this.databoard.name : ''
     }
-
   },
-  // watch:{
-  //   databoard:{
-  //     handler:function(val){
-  //       console.log('edit监测到state databoard 更新',val)
-  //       this.maintit = this.databoard.name || ''
-  //     },
-  //     deep:true
-  //   }
-  // },
-
   methods: {
     ...mapMutations('databoard',[
       'openEditMode',
-      'initEditNode',
-      'initEditGroup',
-      'initEditChart',
-      'setDBID'
     ]),
+    initDataboard(obj){
+      this.databoard = obj
+    },
+    updateDataboard(setting){
+      const obj = objDeepMerge(this.databoard,setting)
+      this.databoard = Object.assign({},obj)
+      //TODO:接口上报更新
+    },
+    updateChart(setting){
+      this.editChart = objDeepMerge(this.editChart,setting)
+      this.editNode.chart = Object.assign({},this.editChart)
+      //TODO:接口上报更新
+    },
+    updateNode(setting){
+      this.editNode = objDeepMerge(this.editNode,setting)
+      //TODO:接口上报更新
+    },
     updateGroup(setting){
       this.$refs.stage.configGroup(setting,this.editGroup)
+      //TODO:接口上报更新
     },
     setBarBtnClick(handler,param){
       if(handler && this[handler]){
         this[handler](param);
       }
+      //TODO：编辑栏收缩开关
     },
     multipleNodesAlign(type) {
       this.$refs.stage.domCavase.multipleNodesAlign(type)
@@ -477,13 +273,14 @@ export default {
       })
       if(this.rootNodesLen === 1){
         if(rootNodes[0].type==='element'){
-          this.initEditNode(rootNodes[0])
+          this.editNode = rootNodes[0]
         }else if(rootNodes[0].type==='group'){
-          this.initEditGroup(rootNodes[0])
+          this.editGroup = rootNodes[0]
         }
       }
+      //TODO:接口上报更新
     },
-    switchEditPanel(){
+    switchEditPanel(){ //TODO:考虑可以将这一层直接放在setbar组件中去？
       if(this.activeNodes.length === 0){
         this.editType = ELEMENT_SCREEN;
         return;
@@ -495,11 +292,11 @@ export default {
       if(this.rootNodesLen === 1){
         if(rootNodes[0].type==='element'){
           this.editType = NODE_ELEMENT
-          this.initEditNode(rootNodes[0])
-          this.initEditChart(rootNodes[0].chart)
+          this.editNode = rootNodes[0]
+          this.editChart = rootNodes[0].chart
         }else if(rootNodes[0].type==='group'){
           this.editType = NODE_GROUP
-          this.initEditGroup(rootNodes[0])
+          this.editGroup = rootNodes[0]
         }
       }else{
         this.editType = NODE_MULTI
@@ -517,9 +314,7 @@ export default {
         id,
         type: item.type,
         name: item.title,
-        version: item.version,
-        text: item.text, //临时代码
-        fontSize: item.fontSize //临时代码
+        version: item.version
       }
       const obj={
         w:item.w || 200,
@@ -610,7 +405,7 @@ export default {
   created(){
     const id = this.$route.params.id  || getuuid();
     //理论上都会有值。新建在进来之前已经获取到ID。可以放在前一个页面上直接设置vuex值。
-    this.setDBID(id)
+    this.databoardID = id
     this.openEditMode()
   }
 }

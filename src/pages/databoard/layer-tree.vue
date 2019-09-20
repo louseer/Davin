@@ -15,6 +15,7 @@
 import Dinput from '../../components/edit-input'
 import Dtree from '../../components/edit-tree.vue'
 import { deflate } from 'zlib'
+import { clearTimeout, setTimeout } from 'timers';
 export default {
   components: {
     Dtree,
@@ -23,7 +24,7 @@ export default {
   props: {
     listType: {
       type: String,
-      deflate: 'thumbnail'
+      default: 'thumbnail'
     },
     treenode: {
       type: Array,
@@ -32,13 +33,30 @@ export default {
   },
   data() {
     return {
-      filterText: ''
+      filterText: '',
+      timeoutID:'',
     }
   },
   methods: {
-   
-    treeNodeClick(nodeId) {
-      this.$emit('treeNodeClick', nodeId)
+    treeNodeClick(node) { 
+      this.timeoutID = setTimeout(()=>{
+        console.log("click",this.timeoutID)
+        const nodeId = node.id
+        this.$emit('treeNodeClick', nodeId)
+      },300)
+      
+    },
+    treeNodeDBLClick(data) {
+      clearTimeout(this.timeoutID)
+      const nodeId = data.id
+      this.$set(data,'edit',true)
+    },
+    treeNodeNameChange(data,newName){
+      const nodeId = data.id
+      this.$set(data,'edit',false)
+      if(data.name !== newName){
+        this.$set(data,'name',newName)
+      }
     },
     unhideNode(nodeId) {
       this.$emit('unhideNode', nodeId)
@@ -60,7 +78,10 @@ export default {
               },
               on: {
                 click: () => {
-                  this.treeNodeClick(data.id)
+                  this.treeNodeClick(data)
+                },
+                dblclick: () => {
+                  this.treeNodeDBLClick(data)
                 }
               }
             },
@@ -85,11 +106,29 @@ export default {
                     width: '50%',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
+                    whiteSpace: 'nowrap',
+                    display: data.edit ? 'none':'block'
                   }
                 },
-
                 data.name
+              ),
+              h(
+                Dinput,
+                {
+                  props: {
+                    "value": data.name,
+                    "autofocus":true,
+                    "placeholder":""
+                  },
+                  style: {
+                    display: !data.edit ? 'none':'block'
+                  },
+                  on: {
+                    blur: (val) => {
+                      this.treeNodeNameChange(data,val)
+                    }
+                  }
+                }
               ),
               h(
                 'div',

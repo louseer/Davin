@@ -81,6 +81,7 @@ import RulerZoom from './rulerzoom.vue'
 import { debuglog } from 'util'
 import { getDataBoardData } from '@/api/api.js'
 import { getuuid } from '@/utils/index'
+import { getChartTemp } from '@/chart-simples/index.js'
 
 export default {
   components: {
@@ -90,6 +91,12 @@ export default {
     RulerZoom,
     GuideLine,
     EagleEye
+  },
+  props:{
+    databoardID:{
+      type:String,
+      default:''
+    }
   },
   data() {
     return {
@@ -151,10 +158,10 @@ export default {
           name: '重命名',
           event: this.reNameNode
         },
-        {
-          name: '复制',
-          event: this.copyNode
-        },
+        // {
+        //   name: '复制',
+        //   event: this.copyNode
+        // },
         {
           name: '删除',
           event: this.deleteNode
@@ -237,12 +244,12 @@ export default {
             this.toExcel()
           }
         },
-        {
-          name: '粘贴',
-          event: () => {
-            this.paste()
-          }
-        },
+        // {
+        //   name: '粘贴',
+        //   event: () => {
+        //     this.paste()
+        //   }
+        // },
         {
           name: '全选',
           event: () => {
@@ -273,10 +280,7 @@ export default {
   computed: {
     multiple() {
       return this.domCavase.selectNodes.filter(n => n.pid === null)
-    },
-    ...mapState('databoard', {
-      databoardID: state => state.databoardID
-    })
+    }
   },
 
   mounted() {
@@ -337,14 +341,13 @@ export default {
         const item = JSON.parse(e.dataTransfer.getData('item'))
         const startX = e.clientX - this.GetPosition(this.$refs.stage).left
         const startY = e.clientY - this.GetPosition(this.$refs.stage).top
+
         const id = getuuid()
         const chart = {
           id,
           type: item.type,
           name: item.title,
           version: item.version,
-          text: item.text, //临时代码
-          fontSize: item.fontSize //临时代码
         }
         const obj = {
           w: item.w || 200,
@@ -356,7 +359,6 @@ export default {
           chart
         }
         this.addNode(obj)
-        this.$emit('switchEditPanel')
       }
     })
     handler.selectNodes(e => {
@@ -403,6 +405,7 @@ export default {
   },
   methods: {
     ...mapMutations('databoard', ['initDataboard', 'setEditType', '_updateDB']),
+
     changeView(x, y) {
       this.domCavase.offsetx = x
       this.domCavase.offsety = y
@@ -774,41 +777,24 @@ export default {
       }
       this.$emit('nodelistChange', this.domCavase.nodeList)
     },
-
-    fillNode() {
-      const nodes = [
-        { x: 0, y: 0, w: 200, h: 200, name: '1基本饼图' },
-        { x: 250, y: 0, w: 200, h: 200, name: '2基本什么图' },
-        { x: 450, y: 0, w: 200, h: 200, name: '3ZZZZXXX图' },
-        { x: 650, y: 0, w: 200, h: 200, name: '4各种图' },
-        {
-          x: 850,
-          y: 0,
-          w: 200,
-          h: 200,
-          elType: 'title',
-          disable: true,
-          name: '中华锁王'
-        },
-        {
-          x: 1050,
-          y: 0,
-          w: 200,
-          h: 200,
-          elType: 'pie',
-          name: '小透明',
-          hide: true
-        }
-      ]
-      nodes.forEach(node => {
-        this.addNode(node)
-      })
-
-      console.log('tag', this.domCavase.nodeList)
-    },
     addNode(node) {
+      if(!node.options){
+        getChartTemp(node.chart.type,node.chart.version).then((val) => {
+          node.chart.options = val
+          this.newNode(node)
+        }).catch(e=>{
+          console.log(`加载${this.version}版本${this.type}图opitions失败`)
+          console.log(e)
+        })
+      }else{
+        this.newNode(node)
+      }
+      
+    },
+    newNode(node){
       const newNode = new Dcanvas.Node(node)
       this.domCavase.addNode(newNode)
+      this.$emit('switchEditPanel')
       this.$emit('nodelistChange', this.domCavase.nodeList)
     },
     eventZoom(e) {
@@ -826,12 +812,11 @@ export default {
     },
     queryDataboard() {
       getDataBoardData(this.databoardID).then(rsp => {
-        console.log(rsp)
         if (rsp.status === 0) {
-          console.log(rsp.data)
           this.canvasConfig = rsp.data
           this.domCavase.createCanvas(this.canvasConfig)
-          this.initDataboard(this.domCavase.canvas)
+          this.$emit('initDataboard',this.domCavase.canvas)
+          //this.initDataboard(this.domCavase.canvas)
         } else {
           console.log('接口请求失败')
         }

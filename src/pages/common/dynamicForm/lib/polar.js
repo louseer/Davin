@@ -7,7 +7,7 @@ import {
   _animationDuration
 
 } from './echarts.js'
-
+//完整配置项，链接右侧表单和图表
 export const options = {
   id:{
     name:"id",

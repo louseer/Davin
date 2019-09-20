@@ -10,8 +10,9 @@
         :max="max[index]"
         @change="(newval)=>{changeHandle(newval,index)}"
       ></el-input-number>
-      <span class='unit'>{{unit}}</span>
+      
     </div>
+    <span class='unit'>{{unit}}</span>
   </div>
 </template>
 
@@ -93,7 +94,7 @@ export default {
   float: left;
   margin-right:5px;
   .d-number-input{
-    width:65px;
+    width:75px;
   }
   .unit{
     padding-left:3px;

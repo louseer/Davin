@@ -2,7 +2,7 @@ import { OPTIONTYPE } from '../core/constants.js'
 const options = {
   "name":{
     "name":"名称",
-    "type":OPTIONTYPE.INPUT,
+    "type":OPTIONTYPE.NOVIEW,
     "defaultVal":''
   },
   "size":{
